@@ -1,0 +1,107 @@
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Link } from "wouter";
+
+// We'll use the imported images
+import hero1 from "@/assets/hero-1.jpg";
+import hero2 from "@/assets/hero-2.jpg";
+import hero3 from "@/assets/hero-3.jpg";
+
+const slides = [
+  {
+    id: 1,
+    image: hero1,
+    title: "Supplying Comfort",
+    subtitle: "Luxury to Your Guests",
+    description: "Experience the pinnacle of hospitality supply with our premium collection."
+  },
+  {
+    id: 2,
+    image: hero2,
+    title: "Bringing Elegance",
+    subtitle: "Ease to Your Visitors",
+    description: "Curated amenities that define sophistication and care."
+  },
+  {
+    id: 3,
+    image: hero3,
+    title: "Enhancing Every Stay",
+    subtitle: "Style and Comfort",
+    description: "Transforming ordinary stays into extraordinary memories."
+  }
+];
+
+export function Hero() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="relative h-screen w-full overflow-hidden">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute inset-0"
+        >
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </motion.div>
+      </AnimatePresence>
+
+      <div className="relative h-full container mx-auto px-6 flex flex-col justify-center items-start text-white z-10">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="max-w-2xl"
+          >
+            <h2 className="text-xl md:text-2xl font-light tracking-widest uppercase mb-4 text-primary">
+              {slides[currentSlide].title}
+            </h2>
+            <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">
+              {slides[currentSlide].subtitle}
+            </h1>
+            <p className="text-lg md:text-xl text-white/80 mb-8 max-w-lg font-light">
+              {slides[currentSlide].description}
+            </p>
+            
+            <Link href="/categories">
+              <a className="inline-flex items-center space-x-2 bg-primary text-white px-8 py-4 rounded-none hover:bg-white hover:text-black transition-colors duration-300">
+                <span className="uppercase tracking-widest text-sm font-bold">Discover More</span>
+                <ArrowRight size={16} />
+              </a>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div className="absolute bottom-12 right-12 flex space-x-4 z-20">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentSlide ? "bg-primary scale-125" : "bg-white/50 hover:bg-white"
+            }`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
