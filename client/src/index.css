@@ -27,33 +27,33 @@
 }
 
 :root {
-  /* Dynamic Blue Palette matching "The Experts" Logo */
-  /* Background: Pure white for clarity */
-  --background: 0 0% 100%; 
-  /* Foreground: Deep Blue-Black */
-  --foreground: 222 47% 11%; 
+  /* Luxury Minimalist Palette - Restored */
+  /* Background: Very slightly off-white for richness */
+  --background: 0 0% 98%; 
+  /* Foreground: Soft black, not harsh #000 */
+  --foreground: 220 10% 10%; 
 
-  /* Primary: Vibrant Blue from the logo arc */
-  --primary: 199 89% 48%;
+  /* Primary: Gold/Bronze for luxury accents */
+  --primary: 45 40% 50%;
   --primary-foreground: 0 0% 100%;
 
-  /* Secondary: Soft Sky Blue */
-  --secondary: 199 89% 96%;
-  --secondary-foreground: 199 89% 20%;
+  /* Secondary: Soft Slate/Greige */
+  --secondary: 220 10% 90%;
+  --secondary-foreground: 220 10% 10%;
 
-  /* Muted: Professional Slate */
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  /* Muted: Lighter greige */
+  --muted: 220 10% 96%;
+  --muted-foreground: 220 10% 40%;
 
-  /* Accent: Bright Cyan/Blue Gradient component */
-  --accent: 199 89% 90%;
-  --accent-foreground: 199 89% 30%;
+  /* Accent: Darker Gold */
+  --accent: 45 30% 90%;
+  --accent-foreground: 45 40% 30%;
 
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 199 89% 48%;
+  --border: 220 10% 90%;
+  --input: 220 10% 90%;
+  --ring: 45 40% 50%;
   
-  --radius: 0.5rem; /* Modern rounded corners to match the friendly logo curves */
+  --radius: 0rem; /* Restored to sharp edges for luxury feel */
 }
 
 @layer base {
