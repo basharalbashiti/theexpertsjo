@@ -1,12 +1,18 @@
 import { Link } from "wouter";
 
+import logo from "@/assets/logo.png";
+
 export function Footer() {
   return (
     <footer className="bg-neutral-900 text-white py-16">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="space-y-4">
-            <h3 className="font-serif text-2xl font-bold">Stella<span className="text-primary">.</span></h3>
+            <Link href="/">
+              <a className="block">
+                <img src={logo} alt="The Experts Logo" className="h-16 w-auto brightness-0 invert" />
+              </a>
+            </Link>
             <p className="text-neutral-400 text-sm leading-relaxed">
               Supplying comfort and luxury to your guests. Premium hospitality products across the Middle East.
             </p>
@@ -35,14 +41,14 @@ export function Footer() {
             <h4 className="font-serif text-lg mb-6">Contact</h4>
             <div className="space-y-3 text-sm text-neutral-400">
               <p>Dubai, UAE</p>
-              <p>info@stellahospitality.me</p>
+              <p>info@theexperts.me</p>
               <p>+971 4 123 4567</p>
             </div>
           </div>
         </div>
         
         <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-xs text-neutral-500">
-          © {new Date().getFullYear()} Stella Hospitality. All rights reserved.
+          © {new Date().getFullYear()} The Experts. All rights reserved.
         </div>
       </div>
     </footer>

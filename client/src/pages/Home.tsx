@@ -26,7 +26,7 @@ export default function Home() {
               Your All-in-one <br/> Hospitality Solution
             </h3>
             <p className="text-neutral-600 leading-relaxed mb-6">
-              At Stella Hospitality, we supply premium hospitality products and essential hotel supplies across the Middle East.
+              At The Experts, we supply premium hospitality products and essential hotel supplies across the Middle East.
             </p>
             <p className="text-neutral-600 leading-relaxed">
               Whether you operate a large hotel or a boutique property, our carefully curated offerings deliver consistent quality and a memorable guest experience.

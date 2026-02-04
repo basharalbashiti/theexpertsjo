@@ -40,7 +40,7 @@ export default function Sustainability() {
             <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">Our Practices</h2>
             <h3 className="text-4xl font-serif font-bold mb-8">Harmony of Luxury and Nature</h3>
             <p className="text-neutral-600 mb-6 leading-relaxed">
-              At Stella Hospitality, we believe sustainability and luxury go hand in hand. That’s why we craft high-quality amenities using eco-friendly materials, responsible sourcing, and sustainable production methods.
+              At The Experts, we believe sustainability and luxury go hand in hand. That’s why we craft high-quality amenities using eco-friendly materials, responsible sourcing, and sustainable production methods.
             </p>
             <p className="text-neutral-600 leading-relaxed">
               From biodegradable essentials to recyclable packaging, every detail is designed to reduce environmental impact without compromising excellence.

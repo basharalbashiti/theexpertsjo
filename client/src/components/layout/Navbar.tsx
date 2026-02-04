@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, MessageCircle } from "lucide-react";
 
+import logo from "@/assets/logo.png";
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -40,8 +42,8 @@ export function Navbar() {
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
           <Link href="/">
-            <a className="font-serif text-2xl font-bold tracking-widest uppercase cursor-pointer">
-              Stella<span className="text-primary">.</span>
+            <a className="flex items-center space-x-2 cursor-pointer">
+              <img src={logo} alt="The Experts Logo" className={cn("h-12 w-auto transition-all", isScrolled ? "brightness-100" : "brightness-0 invert")} />
             </a>
           </Link>
 

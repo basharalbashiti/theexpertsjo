@@ -65,7 +65,7 @@ export default function About() {
               Founded in <span className="text-primary italic">Dubai</span> in 2003
             </h3>
             <p className="text-xl text-neutral-600 leading-relaxed">
-              Stella Hospitality has grown from a regional leader to a global provider of premium amenity solutions for hotels. With roots in the Middle East and a growing international footprint, we deliver high-quality, tailor-made products that elevate guest experiences and strengthen brand identity worldwide.
+              The Experts has grown from a regional leader to a global provider of premium amenity solutions for hotels. With roots in the Middle East and a growing international footprint, we deliver high-quality, tailor-made products that elevate guest experiences and strengthen brand identity worldwide.
             </p>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function About() {
           >
             <h2 className="text-3xl font-serif font-bold mb-8">Chairman’s <span className="text-primary">Message</span></h2>
             <blockquote className="text-lg text-neutral-600 italic mb-8 border-l-4 border-primary pl-6">
-              "Welcome to Stella Hospitality. Since our founding in 2003 in the UAE, we have remained dedicated to transforming the hospitality experience by delivering premium, tailor-made solutions that elevate guest satisfaction."
+              "Welcome to The Experts. Since our founding in 2003 in the UAE, we have remained dedicated to transforming the hospitality experience by delivering premium, tailor-made solutions that elevate guest satisfaction."
             </blockquote>
             <div className="font-serif">
               <div className="text-xl font-bold">Mohammed Al Ghussein</div>
