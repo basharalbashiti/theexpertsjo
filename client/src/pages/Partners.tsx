@@ -7,18 +7,18 @@ export default function Partners() {
   const { t } = useLanguage();
 
   const partners = [
-    { name: "Four Seasons Hotel Amman", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Four_Seasons_Hotels_and_Resorts_logo.svg/1200px-Four_Seasons_Hotels_and_Resorts_logo.svg.png" },
+    { name: "Four Seasons Hotel Amman", logo: "https://www.fourseasons.com/alt/img-logo-fs-black.png" },
     { name: "Landmark Hotel", logo: "https://landmarkamman.com/sites/default/files/logo_0.png" },
-    { name: "Grand Hyatt Amman", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Hyatt_logo.svg/1200px-Hyatt_logo.svg.png" },
-    { name: "Kempinski Hotel Amman", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Kempinski_Logo.svg/1200px-Kempinski_Logo.svg.png" },
-    { name: "Millennium Amman", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Millennium_%26_Copthorne_Hotels_logo.svg/1200px-Millennium_%26_Copthorne_Hotels_logo.svg.png" },
-    { name: "Le Meridien", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Le_M%C3%A9ridien_logo.svg/1200px-Le_M%C3%A9ridien_logo.svg.png" },
-    { name: "Crowne Plaza", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1a/Crowne_Plaza_logo.svg/1200px-Crowne_Plaza_logo.svg.png" },
-    { name: "Ibis Hotel", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Ibis_Hotels_logo.svg/1200px-Ibis_Hotels_logo.svg.png" },
-    { name: "Movenpick", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/M%C3%B6venpick_Hotels_%26_Resorts_logo.svg/1200px-M%C3%B6venpick_Hotels_%26_Resorts_logo.svg.png" },
-    { name: "Ritz Carlton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/The_Ritz-Carlton_Logo.svg/1200px-The_Ritz-Carlton_Logo.svg.png" },
-    { name: "Sheraton", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Sheraton_Hotels_and_Resorts_logo.svg/1200px-Sheraton_Hotels_and_Resorts_logo.svg.png" },
-    { name: "DoubleTree", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/DoubleTree_by_Hilton_logo.svg/1200px-DoubleTree_by_Hilton_logo.svg.png" },
+    { name: "Grand Hyatt Amman", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Hyatt_logo.svg/512px-Hyatt_logo.svg.png" },
+    { name: "Kempinski Hotel Amman", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Kempinski_Logo.svg/512px-Kempinski_Logo.svg.png" },
+    { name: "Millennium Amman", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Millennium_%26_Copthorne_Hotels_logo.svg/512px-Millennium_%26_Copthorne_Hotels_logo.svg.png" },
+    { name: "Le Meridien", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Le_M%C3%A9ridien_logo.svg/512px-Le_M%C3%A9ridien_logo.svg.png" },
+    { name: "Crowne Plaza", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1a/Crowne_Plaza_logo.svg/512px-Crowne_Plaza_logo.svg.png" },
+    { name: "Ibis Hotel", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Ibis_Hotels_logo.svg/512px-Ibis_Hotels_logo.svg.png" },
+    { name: "Movenpick", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/M%C3%B6venpick_Hotels_%26_Resorts_logo.svg/512px-M%C3%B6venpick_Hotels_%26_Resorts_logo.svg.png" },
+    { name: "Ritz Carlton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/The_Ritz-Carlton_Logo.svg/512px-The_Ritz-Carlton_Logo.svg.png" },
+    { name: "Sheraton", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Sheraton_Hotels_and_Resorts_logo.svg/512px-Sheraton_Hotels_and_Resorts_logo.svg.png" },
+    { name: "DoubleTree", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/DoubleTree_by_Hilton_logo.svg/512px-DoubleTree_by_Hilton_logo.svg.png" },
   ];
 
   return (
@@ -48,7 +48,15 @@ export default function Partners() {
                 transition={{ delay: i * 0.05 }}
                 className="group relative aspect-video flex items-center justify-center p-8 border border-neutral-100 grayscale hover:grayscale-0 transition-all duration-500 hover:border-primary/30"
               >
-                <img src={partner.logo} alt={partner.name} className="max-w-full max-h-full object-contain" />
+                <img 
+                  src={partner.logo} 
+                  alt={partner.name} 
+                  className="max-w-full max-h-full object-contain"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.name)}&background=f5f5f5&color=999&size=512&bold=true&format=svg`;
+                  }}
+                />
               </motion.div>
             ))}
           </div>
