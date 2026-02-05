@@ -7,14 +7,18 @@ export default function Partners() {
   const { t } = useLanguage();
 
   const partners = [
-    { name: "Crown Plaza", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-01.jpg" },
-    { name: "Ritz Carlton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-03.png" },
-    { name: "Millennium", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-04.png" },
-    { name: "Sheraton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-14.jpg" },
-    { name: "Four Seasons", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-15.png" },
-    { name: "Double Tree", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-17.jpg" },
-    { name: "Kempinski", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-21.png" },
-    { name: "Movenpick", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-26.png" },
+    { name: "Four Seasons Hotel Amman", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Four_Seasons_Hotels_and_Resorts_logo.svg/1200px-Four_Seasons_Hotels_and_Resorts_logo.svg.png" },
+    { name: "Landmark Hotel", logo: "https://landmarkamman.com/sites/default/files/logo_0.png" },
+    { name: "Grand Hyatt Amman", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Hyatt_logo.svg/1200px-Hyatt_logo.svg.png" },
+    { name: "Kempinski Hotel Amman", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Kempinski_Logo.svg/1200px-Kempinski_Logo.svg.png" },
+    { name: "Millennium Amman", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Millennium_%26_Copthorne_Hotels_logo.svg/1200px-Millennium_%26_Copthorne_Hotels_logo.svg.png" },
+    { name: "Le Meridien", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Le_M%C3%A9ridien_logo.svg/1200px-Le_M%C3%A9ridien_logo.svg.png" },
+    { name: "Crowne Plaza", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1a/Crowne_Plaza_logo.svg/1200px-Crowne_Plaza_logo.svg.png" },
+    { name: "Ibis Hotel", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Ibis_Hotels_logo.svg/1200px-Ibis_Hotels_logo.svg.png" },
+    { name: "Movenpick", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/M%C3%B6venpick_Hotels_%26_Resorts_logo.svg/1200px-M%C3%B6venpick_Hotels_%26_Resorts_logo.svg.png" },
+    { name: "Ritz Carlton", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/The_Ritz-Carlton_Logo.svg/1200px-The_Ritz-Carlton_Logo.svg.png" },
+    { name: "Sheraton", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Sheraton_Hotels_and_Resorts_logo.svg/1200px-Sheraton_Hotels_and_Resorts_logo.svg.png" },
+    { name: "DoubleTree", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/DoubleTree_by_Hilton_logo.svg/1200px-DoubleTree_by_Hilton_logo.svg.png" },
   ];
 
   return (
