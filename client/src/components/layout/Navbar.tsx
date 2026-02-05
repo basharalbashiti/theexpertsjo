@@ -9,6 +9,7 @@ import logo from "@/assets/logo.png";
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [lang, setLang] = useState("EN");
   const [location] = useLocation();
 
   useEffect(() => {
@@ -20,16 +21,21 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About Us", href: "/about-us" },
-    { name: "Products", href: "/categories" },
-    { name: "Partners", href: "/partners" },
-    { name: "Sustainability", href: "/sustainability" },
-    { name: "Contact", href: "/contact" },
+    { name: lang === "EN" ? "Home" : "الرئيسية", href: "/" },
+    { name: lang === "EN" ? "About Us" : "من نحن", href: "/about-us" },
+    { name: lang === "EN" ? "Products" : "المنتجات", href: "/categories" },
+    { name: lang === "EN" ? "Partners" : "شركاؤنا", href: "/partners" },
+    { name: lang === "EN" ? "Sustainability" : "الاستدامة", href: "/sustainability" },
+    { name: lang === "EN" ? "Contact" : "اتصل بنا", href: "/contact" },
   ];
 
   const handleWhatsAppClick = () => {
     window.open("https://wa.me/97141234567", "_blank");
+  };
+
+  const toggleLang = () => {
+    setLang(prev => prev === "EN" ? "AR" : "EN");
+    document.documentElement.dir = lang === "EN" ? "rtl" : "ltr";
   };
 
   return (
@@ -63,10 +69,27 @@ export function Navbar() {
                 </a>
               </Link>
             ))}
+            
+            {/* Language Switcher */}
+            <button 
+              onClick={toggleLang}
+              className={cn(
+                "text-xs font-bold px-2 py-1 border transition-all hover:bg-primary hover:text-white",
+                isScrolled ? "text-black border-black/20" : "text-white border-white/20"
+              )}
+            >
+              {lang === "EN" ? "AR" : "EN"}
+            </button>
           </div>
 
           {/* Mobile Toggle */}
           <div className="flex items-center space-x-4 md:hidden">
+             <button 
+              onClick={toggleLang}
+              className={cn("text-xs font-bold px-2 py-1 border", isScrolled ? "text-black border-black/20" : "text-white border-white/20")}
+            >
+              {lang === "EN" ? "AR" : "EN"}
+            </button>
              <button
               className={isScrolled ? "text-black" : "text-white"}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
