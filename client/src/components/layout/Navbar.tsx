@@ -3,13 +3,14 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, MessageCircle } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 import logo from "@/assets/logo.png";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [lang, setLang] = useState("EN");
+  const { lang, toggleLang, t } = useLanguage();
   const [location] = useLocation();
 
   useEffect(() => {
@@ -21,21 +22,16 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: lang === "EN" ? "Home" : "الرئيسية", href: "/" },
-    { name: lang === "EN" ? "About Us" : "من نحن", href: "/about-us" },
-    { name: lang === "EN" ? "Products" : "المنتجات", href: "/categories" },
-    { name: lang === "EN" ? "Partners" : "شركاؤنا", href: "/partners" },
-    { name: lang === "EN" ? "Sustainability" : "الاستدامة", href: "/sustainability" },
-    { name: lang === "EN" ? "Contact" : "اتصل بنا", href: "/contact" },
+    { name: t("home"), href: "/" },
+    { name: t("about"), href: "/about-us" },
+    { name: t("products"), href: "/categories" },
+    { name: t("partners"), href: "/partners" },
+    { name: t("sustainability"), href: "/sustainability" },
+    { name: t("contact"), href: "/contact" },
   ];
 
   const handleWhatsAppClick = () => {
     window.open("https://wa.me/97141234567", "_blank");
-  };
-
-  const toggleLang = () => {
-    setLang(prev => prev === "EN" ? "AR" : "EN");
-    document.documentElement.dir = lang === "EN" ? "rtl" : "ltr";
   };
 
   return (
@@ -56,7 +52,7 @@ export function Navbar() {
           {/* Desktop Nav */}
           <div className="hidden md:flex space-x-8 items-center">
             {navLinks.map((link) => (
-              <Link key={link.name} href={link.href}>
+              <Link key={link.href} href={link.href}>
                 <a
                   className={cn(
                     "text-sm font-medium tracking-wide transition-colors hover:text-primary relative group",
@@ -110,7 +106,7 @@ export function Navbar() {
             >
               <div className="flex flex-col p-6 space-y-4">
                 {navLinks.map((link) => (
-                  <Link key={link.name} href={link.href}>
+                  <Link key={link.href} href={link.href}>
                     <a
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="text-lg font-serif hover:text-primary transition-colors"

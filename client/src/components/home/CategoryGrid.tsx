@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 import imgTowels from "@/assets/cat-towels.jpg";
 import imgMinibar from "@/assets/cat-minibar.jpg";
 import imgAmenities from "@/assets/cat-amenities.jpg";
@@ -7,16 +8,18 @@ import imgFood from "@/assets/cat-food.jpg";
 import imgHousekeeping from "@/assets/cat-housekeeping.jpg";
 import imgFurniture from "@/assets/cat-furniture.jpg";
 
-const categories = [
-  { id: 1, title: "Towels", image: imgTowels, href: "/categories" },
-  { id: 2, title: "Mini Bar & Safes", image: imgMinibar, href: "/categories" },
-  { id: 3, title: "Amenities", image: imgAmenities, href: "/categories" },
-  { id: 4, title: "Food & Beverage", image: imgFood, href: "/categories" },
-  { id: 5, title: "Housekeeping", image: imgHousekeeping, href: "/categories" },
-  { id: 6, title: "Furniture", image: imgFurniture, href: "/categories" },
-];
-
 export function CategoryGrid() {
+  const { t } = useLanguage();
+
+  const categories = [
+    { id: 1, title: t("cat_towels"), image: imgTowels, href: "/categories" },
+    { id: 2, title: t("cat_minibar"), image: imgMinibar, href: "/categories" },
+    { id: 3, title: t("cat_amenities"), image: imgAmenities, href: "/categories" },
+    { id: 4, title: t("cat_food"), image: imgFood, href: "/categories" },
+    { id: 5, title: t("cat_housekeeping"), image: imgHousekeeping, href: "/categories" },
+    { id: 6, title: t("cat_furniture"), image: imgFurniture, href: "/categories" },
+  ];
+
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-6">
@@ -27,7 +30,7 @@ export function CategoryGrid() {
             viewport={{ once: true }}
             className="text-4xl font-serif font-bold mb-4"
           >
-            Our <span className="text-primary">Categories</span>
+            {t("our_categories").split(" ")[0]} <span className="text-primary">{t("our_categories").split(" ").slice(1).join(" ")}</span>
           </motion.h2>
           <motion.div 
             initial={{ width: 0 }}
@@ -54,7 +57,7 @@ export function CategoryGrid() {
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500" />
                   
-                  <div className="absolute inset-0 flex flex-col justify-end p-8">
+                  <div className="absolute inset-0 flex flex-col justify-end p-8 rtl:items-start">
                     <h3 className="text-white text-2xl font-serif font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                       {cat.title}
                     </h3>

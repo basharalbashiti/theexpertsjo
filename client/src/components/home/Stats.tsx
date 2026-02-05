@@ -2,13 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-
-const stats = [
-  { label: "Offices", value: 4 },
-  { label: "Warehouses", value: 6 },
-  { label: "Countries Served", value: 7 },
-  { label: "SKUs", value: 5000 },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 function Counter({ from, to }: { from: number; to: number }) {
   const ref = useRef(null);
@@ -17,7 +11,6 @@ function Counter({ from, to }: { from: number; to: number }) {
 
   useEffect(() => {
     if (inView) {
-      const controls = { value: from };
       const duration = 2000;
       const stepTime = 20;
       const steps = duration / stepTime;
@@ -42,6 +35,15 @@ function Counter({ from, to }: { from: number; to: number }) {
 }
 
 export function Stats() {
+  const { t } = useLanguage();
+
+  const stats = [
+    { label: t("stat_offices"), value: 4 },
+    { label: t("stat_warehouses"), value: 6 },
+    { label: t("stat_countries"), value: 7 },
+    { label: t("stat_skus"), value: 5000 },
+  ];
+
   return (
     <section className="py-20 bg-neutral-50 border-y border-neutral-200">
       <div className="container mx-auto px-6">
@@ -50,7 +52,7 @@ export function Stats() {
             <div key={index} className="text-center">
               <h3 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-2">
                 <Counter from={0} to={stat.value} />
-                {stat.label === "SKUs" ? "+" : ""}
+                {stat.label === t("stat_skus") ? "+" : ""}
               </h3>
               <p className="text-neutral-500 uppercase tracking-widest text-sm font-medium">
                 {stat.label}

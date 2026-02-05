@@ -2,45 +2,47 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 
 // We'll use the imported images
 import hero1 from "@/assets/hero-1.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
 
-const slides = [
-  {
-    id: 1,
-    image: hero1,
-    title: "Supplying Comfort",
-    subtitle: "Luxury to Your Guests",
-    description: "Experience the pinnacle of hospitality supply with our premium collection."
-  },
-  {
-    id: 2,
-    image: hero2,
-    title: "Bringing Elegance",
-    subtitle: "Ease to Your Visitors",
-    description: "Curated amenities that define sophistication and care."
-  },
-  {
-    id: 3,
-    image: hero3,
-    title: "Enhancing Every Stay",
-    subtitle: "Style and Comfort",
-    description: "Transforming ordinary stays into extraordinary memories."
-  }
-];
-
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { t } = useLanguage();
+
+  const slides = [
+    {
+      id: 1,
+      image: hero1,
+      title: t("hero1_title"),
+      subtitle: t("hero1_subtitle"),
+      description: t("hero1_desc")
+    },
+    {
+      id: 2,
+      image: hero2,
+      title: t("hero2_title"),
+      subtitle: t("hero2_subtitle"),
+      description: t("hero2_desc")
+    },
+    {
+      id: 3,
+      image: hero3,
+      title: t("hero3_title"),
+      subtitle: t("hero3_subtitle"),
+      description: t("hero3_desc")
+    }
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
@@ -69,7 +71,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="max-w-2xl"
+            className="max-w-2xl rtl:items-start"
           >
             <h2 className="text-xl md:text-2xl font-light tracking-widest uppercase mb-4 text-primary">
               {slides[currentSlide].title}
@@ -82,8 +84,8 @@ export function Hero() {
             </p>
             
             <Link href="/categories">
-              <a className="inline-flex items-center space-x-2 bg-primary text-white px-8 py-4 rounded-none hover:bg-white hover:text-black transition-colors duration-300">
-                <span className="uppercase tracking-widest text-sm font-bold">Discover More</span>
+              <a className="inline-flex items-center space-x-2 bg-primary text-white px-8 py-4 rounded-none hover:bg-white hover:text-black transition-colors duration-300 rtl:space-x-reverse">
+                <span className="uppercase tracking-widest text-sm font-bold">{t("discover_more")}</span>
                 <ArrowRight size={16} />
               </a>
             </Link>
@@ -91,7 +93,7 @@ export function Hero() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-12 right-12 flex space-x-4 z-20">
+      <div className="absolute bottom-12 right-12 rtl:right-auto rtl:left-12 flex space-x-4 rtl:space-x-reverse z-20">
         {slides.map((_, index) => (
           <button
             key={index}

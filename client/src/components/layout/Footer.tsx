@@ -1,8 +1,10 @@
 import { Link } from "wouter";
-
+import { useLanguage } from "@/context/LanguageContext";
 import logo from "@/assets/logo.png";
 
 export function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-neutral-900 text-white py-16">
       <div className="container mx-auto px-6">
@@ -14,31 +16,31 @@ export function Footer() {
               </a>
             </Link>
             <p className="text-neutral-400 text-sm leading-relaxed">
-              Supplying comfort and luxury to your guests. Premium hospitality products across the Middle East.
+              {t("footer_desc")}
             </p>
           </div>
           
           <div>
-            <h4 className="font-serif text-lg mb-6">Quick Links</h4>
+            <h4 className="font-serif text-lg mb-6">{t("quick_links")}</h4>
             <ul className="space-y-3 text-sm text-neutral-400">
-              <li><Link href="/"><a className="hover:text-primary transition-colors">Home</a></Link></li>
-              <li><Link href="/about-us"><a className="hover:text-primary transition-colors">About Us</a></Link></li>
-              <li><Link href="/categories"><a className="hover:text-primary transition-colors">Products</a></Link></li>
-              <li><Link href="/contact"><a className="hover:text-primary transition-colors">Contact</a></Link></li>
+              <li><Link href="/"><a className="hover:text-primary transition-colors">{t("home")}</a></Link></li>
+              <li><Link href="/about-us"><a className="hover:text-primary transition-colors">{t("about")}</a></Link></li>
+              <li><Link href="/categories"><a className="hover:text-primary transition-colors">{t("products")}</a></Link></li>
+              <li><Link href="/contact"><a className="hover:text-primary transition-colors">{t("contact")}</a></Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6">Categories</h4>
+            <h4 className="font-serif text-lg mb-6">{t("categories")}</h4>
             <ul className="space-y-3 text-sm text-neutral-400">
-              <li><Link href="/categories"><a className="hover:text-primary transition-colors">Amenities</a></Link></li>
+              <li><Link href="/categories"><a className="hover:text-primary transition-colors">{t("cat_amenities")}</a></Link></li>
               <li><Link href="/categories"><a className="hover:text-primary transition-colors">Linens</a></Link></li>
-              <li><Link href="/categories"><a className="hover:text-primary transition-colors">Furniture</a></Link></li>
+              <li><Link href="/categories"><a className="hover:text-primary transition-colors">{t("cat_furniture")}</a></Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6">Contact</h4>
+            <h4 className="font-serif text-lg mb-6">{t("contact_us")}</h4>
             <div className="space-y-3 text-sm text-neutral-400">
               <p>Dubai, UAE</p>
               <p>info@theexperts.me</p>
@@ -48,7 +50,7 @@ export function Footer() {
         </div>
         
         <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-xs text-neutral-500">
-          © {new Date().getFullYear()} The Experts. All rights reserved.
+          © {new Date().getFullYear()} The Experts. {t("rights_reserved")}
         </div>
       </div>
     </footer>
