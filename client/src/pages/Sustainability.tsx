@@ -1,9 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 import imgBanner from "@/assets/hero-3.jpg";
 import imgPractices from "@/assets/hero-2.jpg";
 
 export default function Sustainability() {
+  const { t } = useLanguage();
+
   return (
     <Layout>
       {/* Banner */}
@@ -18,14 +21,14 @@ export default function Sustainability() {
           animate={{ opacity: 1, letterSpacing: "0.1em" }}
           className="relative text-6xl md:text-8xl font-serif font-bold text-white z-10"
         >
-          Sustainability
+          {t("sustainability")}
         </motion.h1>
       </div>
 
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <p className="text-2xl text-neutral-600 font-serif italic leading-relaxed">
-            "Sustainability is transforming the hospitality industry, driving a shift toward eco-friendly practices and responsible sourcing."
+            "{t("sustainability_quote")}"
           </p>
         </div>
       </section>
@@ -37,13 +40,13 @@ export default function Sustainability() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">Our Practices</h2>
-            <h3 className="text-4xl font-serif font-bold mb-8">Harmony of Luxury and Nature</h3>
+            <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">{t("our_practices")}</h2>
+            <h3 className="text-4xl font-serif font-bold mb-8">{t("harmony")}</h3>
             <p className="text-neutral-600 mb-6 leading-relaxed">
-              At The Experts, we believe sustainability and luxury go hand in hand. That’s why we craft high-quality amenities using eco-friendly materials, responsible sourcing, and sustainable production methods.
+              {t("sustain_desc1")}
             </p>
             <p className="text-neutral-600 leading-relaxed">
-              From biodegradable essentials to recyclable packaging, every detail is designed to reduce environmental impact without compromising excellence.
+              {t("sustain_desc2")}
             </p>
           </motion.div>
           <motion.div
@@ -59,16 +62,16 @@ export default function Sustainability() {
 
       <section className="py-24 bg-white text-center">
         <div className="container mx-auto px-6 max-w-2xl">
-          <h2 className="text-4xl font-serif font-bold mb-8">EcoVadis Certification</h2>
+          <h2 className="text-4xl font-serif font-bold mb-8">{t("ecovadis_title")}</h2>
           <p className="text-neutral-600 mb-12">
-            We are proud to announce our pursuit of EcoVadis certification, a globally recognized standard for ethical and sustainable business practices. This achievement reflects our dedication to eco-friendly sourcing and responsible manufacturing.
+            {t("ecovadis_desc")}
           </p>
           <div className="flex flex-col md:flex-row gap-6 justify-center">
             <button className="bg-primary text-white px-8 py-4 uppercase text-xs font-bold tracking-widest hover:bg-black transition-colors">
-              Download Our SOP
+              {t("download_sop")}
             </button>
             <button className="border-2 border-primary text-primary px-8 py-4 uppercase text-xs font-bold tracking-widest hover:bg-primary hover:text-white transition-colors">
-              Employee Handbook
+              {t("employee_handbook")}
             </button>
           </div>
         </div>

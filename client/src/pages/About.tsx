@@ -1,25 +1,28 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 import imgBanner from "@/assets/hero-1.jpg";
 import imgMission from "@/assets/hero-2.jpg";
 import imgVision from "@/assets/hero-3.jpg";
 import imgChairman from "@/assets/cat-furniture.jpg";
 
-const stats = [
-  { label: "Product Lines", value: "500+" },
-  { label: "Brands", value: "50+" },
-  { label: "Projects", value: "200+" },
-  { label: "Clients", value: "1000+" },
-];
-
-const leadership = [
-  { name: "Ahmed Abu Sakha", role: "Chief Executive Officer" },
-  { name: "Mohammed Faraz", role: "Chief Financial Officer" },
-  { name: "Marwan Abu Sakha", role: "Group Corporate Development Manager" },
-  { name: "Khaled Ghunaim", role: "General Manager - Jordan" },
-];
-
 export default function About() {
+  const { t } = useLanguage();
+
+  const stats = [
+    { label: t("stat_product_lines"), value: "500+" },
+    { label: t("stat_brands"), value: "50+" },
+    { label: t("stat_projects"), value: "200+" },
+    { label: t("stat_clients"), value: "1000+" },
+  ];
+
+  const leadership = [
+    { name: "Ahmed Abu Sakha", role: "Chief Executive Officer" },
+    { name: "Mohammed Faraz", role: "Chief Financial Officer" },
+    { name: "Marwan Abu Sakha", role: "Group Corporate Development Manager" },
+    { name: "Khaled Ghunaim", role: "General Manager - Jordan" },
+  ];
+
   return (
     <Layout>
       {/* Banner */}
@@ -34,7 +37,7 @@ export default function About() {
           animate={{ opacity: 1, y: 0 }}
           className="relative text-6xl md:text-8xl font-serif font-bold text-white z-10"
         >
-          About <span className="text-primary">Us</span>
+          {t("about").split(" ")[0]} <span className="text-primary">{t("about").split(" ").slice(1).join(" ")}</span>
         </motion.h1>
       </div>
 
@@ -60,12 +63,12 @@ export default function About() {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">Who We Are</h2>
+            <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">{t("who_we_are")}</h2>
             <h3 className="text-4xl md:text-6xl font-serif font-bold mb-10 leading-tight">
-              Founded in <span className="text-primary italic">Dubai</span> in 2003
+              {t("founded_in")}
             </h3>
             <p className="text-xl text-neutral-600 leading-relaxed">
-              The Experts has grown from a regional leader to a global provider of premium amenity solutions for hotels. With roots in the Middle East and a growing international footprint, we deliver high-quality, tailor-made products that elevate guest experiences and strengthen brand identity worldwide.
+              {t("about_desc")}
             </p>
           </div>
         </div>
@@ -79,13 +82,13 @@ export default function About() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-serif font-bold mb-8">Chairman’s <span className="text-primary">Message</span></h2>
-            <blockquote className="text-lg text-neutral-600 italic mb-8 border-l-4 border-primary pl-6">
-              "Welcome to The Experts. Since our founding in 2003 in the UAE, we have remained dedicated to transforming the hospitality experience by delivering premium, tailor-made solutions that elevate guest satisfaction."
+            <h2 className="text-3xl font-serif font-bold mb-8">{t("chairman_msg")}</h2>
+            <blockquote className="text-lg text-neutral-600 italic mb-8 border-l-4 border-primary pl-6 rtl:border-l-0 rtl:border-r-4 rtl:pl-0 rtl:pr-6">
+              "{t("chairman_quote")}"
             </blockquote>
             <div className="font-serif">
-              <div className="text-xl font-bold">Mohammed Al Ghussein</div>
-              <div className="text-primary text-sm uppercase tracking-widest">Chairman</div>
+              <div className="text-xl font-bold">{t("chairman_name")}</div>
+              <div className="text-primary text-sm uppercase tracking-widest">{t("chairman_title")}</div>
             </div>
           </motion.div>
           <motion.div
@@ -95,7 +98,7 @@ export default function About() {
             className="relative"
           >
             <img src={imgChairman} alt="Chairman" className="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 border-2 border-primary -z-10" />
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 border-2 border-primary -z-10 rtl:left-auto rtl:-right-6" />
           </motion.div>
         </div>
       </section>
@@ -109,9 +112,9 @@ export default function About() {
           >
             <img src={imgMission} className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
             <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors" />
-            <div className="relative h-full flex flex-col justify-end p-12 text-white">
-              <h3 className="text-3xl font-serif font-bold mb-4">Our Mission</h3>
-              <p className="text-white/80">Streamlining hotel procurement with premium, cost-effective amenities and reliable delivery.</p>
+            <div className="relative h-full flex flex-col justify-end p-12 text-white rtl:items-start">
+              <h3 className="text-3xl font-serif font-bold mb-4">{t("our_mission")}</h3>
+              <p className="text-white/80">{t("mission_desc")}</p>
             </div>
           </motion.div>
           <motion.div 
@@ -120,9 +123,9 @@ export default function About() {
           >
             <img src={imgVision} className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
             <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors" />
-            <div className="relative h-full flex flex-col justify-end p-12 text-white">
-              <h3 className="text-3xl font-serif font-bold mb-4">Our Vision</h3>
-              <p className="text-white/80">To be the global leader in hotel procurement, delivering innovative, high-quality solutions.</p>
+            <div className="relative h-full flex flex-col justify-end p-12 text-white rtl:items-start">
+              <h3 className="text-3xl font-serif font-bold mb-4">{t("our_vision")}</h3>
+              <p className="text-white/80">{t("vision_desc")}</p>
             </div>
           </motion.div>
         </div>
@@ -131,7 +134,7 @@ export default function About() {
       {/* Leadership */}
       <section className="py-24 bg-neutral-50">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-16 underline decoration-primary underline-offset-8">Our Leadership</h2>
+          <h2 className="text-4xl font-serif font-bold mb-16 underline decoration-primary underline-offset-8">{t("our_leadership")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {leadership.map((person, i) => (
               <motion.div 

@@ -1,19 +1,22 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 import imgOffice from "@/assets/hero-1.jpg";
 
-const partners = [
-  { name: "Crown Plaza", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-01.jpg" },
-  { name: "Ritz Carlton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-03.png" },
-  { name: "Millennium", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-04.png" },
-  { name: "Sheraton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-14.jpg" },
-  { name: "Four Seasons", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-15.png" },
-  { name: "Double Tree", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-17.jpg" },
-  { name: "Kempinski", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-21.png" },
-  { name: "Movenpick", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-26.png" },
-];
-
 export default function Partners() {
+  const { t } = useLanguage();
+
+  const partners = [
+    { name: "Crown Plaza", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-01.jpg" },
+    { name: "Ritz Carlton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-03.png" },
+    { name: "Millennium", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-04.png" },
+    { name: "Sheraton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-14.jpg" },
+    { name: "Four Seasons", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-15.png" },
+    { name: "Double Tree", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-17.jpg" },
+    { name: "Kempinski", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-21.png" },
+    { name: "Movenpick", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-26.png" },
+  ];
+
   return (
     <Layout>
       <div className="pt-32 pb-16 bg-neutral-50 border-b border-neutral-200">
@@ -23,9 +26,9 @@ export default function Partners() {
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-7xl font-serif font-bold mb-6"
           >
-            Our <span className="text-primary">Partners</span>
+            {t("partners").split(" ")[0]} <span className="text-primary">{t("partners").split(" ").slice(1).join(" ")}</span>
           </motion.h1>
-          <p className="text-neutral-500 uppercase tracking-[0.2em] text-sm">Trusted by world-class hospitality brands</p>
+          <p className="text-neutral-500 uppercase tracking-[0.2em] text-sm">{t("trusted_by")}</p>
         </div>
       </div>
 
@@ -55,12 +58,12 @@ export default function Partners() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-serif font-bold mb-6 italic">Partner with Excellence</h2>
+            <h2 className="text-4xl font-serif font-bold mb-6 italic">{t("partner_excellence")}</h2>
             <p className="text-neutral-400 text-lg leading-relaxed mb-8">
-              We collaborate with the world's most prestigious hotel groups to deliver uncompromised quality and bespoke guest experiences. Join our network of successful partners today.
+              {t("partner_desc")}
             </p>
             <button className="bg-primary text-white px-10 py-4 uppercase text-xs font-bold tracking-widest hover:bg-white hover:text-black transition-all">
-              Become a Partner
+              {t("become_partner")}
             </button>
           </motion.div>
           <motion.div
