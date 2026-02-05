@@ -10,7 +10,7 @@ export function Footer() {
           <div className="space-y-4">
             <Link href="/">
               <a className="block">
-                <img src={logo} alt="The Experts Logo" className="h-20 w-auto brightness-0 invert" />
+                <img src={logo} alt="The Experts Logo" className="h-16 w-auto brightness-0 invert" />
               </a>
             </Link>
             <p className="text-neutral-400 text-sm leading-relaxed">
