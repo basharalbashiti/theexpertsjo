@@ -1,6 +1,8 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import imgBanner from "@/assets/category-generic-banner.png";
 import imgProduct1 from "@/assets/cat-towels.jpg";
 import imgProduct2 from "@/assets/cat-linens.png";
@@ -29,6 +31,19 @@ export default function CategoryPage({ title, products }: { title: string, produ
 
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className={`mb-12 flex ${lang === "AR" ? "justify-end" : "justify-start"}`}
+          >
+            <Link href="/categories">
+              <a className="group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest">
+                {lang === "AR" ? <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /> : <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />}
+                {t("back_to_categories")}
+              </a>
+            </Link>
+          </motion.div>
+          
           <div className="space-y-32">
             {products.map((product, index) => {
               const isRtl = lang === "AR";

@@ -107,6 +107,7 @@ const translations: Record<Language, Record<string, string>> = {
     explore_range: "Explore our comprehensive range of hotel supplies designed to elevate your guest experience.",
     looking_specific: "Looking for something specific?",
     contact_sales: "Contact Sales Team",
+    back_to_categories: "Back to All Categories",
     // Category Products
     rs_trolley: "Elite Service Trolley",
     rs_trolley_desc: "Handcrafted from solid walnut with whisper-quiet, non-marking wheels. Featuring integrated heating compartments and foldable side wings for space efficiency.",
@@ -243,6 +244,7 @@ const translations: Record<Language, Record<string, string>> = {
     explore_range: "استكشف مجموعتنا الشاملة من مستلزمات الفنادق المصممة لرفع تجربة ضيوفك.",
     looking_specific: "تبحث عن شيء محدد؟",
     contact_sales: "اتصل بفريق المبيعات",
+    back_to_categories: "العودة إلى جميع الأقسام",
     // Category Products (Arabic)
     rs_trolley: "عربة خدمة النخبة",
     rs_trolley_desc: "مصنوعة يدوياً من الجوز الصلب مع عجلات هادئة وغير ملوثة. تتميز بحجرات تسخين مدمجة وأجنحة جانبية قابلة للطي لكفاءة المساحة.",

@@ -1,7 +1,8 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
-import { ShoppingBag, ChevronRight } from "lucide-react";
+import { ShoppingBag, ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
 import imgBanner from "@/assets/room-service-banner.png";
 import imgItems from "@/assets/room-service-items.png";
 import imgTrolley from "@/assets/rs-trolley.png";
@@ -9,7 +10,7 @@ import imgCarafe from "@/assets/rs-carafe.png";
 import imgCloche from "@/assets/rs-cloche.png";
 
 export default function RoomService() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const products = [
     { 
@@ -54,6 +55,19 @@ export default function RoomService() {
 
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className={`mb-12 flex ${lang === "AR" ? "justify-end" : "justify-start"}`}
+          >
+            <Link href="/categories">
+              <a className="group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest">
+                {lang === "AR" ? <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /> : <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />}
+                {t("back_to_categories")}
+              </a>
+            </Link>
+          </motion.div>
+
           <div className="space-y-32">
             {products.map((product, index) => (
               <motion.div
