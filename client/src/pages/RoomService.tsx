@@ -58,11 +58,11 @@ export default function RoomService() {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`mb-12 flex w-full ${lang === "AR" ? "justify-end" : "justify-start"}`}
+            className="mb-12 flex"
           >
             <Link href="/categories">
-              <a className={`group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest ${lang === "AR" ? "flex-row-reverse" : "flex-row"}`}>
-                {lang === "AR" ? <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /> : <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />}
+              <a className="group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest">
+                {lang === "AR" ? <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /> : <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />}
                 {t("back_to_categories")}
               </a>
             </Link>
@@ -104,11 +104,11 @@ export default function RoomService() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className={`mt-24 flex w-full ${lang === "AR" ? "justify-end" : "justify-start"}`}
+            className="mt-24 flex"
           >
             <Link href="/categories">
-              <a className={`group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest ${lang === "AR" ? "flex-row-reverse" : "flex-row"}`}>
-                {lang === "AR" ? <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /> : <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />}
+              <a className="group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest">
+                {lang === "AR" ? <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /> : <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />}
                 {t("back_to_categories")}
               </a>
             </Link>
