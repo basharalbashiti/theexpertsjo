@@ -51,27 +51,28 @@ export function CategoryGrid({ limit }: { limit?: number }) {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((cat, index) => (
             <Link key={cat.id} href={cat.href}>
-              <a className="group block overflow-hidden relative aspect-square cursor-pointer">
+              <a className="group block overflow-hidden relative aspect-[4/5] cursor-pointer">
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: index * 0.1 }}
                   className="w-full h-full relative"
                 >
                   <div 
-                    className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{ backgroundImage: `url(${cat.image})` }}
                   />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-300" />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500" />
                   
-                  <div className="absolute inset-0 flex flex-col justify-end p-6">
-                    <h3 className="text-white text-lg font-serif font-bold tracking-tight">
+                  <div className="absolute inset-0 flex flex-col justify-end p-8 rtl:items-start">
+                    <h3 className="text-white text-2xl font-serif font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                       {cat.title}
                     </h3>
+                    <div className="h-0.5 w-0 bg-primary mt-4 group-hover:w-16 transition-all duration-500" />
                   </div>
                 </motion.div>
               </a>
