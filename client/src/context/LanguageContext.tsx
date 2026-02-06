@@ -15,6 +15,7 @@ const translations: Record<Language, Record<string, string>> = {
     about: "About Us",
     products: "Products",
     partners: "Partners",
+    partners_clients: "Partners & Clients",
     sustainability: "Sustainability",
     contact: "Contact",
     // Hero
@@ -113,6 +114,7 @@ const translations: Record<Language, Record<string, string>> = {
     about: "من نحن",
     products: "المنتجات",
     partners: "شركاؤنا",
+    partners_clients: "شركاؤنا وعملاؤنا",
     sustainability: "الاستدامة",
     contact: "اتصل بنا",
     // Hero

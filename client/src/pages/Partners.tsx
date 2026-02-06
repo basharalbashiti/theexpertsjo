@@ -36,7 +36,7 @@ export default function Partners() {
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-7xl font-serif font-bold mb-6 text-white"
           >
-            {t("partners").split(" ")[0]} <span className="text-primary">{t("partners").split(" ").slice(1).join(" ")}</span>
+            {t("partners_clients").split(" ")[0]} <span className="text-primary">{t("partners_clients").split(" ").slice(1).join(" ")}</span>
           </motion.h1>
           <p className="text-white/80 uppercase tracking-[0.2em] text-sm">{t("trusted_by")}</p>
         </div>
