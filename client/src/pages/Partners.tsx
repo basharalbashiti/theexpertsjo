@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import imgOffice from "@/assets/hero-1.jpg";
 import imgBanner from "@/assets/partners-banner-outdoor.png";
-import imgFourSeasons from "@/assets/four-seasons-amman.png";
+import imgFourSeasons from "@/assets/four-seasons-amman-real.png";
 
 export default function Partners() {
   const { t, lang } = useLanguage();
