@@ -8,25 +8,18 @@ export default function Partners() {
   const { t } = useLanguage();
 
   const partners = [
-    { name: "Four Seasons Hotel-Amman", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-15.png" },
-    { name: "Landmark Hotel-Amman", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-03.png" },
-    { name: "Grand Hyatt-Amman", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-10.png" },
-    { name: "Kempinski Hotel-Amman", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-21.png" },
-    { name: "Grand Millennium-Amman", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-04.png" },
-    { name: "Le Meridien- Amman", logo: "" },
-    { name: "Crowne Plaza -Amman", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-01.jpg" },
-    { name: "Crowne Plaza- Dead Sea", logo: "" },
-    { name: "Bristol Hotel-Amman", logo: "" },
-    { name: "Warwick Il Palazzo Hotel-Amman", logo: "" },
-    { name: "Dana Plaza-Amman", logo: "" },
-    { name: "Warwick Il Palazzo Hotel-Baghdad", logo: "" },
-    { name: "Coral Hotel-Baghdad", logo: "" },
-    { name: "Sulaf-Hotel", logo: "" },
-    { name: "Thousand Night-Hotel", logo: "" },
-    { name: "Ibis Hotel- Amman", logo: "" },
-    { name: "Crowne Plaza-Petra", logo: "" },
-    { name: "La Grand-Amman", logo: "" },
-    { name: "The House Hotel-Amman", logo: "" },
+    { name: "Four Seasons", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-15.png" },
+    { name: "Ritz Carlton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-03.png" },
+    { name: "Millennium", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-04.png" },
+    { name: "Sheraton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-14.jpg" },
+    { name: "Crowne Plaza", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-01.jpg" },
+    { name: "Double Tree", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-17.jpg" },
+    { name: "Kempinski", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-21.png" },
+    { name: "Movenpick", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-26.png" },
+    { name: "Hyatt", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-10.png" },
+    { name: "Marriott", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-08.png" },
+    { name: "Hilton", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-07.png" },
+    { name: "InterContinental", logo: "https://stellahospitality.me/wp-content/uploads/2025/03/Client-Logo-06.png" },
   ];
 
   return (
