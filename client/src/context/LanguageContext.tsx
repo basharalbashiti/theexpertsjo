@@ -102,6 +102,7 @@ const translations: Record<Language, Record<string, string>> = {
     partner_excellence: "Partner with Excellence",
     partner_desc: "We collaborate with the world's most prestigious hotel groups to deliver uncompromised quality and bespoke guest experiences. Join our network of successful partners today.",
     become_partner: "Become a Partner",
+    global_presence: "Global Presence",
     // Product Page
     our_products: "Our Products",
     explore_range: "Explore our comprehensive range of hotel supplies designed to elevate your guest experience.",
@@ -201,6 +202,7 @@ const translations: Record<Language, Record<string, string>> = {
     partner_excellence: "شراكة مع التميز",
     partner_desc: "نحن نتعاون مع مجموعات الفنادق المرموقة في العالم لتقديم جودة غير مساومة وتجارب ضيوف مخصصة. انضم إلى شبكة شركائنا الناجحة اليوم.",
     become_partner: "كن شريكاً",
+    global_presence: "تواجدنا العالمي",
     // Product Page
     our_products: "منتجاتنا",
     explore_range: "استكشف مجموعتنا الشاملة من مستلزمات الفنادق المصممة لرفع تجربة ضيوفك.",
