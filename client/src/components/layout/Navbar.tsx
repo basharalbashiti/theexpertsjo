@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X, MessageCircle, ChevronDown } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 import logo from "@/assets/logo.png";
@@ -24,7 +24,19 @@ export function Navbar() {
   const navLinks = [
     { name: t("home"), href: "/" },
     { name: t("about"), href: "/about-us" },
-    { name: t("products"), href: "/categories" },
+    { 
+      name: t("products"), 
+      href: "/categories",
+      isDropdown: true,
+      subLinks: [
+        { name: t("cat_room_service"), href: "/room-service" },
+        { name: t("cat_linens"), href: "/linens" },
+        { name: t("cat_spa"), href: "/spa" },
+        { name: t("cat_amenities"), href: "/amenities" },
+        { name: t("cat_food"), href: "/food-beverage" },
+        { name: t("cat_banqueting"), href: "/buffet-banqueting" },
+      ]
+    },
     { name: t("partners"), href: "/partners" },
     { name: t("sustainability"), href: "/sustainability" },
     { name: t("contact"), href: "/contact" },
@@ -52,18 +64,50 @@ export function Navbar() {
           {/* Desktop Nav */}
           <div className="hidden md:flex space-x-8 items-center">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href}>
-                <a
-                  className={cn(
-                    "text-sm font-medium tracking-wide transition-colors hover:text-primary relative group",
-                    (isScrolled ? "text-black" : "text-white"),
-                    location === link.href ? "text-primary" : ""
-                  )}
-                >
-                  {link.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-primary transition-all duration-300 group-hover:w-full" />
-                </a>
-              </Link>
+              <div key={link.href} className="relative group">
+                {link.isDropdown ? (
+                  <div className="flex items-center space-x-1 cursor-pointer group py-2">
+                    <Link href={link.href}>
+                      <a
+                        className={cn(
+                          "text-sm font-medium tracking-wide transition-colors hover:text-primary relative",
+                          (isScrolled ? "text-black" : "text-white"),
+                          location === link.href ? "text-primary" : ""
+                        )}
+                      >
+                        {link.name}
+                      </a>
+                    </Link>
+                    <ChevronDown size={14} className={cn("transition-transform duration-300 group-hover:rotate-180", isScrolled ? "text-black" : "text-white")} />
+                    
+                    {/* Dropdown Menu */}
+                    <div className="absolute top-full left-0 mt-0 w-64 bg-white shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-2 border-primary py-4 z-50">
+                      <div className="flex flex-col">
+                        {link.subLinks?.map((sub) => (
+                          <Link key={sub.href} href={sub.href}>
+                            <a className="px-6 py-2 text-sm text-neutral-600 hover:text-primary hover:bg-neutral-50 transition-colors font-medium">
+                              {sub.name}
+                            </a>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link href={link.href}>
+                    <a
+                      className={cn(
+                        "text-sm font-medium tracking-wide transition-colors hover:text-primary relative py-2 block",
+                        (isScrolled ? "text-black" : "text-white"),
+                        location === link.href ? "text-primary" : ""
+                      )}
+                    >
+                      {link.name}
+                      <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-primary transition-all duration-300 group-hover:w-full" />
+                    </a>
+                  </Link>
+                )}
+              </div>
             ))}
             
             {/* Language Switcher */}
@@ -106,14 +150,30 @@ export function Navbar() {
             >
               <div className="flex flex-col p-6 space-y-4">
                 {navLinks.map((link) => (
-                  <Link key={link.href} href={link.href}>
-                    <a
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-lg font-serif hover:text-primary transition-colors"
-                    >
-                      {link.name}
-                    </a>
-                  </Link>
+                  <div key={link.href} className="flex flex-col space-y-2">
+                    <Link href={link.href}>
+                      <a
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="text-lg font-serif hover:text-primary transition-colors font-bold"
+                      >
+                        {link.name}
+                      </a>
+                    </Link>
+                    {link.isDropdown && (
+                      <div className="pl-4 flex flex-col space-y-2 border-l-2 border-primary/20">
+                        {link.subLinks?.map((sub) => (
+                          <Link key={sub.href} href={sub.href}>
+                            <a
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="text-sm text-neutral-500 hover:text-primary transition-colors"
+                            >
+                              {sub.name}
+                            </a>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             </motion.div>
