@@ -63,8 +63,7 @@ export default function Partners() {
                 {t("hospitality_solution")}
               </h2>
               <div className="space-y-6 text-neutral-600 text-lg leading-relaxed max-w-lg">
-                <p>{t("home_desc1")}</p>
-                <p>{t("home_desc2")}</p>
+                <p>{t("partner_desc")}</p>
               </div>
             </motion.div>
 

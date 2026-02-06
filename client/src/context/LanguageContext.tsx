@@ -100,7 +100,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Partners
     trusted_by: "Trusted by world-class hospitality brands",
     partner_excellence: "Partner with Excellence",
-    partner_desc: "We collaborate with the world's most prestigious hotel groups to deliver uncompromised quality and bespoke guest experiences. Join our network of successful partners today.",
+    partner_desc: "The Experts is the leading partner for luxury hospitality groups, providing uncompromised quality in every guest touchpoint. From the world's most iconic hotels to boutique luxury escapes, we deliver bespoke supply solutions that define global standards of excellence.",
     become_partner: "Become a Partner",
     global_presence: "Global Presence",
     // Product Page
@@ -200,7 +200,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Partners
     trusted_by: "موثوق به من قبل علامات تجارية عالمية في مجال الضيافة",
     partner_excellence: "شراكة مع التميز",
-    partner_desc: "نحن نتعاون مع مجموعات الفنادق المرموقة في العالم لتقديم جودة غير مساومة وتجارب ضيوف مخصصة. انضم إلى شبكة شركائنا الناجحة اليوم.",
+    partner_desc: "شركة الخبراء هي الشريك الرائد لمجموعات الضيافة الفاخرة، حيث نقدم جودة لا تضاهى في كل تفاصيل تجربة الضيف. من أشهر الفنادق العالمية إلى الملاذات الفاخرة، نقدم حلول توريد مخصصة تحدد المعايير العالمية للتميز.",
     become_partner: "كن شريكاً",
     global_presence: "تواجدنا العالمي",
     // Product Page
