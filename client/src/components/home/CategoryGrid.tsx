@@ -16,12 +16,12 @@ export function CategoryGrid({ limit }: { limit?: number }) {
 
   const allCategories = [
     { id: 1, title: t("cat_room_service"), image: imgRoomService, href: "/room-service" },
-    { id: 2, title: t("cat_linens"), image: imgLinens, href: "/categories" },
+    { id: 2, title: t("cat_linens"), image: imgLinens, href: "/linens" },
     { id: 3, title: t("cat_spa"), image: imgSpa, href: "/spa" },
     { id: 4, title: t("cat_amenities"), image: imgAmenities, href: "/amenities" },
-    { id: 5, title: t("cat_food"), image: imgFood, href: "/categories" },
-    { id: 6, title: t("cat_banqueting"), image: imgBanqueting, href: "/categories" },
-    { id: 7, title: t("cat_buffet"), image: imgBuffet, href: "/categories" },
+    { id: 5, title: t("cat_food"), image: imgFood, href: "/food-beverage" },
+    { id: 6, title: t("cat_banqueting"), image: imgBanqueting, href: "/buffet-banqueting" },
+    { id: 7, title: t("cat_buffet"), image: imgBuffet, href: "/buffet-banqueting" },
   ];
 
   const categories = limit ? allCategories.slice(0, limit) : allCategories;

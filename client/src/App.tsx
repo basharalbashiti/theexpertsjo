@@ -12,6 +12,9 @@ import Partners from "@/pages/Partners";
 import RoomService from "@/pages/RoomService";
 import Spa from "@/pages/Spa";
 import Amenities from "@/pages/Amenities";
+import BuffetBanqueting from "@/pages/BuffetBanqueting";
+import FoodBeverage from "@/pages/FoodBeverage";
+import LinensHousekeeping from "@/pages/LinensHousekeeping";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -24,6 +27,9 @@ function Router() {
       <Route path="/room-service" component={RoomService} />
       <Route path="/spa" component={Spa} />
       <Route path="/amenities" component={Amenities} />
+      <Route path="/buffet-banqueting" component={BuffetBanqueting} />
+      <Route path="/food-beverage" component={FoodBeverage} />
+      <Route path="/linens" component={LinensHousekeeping} />
       <Route path="/sustainability" component={Sustainability} />
       <Route path="/contact" component={Contact} />
       <Route component={NotFound} />
