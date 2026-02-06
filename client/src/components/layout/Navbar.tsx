@@ -81,15 +81,23 @@ export function Navbar() {
                     <ChevronDown size={14} className={cn("transition-transform duration-300 group-hover:rotate-180", isScrolled ? "text-black" : "text-white")} />
                     
                     {/* Dropdown Menu */}
-                    <div className="absolute top-full left-0 mt-0 w-64 bg-white shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-2 border-primary py-4 z-50">
-                      <div className="flex flex-col">
+                    <div className="absolute top-full left-0 mt-0 w-72 bg-white/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 border border-neutral-100 py-6 z-50 rounded-xl">
+                      <div className="flex flex-col px-2">
                         {link.subLinks?.map((sub) => (
                           <Link key={sub.href} href={sub.href}>
-                            <a className="px-6 py-2 text-sm text-neutral-600 hover:text-primary hover:bg-neutral-50 transition-colors font-medium">
+                            <a className="px-6 py-3 text-[13px] text-neutral-600 hover:text-primary hover:bg-neutral-50/80 transition-all duration-300 font-semibold tracking-wide flex items-center justify-between group/item rounded-lg mb-1">
                               {sub.name}
+                              <ChevronDown size={12} className="-rotate-90 opacity-0 group-hover/item:opacity-100 transition-all transform translate-x-[-10px] group-hover/item:translate-x-0" />
                             </a>
                           </Link>
                         ))}
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-neutral-100 px-8">
+                        <Link href="/categories">
+                          <a className="text-[11px] uppercase tracking-[0.2em] font-bold text-primary hover:text-black transition-colors">
+                            {t("discover_more")}
+                          </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
