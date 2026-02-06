@@ -8,11 +8,13 @@ import imgFood from "@/assets/cat-food.jpg";
 import imgHousekeeping from "@/assets/cat-housekeeping.jpg";
 import imgFurniture from "@/assets/cat-furniture.jpg";
 
+import imgBuffet from "@/assets/cat-buffet.jpg";
+
 export function CategoryGrid() {
   const { t } = useLanguage();
 
   const categories = [
-    { id: 1, title: t("cat_buffet"), image: imgFood, href: "/categories" },
+    { id: 1, title: t("cat_buffet"), image: imgBuffet, href: "/categories" },
     { id: 2, title: t("cat_food"), image: imgFood, href: "/categories" },
     { id: 3, title: t("cat_banqueting"), image: imgFurniture, href: "/categories" },
     { id: 4, title: t("cat_linens"), image: imgTowels, href: "/categories" },
