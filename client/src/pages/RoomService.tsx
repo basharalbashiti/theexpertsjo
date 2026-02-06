@@ -54,33 +54,34 @@ export default function RoomService() {
 
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-serif font-bold mb-4 italic">Excellence Delivered</h2>
-            <div className="h-1 bg-primary w-24 mx-auto" />
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="space-y-32">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="group"
+                className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-16 md:gap-24`}
               >
-                <div className="aspect-square overflow-hidden bg-neutral-50 mb-6 border border-neutral-100">
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
+                <div className="flex-1 space-y-6">
+                  <h3 className="text-3xl md:text-4xl font-serif font-bold text-neutral-900 leading-tight">
+                    {product.name}
+                  </h3>
+                  <div className="h-1 bg-primary w-20" />
+                  <p className="text-neutral-600 text-lg leading-relaxed max-w-xl">
+                    {product.desc}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-serif font-bold mb-3">{product.name}</h3>
-                <p className="text-neutral-600 leading-relaxed mb-6 italic">
-                  {product.desc}
-                </p>
-                <div className="h-0.5 w-0 bg-primary group-hover:w-full transition-all duration-500" />
+                
+                <div className="flex-1 w-full">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl">
+                    <img 
+                      src={product.image} 
+                      alt={product.name} 
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                    />
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
