@@ -15,7 +15,7 @@ export function CategoryGrid({ limit }: { limit?: number }) {
   const { t } = useLanguage();
 
   const allCategories = [
-    { id: 1, title: t("cat_room_service"), image: imgRoomService, href: "/categories" },
+    { id: 1, title: t("cat_room_service"), image: imgRoomService, href: "/room-service" },
     { id: 2, title: t("cat_linens"), image: imgLinens, href: "/categories" },
     { id: 3, title: t("cat_spa"), image: imgSpa, href: "/categories" },
     { id: 4, title: t("cat_amenities"), image: imgAmenities, href: "/categories" },

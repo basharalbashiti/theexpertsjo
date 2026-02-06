@@ -9,6 +9,7 @@ import Categories from "@/pages/Categories";
 import Sustainability from "@/pages/Sustainability";
 import Contact from "@/pages/Contact";
 import Partners from "@/pages/Partners";
+import RoomService from "@/pages/RoomService";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/about-us" component={About} />
       <Route path="/categories" component={Categories} />
       <Route path="/partners" component={Partners} />
+      <Route path="/room-service" component={RoomService} />
       <Route path="/sustainability" component={Sustainability} />
       <Route path="/contact" component={Contact} />
       <Route component={NotFound} />
