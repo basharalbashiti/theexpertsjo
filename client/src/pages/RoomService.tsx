@@ -58,7 +58,7 @@ export default function RoomService() {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`mb-12 flex ${lang === "AR" ? "justify-end" : "justify-start"}`}
+            className={`mb-12 flex w-full ${lang === "AR" ? "justify-end" : "justify-start"}`}
           >
             <Link href="/categories">
               <a className={`group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest ${lang === "AR" ? "flex-row-reverse" : "flex-row"}`}>
@@ -104,7 +104,7 @@ export default function RoomService() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className={`mt-24 flex ${lang === "AR" ? "justify-end" : "justify-start"}`}
+            className={`mt-24 flex w-full ${lang === "AR" ? "justify-end" : "justify-start"}`}
           >
             <Link href="/categories">
               <a className={`group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest ${lang === "AR" ? "flex-row-reverse" : "flex-row"}`}>
