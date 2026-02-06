@@ -2,6 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import imgOffice from "@/assets/hero-1.jpg";
+import imgBanner from "@/assets/partners-banner.png";
 
 export default function Partners() {
   const { t } = useLanguage();
@@ -23,16 +24,21 @@ export default function Partners() {
 
   return (
     <Layout>
-      <div className="pt-32 pb-16 bg-neutral-50 border-b border-neutral-200">
-        <div className="container mx-auto px-6 text-center">
+      <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-16">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${imgBanner})` }}
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="container mx-auto px-6 text-center relative z-10">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-serif font-bold mb-6"
+            className="text-5xl md:text-7xl font-serif font-bold mb-6 text-white"
           >
             {t("partners").split(" ")[0]} <span className="text-primary">{t("partners").split(" ").slice(1).join(" ")}</span>
           </motion.h1>
-          <p className="text-neutral-500 uppercase tracking-[0.2em] text-sm">{t("trusted_by")}</p>
+          <p className="text-white/80 uppercase tracking-[0.2em] text-sm">{t("trusted_by")}</p>
         </div>
       </div>
 
