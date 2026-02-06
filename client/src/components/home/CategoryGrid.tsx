@@ -14,7 +14,7 @@ import imgLinens from "@/assets/cat-linens.png";
 
 import imgRoomService from "@/assets/cat-room-service.png";
 
-import imgSpa from "@/assets/cat-spa-medium.png";
+import imgSpa from "@/assets/cat-spa-alt.png";
 
 export function CategoryGrid({ limit }: { limit?: number }) {
   const { t } = useLanguage();
