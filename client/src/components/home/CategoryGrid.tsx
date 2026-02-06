@@ -69,7 +69,7 @@ export function CategoryGrid({ limit }: { limit?: number }) {
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500" />
                   
                   <div className="absolute inset-0 flex flex-col justify-end p-8 rtl:items-start">
-                    <h3 className="text-white text-2xl font-serif font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <h3 className="text-white text-2xl font-serif font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                       {cat.title}
                     </h3>
                     <div className="h-0.5 w-0 bg-primary mt-4 group-hover:w-16 transition-all duration-500" />
