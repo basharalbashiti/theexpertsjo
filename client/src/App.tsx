@@ -10,6 +10,8 @@ import Sustainability from "@/pages/Sustainability";
 import Contact from "@/pages/Contact";
 import Partners from "@/pages/Partners";
 import RoomService from "@/pages/RoomService";
+import Spa from "@/pages/Spa";
+import Amenities from "@/pages/Amenities";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/categories" component={Categories} />
       <Route path="/partners" component={Partners} />
       <Route path="/room-service" component={RoomService} />
+      <Route path="/spa" component={Spa} />
+      <Route path="/amenities" component={Amenities} />
       <Route path="/sustainability" component={Sustainability} />
       <Route path="/contact" component={Contact} />
       <Route component={NotFound} />
