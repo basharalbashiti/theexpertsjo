@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { useLanguage } from "@/context/LanguageContext";
-import imgBanner from "@/assets/products-banner.png";
+import imgBanner from "@/assets/products-banner-bedroom.png";
 
 export default function Categories() {
   const { t } = useLanguage();
