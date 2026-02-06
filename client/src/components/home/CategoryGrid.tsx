@@ -4,7 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import imgTowels from "@/assets/cat-towels.jpg";
 import imgMinibar from "@/assets/cat-minibar.jpg";
 import imgAmenities from "@/assets/cat-amenities-wide.png";
-import imgFood from "@/assets/cat-food-stands-v2.png";
+import imgFood from "@/assets/cat-cocktail-accessories.png";
 import imgBanqueting from "@/assets/cat-banqueting.png";
 import imgBuffet from "@/assets/cat-buffet.png";
 import imgLinens from "@/assets/cat-linens.png";
