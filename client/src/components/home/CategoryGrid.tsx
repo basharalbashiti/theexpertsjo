@@ -8,7 +8,7 @@ import imgFood from "@/assets/cat-food.jpg";
 import imgHousekeeping from "@/assets/cat-housekeeping.jpg";
 import imgFurniture from "@/assets/cat-furniture.jpg";
 
-import imgBuffet from "@/assets/cat-buffet.jpg";
+import imgBuffet from "@/assets/cat-buffet.png";
 
 export function CategoryGrid() {
   const { t } = useLanguage();
