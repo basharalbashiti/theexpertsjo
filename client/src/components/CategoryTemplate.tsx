@@ -7,6 +7,7 @@ import imgProduct2 from "@/assets/cat-linens.png";
 import imgProduct3 from "@/assets/cat-amenities-wide.png";
 
 export default function CategoryPage({ title, products }: { title: string, products: any[] }) {
+  const { lang } = useLanguage();
   return (
     <Layout>
       <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-16">
@@ -29,35 +30,40 @@ export default function CategoryPage({ title, products }: { title: string, produ
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <div className="space-y-32">
-            {products.map((product, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-16 md:gap-24`}
-              >
-                <div className="flex-1 space-y-6">
-                  <h3 className="text-3xl md:text-4xl font-serif font-bold text-neutral-900 leading-tight">
-                    {product.name}
-                  </h3>
-                  <div className="h-1 bg-primary w-20" />
-                  <p className="text-neutral-600 text-lg leading-relaxed max-w-xl">
-                    {product.desc}
-                  </p>
-                </div>
-                
-                <div className="flex-1 w-full">
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl">
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                    />
+            {products.map((product, index) => {
+              const isRtl = lang === "AR";
+              const shouldReverse = isRtl ? index % 2 === 0 : index % 2 !== 0;
+              
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className={`flex flex-col ${shouldReverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-16 md:gap-24`}
+                >
+                  <div className={`flex-1 space-y-6 ${isRtl ? 'text-right' : 'text-left'}`}>
+                    <h3 className="text-3xl md:text-4xl font-serif font-bold text-neutral-900 leading-tight">
+                      {product.name}
+                    </h3>
+                    <div className={`h-1 bg-primary w-20 ${isRtl ? 'mr-0 ml-auto' : 'ml-0 mr-auto'}`} />
+                    <p className="text-neutral-600 text-lg leading-relaxed max-w-xl">
+                      {product.desc}
+                    </p>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                  
+                  <div className="flex-1 w-full">
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl">
+                      <img 
+                        src={product.image} 
+                        alt={product.name} 
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
