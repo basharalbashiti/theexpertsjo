@@ -80,6 +80,20 @@ export default function CategoryPage({ title, products }: { title: string, produ
               );
             })}
           </div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className={`mt-24 flex ${lang === "AR" ? "justify-end" : "justify-start"}`}
+          >
+            <Link href="/categories">
+              <a className="group flex items-center gap-2 text-neutral-400 hover:text-primary transition-colors text-sm font-bold uppercase tracking-widest">
+                {lang === "AR" ? <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /> : <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />}
+                {t("back_to_categories")}
+              </a>
+            </Link>
+          </motion.div>
         </div>
       </section>
     </Layout>
