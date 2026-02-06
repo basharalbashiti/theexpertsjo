@@ -23,7 +23,7 @@ export default function Categories() {
         </div>
       </div>
 
-      <CategoryGrid />
+      <CategoryGrid limit={6} />
       
       <section className="py-24 bg-white text-center">
         <div className="container mx-auto px-6">

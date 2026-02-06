@@ -10,18 +10,20 @@ import imgFurniture from "@/assets/cat-furniture.jpg";
 
 import imgBuffet from "@/assets/cat-buffet.png";
 
-export function CategoryGrid() {
+export function CategoryGrid({ limit }: { limit?: number }) {
   const { t } = useLanguage();
 
-  const categories = [
-    { id: 1, title: t("cat_buffet"), image: imgBuffet, href: "/categories" },
-    { id: 2, title: t("cat_food"), image: imgFood, href: "/categories" },
-    { id: 3, title: t("cat_banqueting"), image: imgFurniture, href: "/categories" },
-    { id: 4, title: t("cat_linens"), image: imgTowels, href: "/categories" },
-    { id: 5, title: t("cat_spa"), image: imgAmenities, href: "/categories" },
-    { id: 6, title: t("cat_room_service"), image: imgMinibar, href: "/categories" },
-    { id: 7, title: t("cat_amenities"), image: imgAmenities, href: "/categories" },
+  const allCategories = [
+    { id: 1, title: t("cat_room_service"), image: imgMinibar, href: "/categories" },
+    { id: 2, title: t("cat_linens"), image: imgTowels, href: "/categories" },
+    { id: 3, title: t("cat_spa"), image: imgAmenities, href: "/categories" },
+    { id: 4, title: t("cat_amenities"), image: imgAmenities, href: "/categories" },
+    { id: 5, title: t("cat_food"), image: imgFood, href: "/categories" },
+    { id: 6, title: t("cat_banqueting"), image: imgFurniture, href: "/categories" },
+    { id: 7, title: t("cat_buffet"), image: imgBuffet, href: "/categories" },
   ];
+
+  const categories = limit ? allCategories.slice(0, limit) : allCategories;
 
   return (
     <section className="py-24 bg-white">
