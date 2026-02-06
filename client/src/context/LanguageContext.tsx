@@ -32,8 +32,8 @@ const translations: Record<Language, Record<string, string>> = {
     // Home
     all_in_one: "All in One Place",
     hospitality_solution: "Your All-in-one Hospitality Solution",
-    home_desc1: "The Experts is the leading partner for luxury hospitality groups, providing uncompromised quality in every guest touchpoint.",
-    home_desc2: "From the world's most iconic hotels to boutique luxury escapes, we deliver bespoke supply solutions that define global standards of excellence.",
+    home_desc1: "At The Experts, we supply premium hospitality products and essential hotel supplies across the Middle East.",
+    home_desc2: "Whether you operate a large hotel or a boutique property, our carefully curated offerings deliver consistent quality and a memorable guest experience.",
     our_categories: "Our Categories",
     // Categories
     cat_towels: "Towels",
@@ -100,9 +100,8 @@ const translations: Record<Language, Record<string, string>> = {
     // Partners
     trusted_by: "Trusted by world-class hospitality brands",
     partner_excellence: "Partner with Excellence",
-    partner_desc: "The Experts is the leading partner for luxury hospitality groups, providing uncompromised quality in every guest touchpoint. From the world's most iconic hotels to boutique luxury escapes, we deliver bespoke supply solutions that define global standards of excellence.",
+    partner_desc: "We collaborate with the world's most prestigious hotel groups to deliver uncompromised quality and bespoke guest experiences. Join our network of successful partners today.",
     become_partner: "Become a Partner",
-    global_presence: "Global Presence",
     // Product Page
     our_products: "Our Products",
     explore_range: "Explore our comprehensive range of hotel supplies designed to elevate your guest experience.",
@@ -132,8 +131,8 @@ const translations: Record<Language, Record<string, string>> = {
     // Home
     all_in_one: "الكل في مكان واحد",
     hospitality_solution: "حلك المتكامل للضيافة",
-    home_desc1: "شركة الخبراء هي الشريك الرائد لمجموعات الضيافة الفاخرة، حيث نقدم جودة لا تضاهى في كل تفاصيل تجربة الضيف.",
-    home_desc2: "من أشهر الفنادق العالمية إلى الملاذات الفاخرة، نقدم حلول توريد مخصصة تحدد المعايير العالمية للتميز.",
+    home_desc1: "في الخبراء، نقوم بتوريد منتجات الضيافة الفاخرة ومستلزمات الفنادق الأساسية في جميع أنحاء الشرق الأوسط.",
+    home_desc2: "سواء كنت تدير فندقاً كبيراً أو عقاراً صغيراً، فإن عروضنا المنسقة بعناية توفر جودة متسقة وتجربة ضيوف لا تُنسى.",
     our_categories: "أقسامنا",
     // Categories
     cat_towels: "المناشف",
@@ -200,9 +199,8 @@ const translations: Record<Language, Record<string, string>> = {
     // Partners
     trusted_by: "موثوق به من قبل علامات تجارية عالمية في مجال الضيافة",
     partner_excellence: "شراكة مع التميز",
-    partner_desc: "شركة الخبراء هي الشريك الرائد لمجموعات الضيافة الفاخرة، حيث نقدم جودة لا تضاهى في كل تفاصيل تجربة الضيف. من أشهر الفنادق العالمية إلى الملاذات الفاخرة، نقدم حلول توريد مخصصة تحدد المعايير العالمية للتميز.",
+    partner_desc: "نحن نتعاون مع مجموعات الفنادق المرموقة في العالم لتقديم جودة غير مساومة وتجارب ضيوف مخصصة. انضم إلى شبكة شركائنا الناجحة اليوم.",
     become_partner: "كن شريكاً",
-    global_presence: "تواجدنا العالمي",
     // Product Page
     our_products: "منتجاتنا",
     explore_range: "استكشف مجموعتنا الشاملة من مستلزمات الفنادق المصممة لرفع تجربة ضيوفك.",
