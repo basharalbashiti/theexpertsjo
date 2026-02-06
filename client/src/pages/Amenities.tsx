@@ -7,9 +7,9 @@ import img3 from "@/assets/cat-amenities-wide.png";
 export default function AmenitiesPage() {
   const { t } = useLanguage();
   const products = [
-    { name: "Signature Collection", desc: "Eco-friendly bathroom amenities with botanical extracts.", image: img1 },
-    { name: "Personal Care Kits", desc: "Thoughtfully curated kits for the modern traveler.", image: img2 },
-    { name: "Custom Branded Sets", desc: "High-quality products tailored to your hotel's identity.", image: img3 }
+    { name: t("amenities_sig"), desc: t("amenities_sig_desc"), image: img1 },
+    { name: t("amenities_kits"), desc: t("amenities_kits_desc"), image: img2 },
+    { name: t("amenities_custom"), desc: t("amenities_custom_desc"), image: img3 }
   ];
   return <CategoryTemplate title={t("cat_amenities")} products={products} />;
 }

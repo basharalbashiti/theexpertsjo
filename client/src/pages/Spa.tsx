@@ -7,9 +7,9 @@ import img3 from "@/assets/cat-spa-simple.png";
 export default function SpaPage() {
   const { t } = useLanguage();
   const products = [
-    { name: "Premium Cotton Towels", desc: "Ultra-absorbent, 800 GSM Egyptian cotton towels for a spa-like feel.", image: img1 },
-    { name: "Luxury Bathrobes", desc: "Soft, breathable waffle-weave robes designed for maximum comfort.", image: img2 },
-    { name: "Aromatherapy Essentials", desc: "Curated selection of essential oils and candles for relaxation.", image: img3 }
+    { name: t("spa_towels"), desc: t("spa_towels_desc"), image: img1 },
+    { name: t("spa_robes"), desc: t("spa_robes_desc"), image: img2 },
+    { name: t("spa_essentials"), desc: t("spa_essentials_desc"), image: img3 }
   ];
   return <CategoryTemplate title={t("cat_spa")} products={products} />;
 }

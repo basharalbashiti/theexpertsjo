@@ -14,20 +14,20 @@ export default function RoomService() {
   const products = [
     { 
       id: 1, 
-      name: "Elite Service Trolley", 
-      desc: "Handcrafted from solid walnut with whisper-quiet, non-marking wheels. Featuring integrated heating compartments and foldable side wings for space efficiency.",
+      name: t("rs_trolley"), 
+      desc: t("rs_trolley_desc"),
       image: imgTrolley
     },
     { 
       id: 2, 
-      name: "Signature Thermal Carafe", 
-      desc: "Double-walled vacuum insulation keeps beverages at the perfect temperature for up to 12 hours. Ergonomic handle and drip-free pouring spout for effortless service.",
+      name: t("rs_carafe"), 
+      desc: t("rs_carafe_desc"),
       image: imgCarafe
     },
     { 
       id: 3, 
-      name: "Mirror-Finish Cloche", 
-      desc: "Precision-engineered from 18/10 stainless steel. High-mirror polish adds a touch of theater to the dining experience while maintaining optimal food temperature.",
+      name: t("rs_cloche"), 
+      desc: t("rs_cloche_desc"),
       image: imgCloche
     }
   ];

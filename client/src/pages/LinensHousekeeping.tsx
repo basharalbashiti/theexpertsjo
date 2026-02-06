@@ -7,9 +7,9 @@ import img3 from "@/assets/cat-room-service.png";
 export default function LinensHousekeepingPage() {
   const { t } = useLanguage();
   const products = [
-    { name: "Premium Bed Linens", desc: "High-thread-count cotton sheets for ultimate guest comfort.", image: img1 },
-    { name: "Luxury Towel Sets", desc: "Plush, absorbent towels in various weights and sizes.", image: img2 },
-    { name: "Housekeeping Essentials", desc: "Efficient solutions for maintaining pristine guest rooms.", image: img3 }
+    { name: t("linens_bed"), desc: t("linens_bed_desc"), image: img1 },
+    { name: t("linens_towels"), desc: t("linens_towels_desc"), image: img2 },
+    { name: t("linens_housekeeping"), desc: t("linens_housekeeping_desc"), image: img3 }
   ];
   return <CategoryTemplate title={t("cat_linens")} products={products} />;
 }
