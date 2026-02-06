@@ -45,10 +45,10 @@ export function CategoryGrid({ limit }: { limit?: number }) {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((cat, index) => (
             <Link key={cat.id} href={cat.href}>
-              <a className="group block overflow-hidden relative aspect-[4/5] cursor-pointer w-full max-w-[400px]">
+              <a className="group block overflow-hidden relative aspect-[4/5] cursor-pointer">
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
