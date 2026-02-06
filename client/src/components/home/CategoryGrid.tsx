@@ -12,12 +12,13 @@ export function CategoryGrid() {
   const { t } = useLanguage();
 
   const categories = [
-    { id: 1, title: t("cat_towels"), image: imgTowels, href: "/categories" },
-    { id: 2, title: t("cat_minibar"), image: imgMinibar, href: "/categories" },
-    { id: 3, title: t("cat_amenities"), image: imgAmenities, href: "/categories" },
-    { id: 4, title: t("cat_food"), image: imgFood, href: "/categories" },
-    { id: 5, title: t("cat_housekeeping"), image: imgHousekeeping, href: "/categories" },
-    { id: 6, title: t("cat_furniture"), image: imgFurniture, href: "/categories" },
+    { id: 1, title: t("cat_buffet"), image: imgFood, href: "/categories" },
+    { id: 2, title: t("cat_food"), image: imgFood, href: "/categories" },
+    { id: 3, title: t("cat_banqueting"), image: imgFurniture, href: "/categories" },
+    { id: 4, title: t("cat_linens"), image: imgTowels, href: "/categories" },
+    { id: 5, title: t("cat_spa"), image: imgAmenities, href: "/categories" },
+    { id: 6, title: t("cat_room_service"), image: imgMinibar, href: "/categories" },
+    { id: 7, title: t("cat_amenities"), image: imgAmenities, href: "/categories" },
   ];
 
   return (

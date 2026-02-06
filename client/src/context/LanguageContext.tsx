@@ -42,6 +42,10 @@ const translations: Record<Language, Record<string, string>> = {
     cat_housekeeping: "Housekeeping",
     cat_furniture: "Furniture",
     cat_linens: "Linens",
+    cat_buffet: "Buffet Stands",
+    cat_banqueting: "Banqueting",
+    cat_spa: "Spa",
+    cat_room_service: "Room Service",
     // Stats
     stat_offices: "Offices",
     stat_warehouses: "Warehouses",
@@ -136,6 +140,10 @@ const translations: Record<Language, Record<string, string>> = {
     cat_housekeeping: "التدبير الفندقي",
     cat_furniture: "الأثاث",
     cat_linens: "البياضات",
+    cat_buffet: "أستاندات البوفيه",
+    cat_banqueting: "قاعات الاحتفالات",
+    cat_spa: "السبا",
+    cat_room_service: "خدمة الغرف",
     // Stats
     stat_offices: "مكاتب",
     stat_warehouses: "مستودعات",
