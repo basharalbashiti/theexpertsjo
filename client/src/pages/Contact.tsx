@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import imgBanner from "@/assets/contact-banner-clean.png";
+import imgBanner from "@/assets/contact-banner-smart.png";
 
 export default function Contact() {
   const { t } = useLanguage();
