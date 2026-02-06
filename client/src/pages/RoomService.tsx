@@ -88,45 +88,6 @@ export default function RoomService() {
         </div>
       </section>
 
-      <section className="py-24 bg-neutral-50 border-y border-neutral-100">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl font-serif font-bold mb-6">Signature Standards</h2>
-              <p className="text-neutral-600 text-lg leading-relaxed mb-8">
-                Every piece in our room service collection is rigorously tested for durability in high-traffic environments. We combine traditional craftsmanship with modern ergonomics to ensure your staff can deliver perfection, every time.
-              </p>
-              <ul className="space-y-4 text-neutral-800 font-medium">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                  Premium 18/10 Stainless Steel
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                  Silent-Motion Technology
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                  Custom Branding Available
-                </li>
-              </ul>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative aspect-video"
-            >
-              <img src={imgItems} className="w-full h-full object-cover shadow-2xl" alt="Room Service Atmosphere" />
-              <div className="absolute inset-0 bg-primary/10 mix-blend-multiply" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       <section className="py-24 bg-neutral-900 text-white text-center">
         <div className="container mx-auto px-6 max-w-2xl">
