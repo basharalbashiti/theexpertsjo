@@ -9,7 +9,7 @@ import imgProduct2 from "@/assets/cat-linens.png";
 import imgProduct3 from "@/assets/cat-amenities-wide.png";
 
 export default function CategoryPage({ title, products }: { title: string, products: any[] }) {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   return (
     <Layout>
       <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-16">
