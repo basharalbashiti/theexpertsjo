@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import imgOffice from "@/assets/hero-1.jpg";
-import imgBanner from "@/assets/partners-banner.png";
+import imgBanner from "@/assets/partners-banner-clean.png";
 
 export default function Partners() {
   const { t } = useLanguage();
