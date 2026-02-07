@@ -54,15 +54,25 @@ export default function Contact() {
                     addr: "Wahet Ammoun Building, No. 185, 2nd floor, Amman, Jordan", 
                     phone: "Tel: +962-6-5852220",
                     mobile: "Mob: +962-79-0120447",
-                    email: "sales@theexpertsjo.com"
+                    email: "sales@theexpertsjo.com",
+                    mapUrl: "https://maps.app.goo.gl/q9S4aYVrdxUaR2YX7?g_st=iw"
                   }
                 ].map((loc, i) => (
                   <div key={i} className="flex gap-6 group">
-                    <div className="w-12 h-12 bg-neutral-100 flex items-center justify-center group-hover:bg-primary transition-colors">
+                    <a 
+                      href={loc.mapUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 bg-neutral-100 flex items-center justify-center group-hover:bg-primary transition-colors flex-shrink-0"
+                    >
                       <MapPin size={20} className="group-hover:text-white" />
-                    </div>
+                    </a>
                     <div>
-                      <h4 className="font-serif font-bold text-lg">{loc.city}</h4>
+                      <h4 className="font-serif font-bold text-lg">
+                        <a href={loc.mapUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                          {loc.city}
+                        </a>
+                      </h4>
                       <p className="text-neutral-500 text-sm mt-1">{loc.addr}</p>
                       <div className="mt-2 space-y-1">
                         <p className="text-primary text-sm font-bold">{loc.phone}</p>
