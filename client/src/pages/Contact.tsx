@@ -63,15 +63,9 @@ export default function Contact() {
                       href={loc.mapUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-16 h-16 bg-white border-2 border-neutral-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary transition-all duration-300 flex-shrink-0 shadow-lg group-hover:shadow-primary/20 rounded-xl relative overflow-hidden"
+                      className="w-12 h-12 bg-neutral-100 flex items-center justify-center group-hover:bg-primary transition-colors flex-shrink-0"
                     >
-                      <MapPin size={24} className="text-primary group-hover:text-white transition-colors relative z-10" />
-                      <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity" />
-                      <div className="absolute -bottom-1 -right-1 bg-white p-1 rounded-tl-md shadow-sm border border-neutral-100 group-hover:border-white transition-colors">
-                        <svg className="w-3 h-3 text-neutral-400 group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        </svg>
-                      </div>
+                      <MapPin size={20} className="group-hover:text-white" />
                     </a>
                     <div>
                       <h4 className="font-serif font-bold text-lg">
