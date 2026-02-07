@@ -43,7 +43,7 @@ export function Navbar() {
   ];
 
   const handleWhatsAppClick = () => {
-    window.open("https://wa.me/97141234567", "_blank");
+    window.open("https://wa.me/962790484745", "_blank");
   };
 
   return (
