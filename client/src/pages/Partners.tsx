@@ -8,7 +8,7 @@ import partner3 from "@/assets/partner-hotel_3.jpg";
 import partner4 from "@/assets/partner-hotel_4.jpg";
 import partner5 from "@/assets/partner-hotel_5.jpg";
 import partner6 from "@/assets/partner-hotel_6.jpg";
-import imgCTA from "@/assets/partner-cta-bedroom.jpg";
+import imgCTA from "@/assets/partnership-handshake.jpg";
 
 export default function Partners() {
   const { t, lang } = useLanguage();
