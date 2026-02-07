@@ -52,8 +52,7 @@ export default function Contact() {
                   { 
                     city: t("amman"), 
                     addr: "Wahet Ammoun Building, No. 185, 2nd floor, Amman, Jordan", 
-                    phone: "Tel: +962-6-5852220",
-                    mobile: "Mob: +962-79-0120447",
+                    mobile: "00962 79 0484745",
                     email: "sales@theexpertsjo.com",
                     mapUrl: "https://maps.app.goo.gl/q9S4aYVrdxUaR2YX7?g_st=iw"
                   }
@@ -75,7 +74,6 @@ export default function Contact() {
                       </h4>
                       <p className="text-neutral-500 text-sm mt-1">{loc.addr}</p>
                       <div className="mt-2 space-y-1">
-                        <p className="text-primary text-sm font-bold">{loc.phone}</p>
                         <p className="text-primary text-sm font-bold">{loc.mobile}</p>
                         <p className="text-neutral-600 text-sm italic">{loc.email}</p>
                       </div>

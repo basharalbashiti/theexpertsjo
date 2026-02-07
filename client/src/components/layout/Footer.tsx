@@ -44,8 +44,7 @@ export function Footer() {
             <div className="space-y-3 text-sm text-neutral-400">
               <p>Amman – Jordan</p>
               <p>sales@theexpertsjo.com</p>
-              <p>Tel: +962-6-5852220</p>
-              <p>Mob: +962-79-0120447</p>
+              <p>Mob: 00962 79 0484745</p>
             </div>
           </div>
         </div>
