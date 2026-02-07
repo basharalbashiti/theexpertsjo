@@ -9,6 +9,7 @@ import partner4 from "@/assets/partner-hotel_4.jpg";
 import partner5 from "@/assets/partner-hotel_5.jpg";
 import partner6 from "@/assets/partner-hotel_6.jpg";
 import imgCTA from "@/assets/partnership-bespoke.png";
+import brandLogo from "@/assets/theexperts-brand-logo.png";
 
 export default function Partners() {
   const { t, lang } = useLanguage();
@@ -16,9 +17,9 @@ export default function Partners() {
   const hotelPartners = [partner1, partner2, partner3, partner4, partner5, partner6];
   
   const brands = [
-    { name: "ABDEEN", style: "font-sans font-black tracking-tighter text-[#4A5568]" },
-    { name: "Cashmere", style: "font-serif italic text-[#718096]" },
-    { name: "THE EXPERTS", style: "font-sans font-bold tracking-tight text-[#3182CE]" }
+    { name: "ABDEEN", type: "text", style: "font-sans font-black tracking-tighter text-[#4A5568]" },
+    { name: "Cashmere", type: "text", style: "font-serif italic text-[#718096]" },
+    { logo: brandLogo, type: "image" }
   ];
 
   return (
@@ -76,16 +77,22 @@ export default function Partners() {
           <h2 className="text-3xl font-serif font-bold text-neutral-900 mb-16">Our Brands</h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
             {brands.map((brand, i) => (
-              <motion.span
+              <motion.div
                 key={i}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
-                className={`text-2xl md:text-4xl uppercase tracking-widest ${brand.style} cursor-default`}
+                className="flex items-center justify-center"
               >
-                {brand.name}
-              </motion.span>
+                {brand.type === "image" ? (
+                  <img src={brand.logo} alt="The Experts Brand" className="h-16 md:h-24 w-auto object-contain" />
+                ) : (
+                  <span className={`text-2xl md:text-4xl uppercase tracking-widest ${brand.style} cursor-default`}>
+                    {brand.name}
+                  </span>
+                )}
+              </motion.div>
             ))}
           </div>
         </div>
