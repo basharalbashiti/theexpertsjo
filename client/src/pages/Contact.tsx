@@ -84,6 +84,28 @@ export default function Contact() {
                 ))}
               </div>
             </div>
+
+            <div className="pt-8 border-t border-neutral-100">
+              <h2 className="text-3xl font-serif font-bold mb-8 text-primary">Key Contacts</h2>
+              <div className="grid gap-8">
+                <div className="space-y-2">
+                  <h4 className="font-serif font-bold text-xl text-neutral-900">Alaa Abdin</h4>
+                  <p className="text-primary text-xs uppercase tracking-widest font-bold">General Manager</p>
+                  <div className="text-sm text-neutral-600 space-y-1">
+                    <p>Tel: 00962 79 5779345</p>
+                    <p>Email: alaa@theexpertsjo.com</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-serif font-bold text-xl text-neutral-900">Rafat Daood</h4>
+                  <p className="text-primary text-xs uppercase tracking-widest font-bold">Sales Manager</p>
+                  <div className="text-sm text-neutral-600 space-y-1">
+                    <p>Tel: 00962 79 0484745</p>
+                    <p>Email: Sales@theexpertsjo.com</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

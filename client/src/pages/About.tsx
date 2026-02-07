@@ -17,8 +17,8 @@ export default function About() {
   ];
 
   const leadership = [
-    { name: "Ahmed Abu Sakha", role: "Chief Executive Officer" },
-    { name: "Mohammed Faraz", role: "Chief Financial Officer" },
+    { name: "Alaa Abdin", role: "General Manager" },
+    { name: "Rafat Daood", role: "Sales Manager" },
     { name: "Marwan Abu Sakha", role: "Group Corporate Development Manager" },
     { name: "Khaled Ghunaim", role: "General Manager - Jordan" },
   ];
