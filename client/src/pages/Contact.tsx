@@ -74,7 +74,7 @@ export default function Contact() {
                       </h4>
                       <p className="text-neutral-500 text-sm mt-1">{loc.addr}</p>
                       <div className="mt-2 space-y-1">
-                        <p className="text-primary text-sm font-bold">{loc.mobile}</p>
+                        <p className="text-primary text-sm font-bold">Mob: {loc.mobile}</p>
                         <p className="text-neutral-600 text-sm italic">{loc.email}</p>
                       </div>
                     </div>
