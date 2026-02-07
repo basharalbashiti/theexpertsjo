@@ -49,9 +49,13 @@ export default function Contact() {
               <h2 className="text-3xl font-serif font-bold mb-8 text-primary">{t("our_locations")}</h2>
               <div className="space-y-8">
                 {[
-                  { city: t("dubai"), addr: "Business Bay, Dubai", phone: "+971 4 123 4567" },
-                  { city: t("riyadh"), addr: "King Fahd Road, Riyadh", phone: "+966 11 123 4567" },
-                  { city: t("amman"), addr: "Shmeisani, Amman", phone: "+962 6 123 4567" }
+                  { 
+                    city: t("amman"), 
+                    addr: "Wahet Ammoun Building, No. 185, 2nd floor, Amman, Jordan", 
+                    phone: "Tel: +962-6-5852220",
+                    mobile: "Mob: +962-79-0120447",
+                    email: "sales@theexpertsjo.com"
+                  }
                 ].map((loc, i) => (
                   <div key={i} className="flex gap-6 group">
                     <div className="w-12 h-12 bg-neutral-100 flex items-center justify-center group-hover:bg-primary transition-colors">
@@ -60,7 +64,11 @@ export default function Contact() {
                     <div>
                       <h4 className="font-serif font-bold text-lg">{loc.city}</h4>
                       <p className="text-neutral-500 text-sm mt-1">{loc.addr}</p>
-                      <p className="text-primary text-sm mt-2 font-bold">{loc.phone}</p>
+                      <div className="mt-2 space-y-1">
+                        <p className="text-primary text-sm font-bold">{loc.phone}</p>
+                        <p className="text-primary text-sm font-bold">{loc.mobile}</p>
+                        <p className="text-neutral-600 text-sm italic">{loc.email}</p>
+                      </div>
                     </div>
                   </div>
                 ))}

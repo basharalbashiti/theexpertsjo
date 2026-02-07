@@ -42,9 +42,10 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg mb-6">{t("contact_us")}</h4>
             <div className="space-y-3 text-sm text-neutral-400">
-              <p>Dubai, UAE</p>
-              <p>info@theexperts.me</p>
-              <p>+971 4 123 4567</p>
+              <p>Amman – Jordan</p>
+              <p>sales@theexpertsjo.com</p>
+              <p>Tel: +962-6-5852220</p>
+              <p>Mob: +962-79-0120447</p>
             </div>
           </div>
         </div>
