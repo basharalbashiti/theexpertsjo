@@ -86,7 +86,7 @@ export default function Partners() {
                 className="flex items-center justify-center"
               >
                 {brand.type === "image" ? (
-                  <img src={brand.logo} alt="The Experts Brand" className="h-16 md:h-20 w-[240px] md:w-[320px] object-contain" />
+                  <img src={brand.logo} alt="The Experts Brand" className="h-20 md:h-24 w-[288px] md:w-[384px] object-contain" />
                 ) : (
                   <span className={`text-2xl md:text-4xl uppercase tracking-widest ${brand.style} cursor-default`}>
                     {brand.name}
