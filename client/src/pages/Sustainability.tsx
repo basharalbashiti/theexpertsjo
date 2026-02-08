@@ -19,7 +19,7 @@ export default function Sustainability() {
         <motion.h1 
           initial={{ opacity: 0, letterSpacing: "0em" }}
           animate={{ opacity: 1, letterSpacing: "0.1em" }}
-          className="relative text-6xl md:text-8xl font-serif font-bold text-white z-10"
+          className="relative text-3xl md:text-8xl font-serif font-bold text-white z-10 px-4 text-center"
         >
           {t("sustainability")}
         </motion.h1>
