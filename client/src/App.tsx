@@ -1,6 +1,5 @@
 import { LanguageProvider } from "./context/LanguageContext";
 import { Switch, Route, Router } from "wouter";
-import { useHashLocation } from "wouter/use-hash-location";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -43,7 +42,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <Toaster />
-        <Router hook={useHashLocation}>
+        <Router>
           <AppRoutes />
         </Router>
       </LanguageProvider>
