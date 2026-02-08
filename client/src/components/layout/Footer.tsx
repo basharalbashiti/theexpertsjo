@@ -50,7 +50,8 @@ export function Footer() {
         </div>
         
         <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-xs text-neutral-500">
-          © {new Date().getFullYear()} The Experts. {t("rights_reserved")}
+          <p>© {new Date().getFullYear()} The Experts. {t("rights_reserved")}</p>
+          <p className="mt-2 opacity-30">Build: 2026-02-08-01</p>
         </div>
       </div>
     </footer>
