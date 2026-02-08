@@ -31,7 +31,7 @@ function Router() {
       <Route path="/food-beverage" component={FoodBeverage} />
       <Route path="/linens" component={LinensHousekeeping} />
       <Route path="/sustainability" component={Sustainability} />
-      <Route path="/contact" component={Contact} />
+      <Route path="/contact-us" component={Contact} />
       <Route component={NotFound} />
     </Switch>
   );
