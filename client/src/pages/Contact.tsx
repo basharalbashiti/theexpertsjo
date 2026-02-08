@@ -31,23 +31,14 @@ export default function Contact() {
         <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16">
           <div>
             <h2 className="text-3xl font-serif font-bold mb-12">{t("send_message")}</h2>
-            <form 
-              className="space-y-6"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const subject = formData.get('subject') || 'Contact Message';
-                const body = `Name: ${formData.get('name')}\nEmail: ${formData.get('email')}\n\nMessage:\n${formData.get('message')}`;
-                window.location.href = `mailto:alaa@theexpertsjo.com,Sales@theexpertsjo.com?subject=${encodeURIComponent(subject as string)}&body=${encodeURIComponent(body)}`;
-              }}
-            >
+            <form className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
-                <input name="name" type="text" required placeholder={t("full_name")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-                <input name="email" type="email" required placeholder={t("email_addr")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
+                <input type="text" placeholder={t("full_name")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
+                <input type="email" placeholder={t("email_addr")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
               </div>
-              <input name="subject" type="text" required placeholder={t("subject")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-              <textarea name="message" required placeholder={t("message")} rows={4} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors resize-none" />
-              <button type="submit" className="bg-primary text-white px-12 py-4 uppercase text-xs font-bold tracking-widest hover:bg-black transition-colors mt-8">
+              <input type="text" placeholder={t("subject")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
+              <textarea placeholder={t("message")} rows={4} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors resize-none" />
+              <button className="bg-primary text-white px-12 py-4 uppercase text-xs font-bold tracking-widest hover:bg-black transition-colors mt-8">
                 {t("submit")}
               </button>
             </form>
