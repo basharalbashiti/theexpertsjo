@@ -7,7 +7,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { lang } = useLanguage();
   
   return (
-    <div className={`min-h-screen flex flex-col ${lang === "AR" ? "rtl" : "ltr"}`} dir={lang === "AR" ? "rtl" : "ltr"}>
+    <div className={`min-h-screen flex flex-col overflow-x-hidden ${lang === "AR" ? "rtl" : "ltr"}`} dir={lang === "AR" ? "rtl" : "ltr"}>
       <Navbar />
       <motion.main 
         initial={{ opacity: 0, y: 20 }}

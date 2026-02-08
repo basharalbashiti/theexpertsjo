@@ -14,7 +14,7 @@ export default function Home() {
       
       <Stats />
 
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white overflow-hidden">
         <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
