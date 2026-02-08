@@ -17,7 +17,7 @@ const translations: Record<Language, Record<string, string>> = {
     partners: "Partners & Clients",
     partners_clients: "Partners & Clients",
     sustainability: "Sustainability",
-    contact: "Contact",
+    contact: "Contact Us",
     // Hero
     hero1_title: "Supplying Comfort",
     hero1_subtitle: "Luxury to Your Guests",
