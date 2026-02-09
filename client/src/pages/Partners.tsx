@@ -19,7 +19,7 @@ export default function Partners() {
   const brands = [
     { name: "ABDEEN", type: "text", style: "font-sans font-black tracking-tighter text-[#4A5568]" },
     { name: "Cashmere", type: "text", style: "font-serif italic text-[#718096]" },
-    { logo: brandLogo, type: "image" }
+    { name: "THE EXPERTS", type: "text", style: "font-serif font-bold tracking-wider text-[#0F1E40]" }
   ];
 
   return (
