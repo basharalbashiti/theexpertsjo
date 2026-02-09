@@ -196,11 +196,14 @@ export function Navbar() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleWhatsAppClick}
-        className="fixed bottom-6 right-6 z-[60] bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center overflow-hidden"
+        className="fixed bottom-6 right-6 z-[60] bg-transparent w-14 h-14 rounded-full shadow-2xl flex items-center justify-center overflow-hidden"
         aria-label="Chat on WhatsApp"
       >
-        <MessageCircle size={30} fill="currentColor" className="relative z-10" />
-        <div className="absolute inset-0 bg-black/5 opacity-0 hover:opacity-100 transition-opacity" />
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+          alt="WhatsApp" 
+          className="w-full h-full object-cover"
+        />
       </motion.button>
     </>
   );
