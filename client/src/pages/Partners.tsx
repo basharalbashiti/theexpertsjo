@@ -18,7 +18,15 @@ export default function Partners() {
   const brands = [
     { name: "ABDEEN", type: "text", style: "font-sans font-black tracking-tighter text-[#4A5568]" },
     { name: "Cashmere", type: "text", style: "font-serif italic text-[#718096]" },
-    { name: "The Experts for Hotels Supplies", type: "text", style: "font-serif font-bold tracking-wider text-[#718096] text-center" }
+    { 
+      type: "custom", 
+      content: (
+        <div className="flex flex-col items-center justify-center text-[#718096] font-serif font-bold cursor-default leading-tight">
+           <span className="text-xl md:text-3xl uppercase tracking-wider">The Experts</span>
+           <span className="text-[10px] md:text-sm uppercase tracking-[0.2em] mt-1 opacity-90">for Hotels Supplies</span>
+        </div>
+      )
+    }
   ];
 
   return (
@@ -85,8 +93,13 @@ export default function Partners() {
                 className="flex items-center justify-center"
               >
                 {brand.type === "image" ? (
+                  // @ts-ignore
                   <img src={brand.logo} alt="The Experts Brand" className="h-20 md:h-24 w-[288px] md:w-[384px] object-contain" />
+                ) : brand.type === "custom" ? (
+                  // @ts-ignore
+                  brand.content
                 ) : (
+                  // @ts-ignore
                   <span className={`text-2xl md:text-4xl uppercase tracking-widest ${brand.style} cursor-default`}>
                     {brand.name}
                   </span>
