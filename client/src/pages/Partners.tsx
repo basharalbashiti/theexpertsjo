@@ -9,7 +9,6 @@ import partner4 from "@/assets/partner-hotel_4.jpg";
 import partner5 from "@/assets/partner-hotel_5.jpg";
 import partner6 from "@/assets/partner-hotel_6.jpg";
 import imgCTA from "@/assets/partnership-bespoke.png";
-import brandLogo from "@/assets/theexperts-brand-logo.png";
 
 export default function Partners() {
   const { t, lang } = useLanguage();
@@ -19,7 +18,7 @@ export default function Partners() {
   const brands = [
     { name: "ABDEEN", type: "text", style: "font-sans font-black tracking-tighter text-[#4A5568]" },
     { name: "Cashmere", type: "text", style: "font-serif italic text-[#718096]" },
-    { name: "THE EXPERTS", type: "text", style: "font-serif font-bold tracking-wider text-[#0F1E40]" }
+    { name: "The Experts for Hotels Supplies", type: "text", style: "font-serif font-bold tracking-wider text-[#718096] text-center" }
   ];
 
   return (
