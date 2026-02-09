@@ -9,7 +9,7 @@ import partner4 from "@/assets/partner-hotel_4.jpg";
 import partner5 from "@/assets/partner-hotel_5.jpg";
 import partner6 from "@/assets/partner-hotel_6.jpg";
 import imgCTA from "@/assets/partnership-bespoke.png";
-import brandLogo from "@/assets/theexperts-brand-logo-wide.png";
+import brandLogo from "@/assets/theexperts-brand-logo.png";
 
 export default function Partners() {
   const { t, lang } = useLanguage();
