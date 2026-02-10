@@ -89,7 +89,6 @@ export function Navbar() {
                           <Link key={sub.href} href={sub.href}>
                             <a className="px-6 py-3 text-[13px] text-neutral-600 hover:text-primary hover:bg-neutral-50/80 transition-all duration-300 font-semibold tracking-wide flex items-center justify-between group/item rounded-lg mb-1">
                               {sub.name}
-                              <ChevronDown size={12} className="-rotate-90 opacity-0 group-hover/item:opacity-100 transition-all transform translate-x-[-10px] group-hover/item:translate-x-0" />
                             </a>
                           </Link>
                         ))}
