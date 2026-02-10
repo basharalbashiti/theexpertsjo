@@ -4,7 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import imgBanner from "@/assets/partners-banner-outdoor.png";
 import grandHyatt from "@/assets/partners/grand-hyatt.jpg";
 import coralBaghdad from "@/assets/partners/coral-baghdad.jpg";
-import theHouseHotels from "@/assets/partners/the-house-hotels.jpg";
+import theHouseHotels from "@/assets/partners/the-house-hotels-logo.webp";
 import landmark from "@/assets/partners/landmark.jpg";
 import wHotel from "@/assets/partners/w-hotel.jpg";
 import fourSeasons from "@/assets/partners/four-seasons.jpg";
