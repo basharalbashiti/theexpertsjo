@@ -24,16 +24,7 @@ export default function Partners() {
   
   const brands = [
     { name: "ABDEEN", type: "text", style: "font-sans font-black tracking-tighter text-[#4A5568]" },
-    { name: "Cashmere", type: "text", style: "font-serif italic text-[#718096]" },
-    { 
-      type: "custom", 
-      content: (
-        <div className="flex flex-col items-center justify-center font-serif font-bold cursor-default leading-tight">
-           <span className="text-xl md:text-3xl uppercase tracking-wider text-[#0F1E40]">The Experts</span>
-           <span className="text-[10px] md:text-sm uppercase tracking-[0.2em] mt-1 text-primary">for Hotels Supplies</span>
-        </div>
-      )
-    }
+    { name: "Cashmere", type: "text", style: "font-serif italic text-[#718096]" }
   ];
 
   return (
