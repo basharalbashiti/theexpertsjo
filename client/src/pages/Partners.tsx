@@ -7,7 +7,7 @@ import coralBaghdad from "@/assets/partners/coral-baghdad.jpg";
 import theHouseHotels from "@/assets/partners/the-house-hotels-logo.webp";
 import landmark from "@/assets/partners/landmark.jpg";
 import wHotel from "@/assets/partners/w-hotel.jpg";
-import fourSeasons from "@/assets/partners/four-seasons.jpg";
+import fourSeasons from "@/assets/partners/four-seasons-new.png";
 import imgCTA from "@/assets/partnership-bespoke.png";
 
 export default function Partners() {
