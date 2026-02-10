@@ -33,9 +33,10 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg mb-6">{t("categories")}</h4>
             <ul className="space-y-3 text-sm text-neutral-400">
-              <li><Link href="/categories"><a className="hover:text-primary transition-colors">{t("cat_amenities")}</a></Link></li>
-              <li><Link href="/categories"><a className="hover:text-primary transition-colors">{t("cat_linens")}</a></Link></li>
-              <li><Link href="/categories"><a className="hover:text-primary transition-colors">{t("cat_furniture")}</a></Link></li>
+              <li><Link href="/amenities"><a className="hover:text-primary transition-colors">{t("cat_amenities")}</a></Link></li>
+              <li><Link href="/linens"><a className="hover:text-primary transition-colors">{t("cat_linens")}</a></Link></li>
+              <li><Link href="/room-service"><a className="hover:text-primary transition-colors">{t("cat_room_service")}</a></Link></li>
+              <li><Link href="/spa"><a className="hover:text-primary transition-colors">{t("cat_spa")}</a></Link></li>
             </ul>
           </div>
 
