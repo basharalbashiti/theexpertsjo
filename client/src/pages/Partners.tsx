@@ -2,23 +2,24 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import imgBanner from "@/assets/partners-banner-outdoor.png";
-import partner1 from "@/assets/partner-hotel_1.jpg";
-import partner2 from "@/assets/partner-hotel_2.jpg";
-import partner3 from "@/assets/partner-hotel_3.jpg";
-import partner4 from "@/assets/partner-hotel_4.jpg";
-import partner5 from "@/assets/partner-hotel_5.jpg";
+import grandHyatt from "@/assets/partners/grand-hyatt.jpg";
+import coralBaghdad from "@/assets/partners/coral-baghdad.jpg";
+import theHouseHotels from "@/assets/partners/the-house-hotels.jpg";
+import landmark from "@/assets/partners/landmark.jpg";
+import wHotel from "@/assets/partners/w-hotel.jpg";
+import fourSeasons from "@/assets/partners/four-seasons.jpg";
 import imgCTA from "@/assets/partnership-bespoke.png";
 
 export default function Partners() {
   const { t, lang } = useLanguage();
 
   const hotelPartners = [
-    { type: 'image', src: partner1 },
-    { type: 'image', src: partner2 },
-    { type: 'image', src: partner3 },
-    { type: 'image', src: partner4 },
-    { type: 'image', src: partner5 },
-    { type: 'text', content: "Five Palm Jumeirah - Dubai" }
+    { type: 'image', src: fourSeasons },
+    { type: 'image', src: grandHyatt },
+    { type: 'image', src: wHotel },
+    { type: 'image', src: landmark },
+    { type: 'image', src: coralBaghdad },
+    { type: 'image', src: theHouseHotels },
   ];
   
   const brands = [
@@ -74,19 +75,11 @@ export default function Partners() {
                 transition={{ delay: i * 0.1 }}
                 className="w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 bg-neutral-50 p-2 border border-neutral-100 flex items-center justify-center text-center group"
               >
-                {item.type === 'image' ? (
-                  <img 
-                    src={item.src} 
-                    alt="Partner Hotel" 
-                    className="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center p-4 bg-white rounded-xl group-hover:bg-neutral-50 transition-colors">
-                    <span className="font-serif font-bold text-neutral-800 text-sm md:text-base leading-tight">
-                      {item.content}
-                    </span>
-                  </div>
-                )}
+                <img 
+                  src={item.src} 
+                  alt="Partner Hotel" 
+                  className="w-full h-full object-contain p-2 rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
+                />
               </motion.div>
             ))}
           </div>
