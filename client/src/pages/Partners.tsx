@@ -8,6 +8,17 @@ import theHouseHotels from "@/assets/partners/the-house-hotels-logo.webp";
 import landmark from "@/assets/partners/landmark.jpg";
 import wHotel from "@/assets/partners/w-hotel.jpg";
 import fourSeasons from "@/assets/partners/four-seasons-new.png";
+import banyanTree from "@/assets/partners/banyan-tree.png";
+import rosewood from "@/assets/partners/rosewood.jpg";
+import wyndham from "@/assets/partners/wyndham.png";
+import mandarinOriental from "@/assets/partners/mandarin-oriental.png";
+import accor from "@/assets/partners/accor.png";
+import leMeridien from "@/assets/partners/le-meridien.png";
+import crownePlaza from "@/assets/partners/crowne-plaza.png";
+import ihg from "@/assets/partners/ihg.jpg";
+import marriott from "@/assets/partners/marriott.png";
+import millennium from "@/assets/partners/millennium.png";
+import hyatt from "@/assets/partners/hyatt.jpg";
 import imgCTA from "@/assets/partnership-bespoke.png";
 
 export default function Partners() {
@@ -20,6 +31,17 @@ export default function Partners() {
     { type: 'image', src: landmark },
     { type: 'image', src: coralBaghdad },
     { type: 'image', src: theHouseHotels },
+    { type: 'image', src: banyanTree },
+    { type: 'image', src: rosewood },
+    { type: 'image', src: wyndham },
+    { type: 'image', src: mandarinOriental },
+    { type: 'image', src: accor },
+    { type: 'image', src: leMeridien },
+    { type: 'image', src: crownePlaza },
+    { type: 'image', src: ihg },
+    { type: 'image', src: marriott },
+    { type: 'image', src: millennium },
+    { type: 'image', src: hyatt },
   ];
   
   const brands = [
