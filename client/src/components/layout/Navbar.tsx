@@ -38,7 +38,6 @@ export function Navbar() {
       ]
     },
     { name: t("partners"), href: "/partners" },
-    { name: t("sustainability"), href: "/sustainability" },
     { name: t("contact"), href: "/contact" },
   ];
 

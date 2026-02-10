@@ -6,8 +6,6 @@ import { Toaster } from "@/components/ui/toaster";
 import ScrollToTop from "@/components/ScrollToTop";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
-import Categories from "@/pages/Categories";
-import Sustainability from "@/pages/Sustainability";
 import Contact from "@/pages/Contact";
 import Partners from "@/pages/Partners";
 import RoomService from "@/pages/RoomService";
@@ -31,7 +29,6 @@ function Router() {
       <Route path="/buffet-banqueting" component={BuffetBanqueting} />
       <Route path="/food-beverage" component={FoodBeverage} />
       <Route path="/linens" component={LinensHousekeeping} />
-      <Route path="/sustainability" component={Sustainability} />
       <Route path="/contact" component={Contact} />
       <Route component={NotFound} />
     </Switch>
