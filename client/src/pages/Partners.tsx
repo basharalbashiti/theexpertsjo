@@ -95,7 +95,7 @@ export default function Partners() {
 
       <section className="py-24 bg-neutral-50 border-y border-neutral-100">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-serif font-bold text-neutral-900 mb-16">Our Brands</h2>
+          <h2 className="text-3xl font-serif font-bold text-neutral-900 mb-16">Our Partners</h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
             {brands.map((brand, i) => (
               <motion.div
