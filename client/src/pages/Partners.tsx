@@ -144,7 +144,7 @@ export default function Partners() {
                 </div>
               </div>
               <div className="flex-1 w-full h-[400px] md:h-[600px] relative">
-                <img src={imgCTA} className="w-full h-full object-cover" alt="Luxury Bedroom" />
+                <img src={imgCTA} className="w-full h-full object-cover" alt="Hotel Bedroom" />
                 <div className="absolute inset-0 bg-black/5" />
               </div>
             </div>
