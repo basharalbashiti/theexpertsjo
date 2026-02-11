@@ -182,7 +182,7 @@ export default function ContentEditor() {
 
       <div className="flex gap-6">
         <div className="w-56 shrink-0">
-          <div className="bg-white rounded-xl border p-2 sticky top-6">
+          <div className="bg-white rounded-xl border p-2">
             <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wider px-3 py-2">Sections</p>
             <button
               data-testid="section-all"
