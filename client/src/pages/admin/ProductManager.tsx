@@ -245,6 +245,12 @@ export default function ProductManager() {
         <table className="w-full min-w-[800px]">
           <thead>
             <tr className="border-b bg-neutral-50">
+              <th
+                className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
+                onClick={() => toggleSort("sortOrder")}
+              >
+                Order<SortIcon field="sortOrder" />
+              </th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Image</th>
               <th
                 className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
@@ -265,18 +271,13 @@ export default function ProductManager() {
               >
                 Category<SortIcon field="category" />
               </th>
-              <th
-                className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
-                onClick={() => toggleSort("sortOrder")}
-              >
-                Order<SortIcon field="sortOrder" />
-              </th>
               <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredAndSorted.map((product) => (
               <tr key={product.id} data-testid={`row-product-${product.id}`} className="border-b last:border-0 hover:bg-neutral-50 transition-colors">
+                <td className="px-4 py-3 text-sm text-neutral-500">{product.sortOrder}</td>
                 <td className="px-4 py-3">
                   {product.imageUrl ? (
                     <img src={product.imageUrl} alt={product.nameEn} className="w-12 h-12 object-cover rounded-lg" />
@@ -305,7 +306,6 @@ export default function ProductManager() {
                     {getCategoryName(product.categoryId)}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-neutral-500">{product.sortOrder}</td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">
                     <Button
