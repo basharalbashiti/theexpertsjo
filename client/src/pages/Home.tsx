@@ -55,7 +55,13 @@ export default function Home() {
         </div>
       </section>
 
-      <CategoryGrid />
+      <CategoryGrid limit={6} />
+
+      <div className="bg-white pb-16 text-center">
+        <a href="/categories" className="inline-block text-primary border-b-2 border-primary pb-1 uppercase tracking-widest text-sm font-bold hover:text-black hover:border-black transition-colors" data-testid="link-discover-more">
+          Discover More
+        </a>
+      </div>
       
     </Layout>
   );
