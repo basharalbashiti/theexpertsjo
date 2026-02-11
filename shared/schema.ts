@@ -37,24 +37,12 @@ export const partners = pgTable("partners", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   imageUrl: text("image_url").notNull(),
-  displayType: text("display_type").notNull().default("image"),
-  fontFamily: text("font_family").notNull().default("sans-serif"),
-  fontWeight: text("font_weight").notNull().default("900"),
-  fontStyle: text("font_style").notNull().default("normal"),
-  textColor: text("text_color").notNull().default("#4A5568"),
-  letterSpacing: text("letter_spacing").notNull().default("0.05em"),
   sortOrder: serial("sort_order"),
 });
 
 export const insertPartnerSchema = createInsertSchema(partners).pick({
   name: true,
   imageUrl: true,
-  displayType: true,
-  fontFamily: true,
-  fontWeight: true,
-  fontStyle: true,
-  textColor: true,
-  letterSpacing: true,
 });
 
 export type InsertPartner = z.infer<typeof insertPartnerSchema>;

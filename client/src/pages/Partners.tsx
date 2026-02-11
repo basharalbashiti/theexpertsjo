@@ -9,12 +9,6 @@ interface Partner {
   id: number;
   name: string;
   imageUrl: string;
-  displayType: string;
-  fontFamily: string;
-  fontWeight: string;
-  fontStyle: string;
-  textColor: string;
-  letterSpacing: string;
   sortOrder: number;
 }
 
@@ -104,20 +98,7 @@ export default function Partners() {
                 className="flex items-center justify-center"
                 data-testid={`card-partner-${partner.id}`}
               >
-                {partner.displayType === "text" || (!partner.imageUrl && !partner.displayType) ? (
-                  <span
-                    className="text-2xl md:text-4xl uppercase cursor-default"
-                    style={{
-                      fontFamily: partner.fontFamily || "sans-serif",
-                      fontWeight: (partner.fontWeight || "900") as any,
-                      fontStyle: partner.fontStyle || "normal",
-                      color: partner.textColor || "#4A5568",
-                      letterSpacing: partner.letterSpacing || "0.05em",
-                    }}
-                  >
-                    {partner.name}
-                  </span>
-                ) : partner.imageUrl ? (
+                {partner.imageUrl ? (
                   <img src={partner.imageUrl} alt={partner.name} className="h-20 md:h-24 w-[288px] md:w-[384px] object-contain" />
                 ) : (
                   <span className="text-2xl md:text-4xl uppercase tracking-widest font-sans font-black text-neutral-600 cursor-default">

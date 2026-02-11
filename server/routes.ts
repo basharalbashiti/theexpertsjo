@@ -144,7 +144,7 @@ export async function registerRoutes(
 
   app.post("/api/partners", requireAuth, upload.single("image"), async (req, res) => {
     try {
-      const { name, displayType, fontFamily, fontWeight, fontStyle, textColor, letterSpacing } = req.body;
+      const { name } = req.body;
       if (!name) {
         return res.status(400).json({ message: "Name is required" });
       }
@@ -152,16 +152,7 @@ export async function registerRoutes(
       if (req.file) {
         imageUrl = `/uploads/${req.file.filename}`;
       }
-      const partner = await storage.createPartner({
-        name,
-        imageUrl,
-        displayType: displayType || "image",
-        fontFamily: fontFamily || "sans-serif",
-        fontWeight: fontWeight || "900",
-        fontStyle: fontStyle || "normal",
-        textColor: textColor || "#4A5568",
-        letterSpacing: letterSpacing || "0.05em",
-      });
+      const partner = await storage.createPartner({ name, imageUrl });
       res.json(partner);
     } catch (error) {
       res.status(500).json({ message: "Failed to create partner" });
@@ -173,17 +164,7 @@ export async function registerRoutes(
       const id = parseInt(req.params.id);
       const updates: any = {};
       if (req.body.name) updates.name = req.body.name;
-      if (req.body.displayType) updates.displayType = req.body.displayType;
-      if (req.body.displayType === "text") {
-        updates.imageUrl = "";
-        if (req.body.fontFamily) updates.fontFamily = req.body.fontFamily;
-        if (req.body.fontWeight) updates.fontWeight = req.body.fontWeight;
-        if (req.body.fontStyle !== undefined) updates.fontStyle = req.body.fontStyle;
-        if (req.body.textColor) updates.textColor = req.body.textColor;
-        if (req.body.letterSpacing) updates.letterSpacing = req.body.letterSpacing;
-      } else {
-        if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
-      }
+      if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       const partner = await storage.updatePartner(id, updates);
       if (!partner) {
         return res.status(404).json({ message: "Partner not found" });
