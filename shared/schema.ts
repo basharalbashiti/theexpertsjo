@@ -77,6 +77,7 @@ export const products = pgTable("products", {
   descriptionEn: text("description_en").notNull().default(""),
   descriptionAr: text("description_ar").notNull().default(""),
   imageUrl: text("image_url").notNull().default(""),
+  brand: text("brand").notNull().default(""),
   categoryId: integer("category_id").notNull(),
   sortOrder: integer("sort_order").notNull().default(0),
 });
@@ -87,6 +88,7 @@ export const insertProductSchema = createInsertSchema(products).pick({
   descriptionEn: true,
   descriptionAr: true,
   imageUrl: true,
+  brand: true,
   categoryId: true,
   sortOrder: true,
 });

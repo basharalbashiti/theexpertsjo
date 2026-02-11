@@ -305,7 +305,7 @@ export async function registerRoutes(
 
   app.post("/api/products", requireAuth, upload.single("image"), async (req, res) => {
     try {
-      const { nameEn, nameAr, descriptionEn, descriptionAr, categoryId, sortOrder } = req.body;
+      const { nameEn, nameAr, descriptionEn, descriptionAr, categoryId, sortOrder, brand } = req.body;
       if (!nameEn || !categoryId) {
         return res.status(400).json({ message: "Name and category are required" });
       }
@@ -319,6 +319,7 @@ export async function registerRoutes(
         descriptionEn: descriptionEn || "",
         descriptionAr: descriptionAr || "",
         imageUrl,
+        brand: brand || "",
         categoryId: parseInt(categoryId),
         sortOrder: parseInt(sortOrder) || 0,
       });
@@ -338,6 +339,7 @@ export async function registerRoutes(
       if (req.body.descriptionAr !== undefined) updates.descriptionAr = req.body.descriptionAr;
       if (req.body.categoryId) updates.categoryId = parseInt(req.body.categoryId);
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.body.brand !== undefined) updates.brand = req.body.brand;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       const product = await storage.updateProduct(id, updates);
       if (!product) {

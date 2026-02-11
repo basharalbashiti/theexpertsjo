@@ -21,6 +21,7 @@ interface Product {
   descriptionEn: string;
   descriptionAr: string;
   imageUrl: string;
+  brand: string;
   categoryId: number;
   sortOrder: number;
 }
@@ -130,6 +131,9 @@ export default function CategoryDetail({ slug }: { slug: string }) {
                     data-testid={`product-${product.id}`}
                   >
                     <div className={`flex-1 space-y-6 ${isRtl ? 'text-right' : 'text-left'}`}>
+                      {product.brand && (
+                        <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-primary">{product.brand}</span>
+                      )}
                       <h3 data-testid={`text-product-name-${product.id}`} className="text-3xl md:text-4xl font-serif font-bold text-neutral-900 leading-tight">
                         {name}
                       </h3>

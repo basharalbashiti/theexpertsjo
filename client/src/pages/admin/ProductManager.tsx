@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getQueryFn, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,11 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import type { Product, Category } from "@shared/schema";
+
+type SortField = "nameEn" | "brand" | "category" | "sortOrder";
+type SortDir = "asc" | "desc";
 
 export default function ProductManager() {
   const { toast } = useToast();
@@ -25,9 +29,12 @@ export default function ProductManager() {
   const [nameAr, setNameAr] = useState("");
   const [descEn, setDescEn] = useState("");
   const [descAr, setDescAr] = useState("");
+  const [brand, setBrand] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [sortField, setSortField] = useState<SortField>("sortOrder");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -39,13 +46,47 @@ export default function ProductManager() {
     queryFn: getQueryFn({ on401: "throw" }),
   });
 
-  const filteredProducts = filterCategoryId
-    ? products.filter((p) => p.categoryId === filterCategoryId)
-    : products;
-
   const getCategoryName = (catId: number) => {
     const cat = categories.find((c) => c.id === catId);
     return cat?.nameEn || "Unknown";
+  };
+
+  const filteredAndSorted = useMemo(() => {
+    let list = filterCategoryId
+      ? products.filter((p) => p.categoryId === filterCategoryId)
+      : [...products];
+
+    list.sort((a, b) => {
+      let cmp = 0;
+      if (sortField === "nameEn") {
+        cmp = a.nameEn.localeCompare(b.nameEn);
+      } else if (sortField === "brand") {
+        cmp = (a.brand || "").localeCompare(b.brand || "");
+      } else if (sortField === "category") {
+        cmp = getCategoryName(a.categoryId).localeCompare(getCategoryName(b.categoryId));
+      } else {
+        cmp = a.sortOrder - b.sortOrder;
+      }
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+
+    return list;
+  }, [products, filterCategoryId, sortField, sortDir, categories]);
+
+  const toggleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDir("asc");
+    }
+  };
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortField !== field) return <ArrowUpDown size={12} className="ml-1 inline text-neutral-300" />;
+    return sortDir === "asc"
+      ? <ArrowUp size={12} className="ml-1 inline text-primary" />
+      : <ArrowDown size={12} className="ml-1 inline text-primary" />;
   };
 
   const createMutation = useMutation({
@@ -55,6 +96,7 @@ export default function ProductManager() {
       formData.append("nameAr", nameAr);
       formData.append("descriptionEn", descEn);
       formData.append("descriptionAr", descAr);
+      formData.append("brand", brand);
       formData.append("categoryId", categoryId);
       formData.append("sortOrder", sortOrder);
       if (imageFile) formData.append("image", imageFile);
@@ -83,6 +125,7 @@ export default function ProductManager() {
       formData.append("nameAr", nameAr);
       formData.append("descriptionEn", descEn);
       formData.append("descriptionAr", descAr);
+      formData.append("brand", brand);
       formData.append("categoryId", categoryId);
       formData.append("sortOrder", sortOrder);
       if (imageFile) formData.append("image", imageFile);
@@ -129,6 +172,7 @@ export default function ProductManager() {
     setNameAr("");
     setDescEn("");
     setDescAr("");
+    setBrand("");
     setCategoryId("");
     setSortOrder("0");
     setImageFile(null);
@@ -146,6 +190,7 @@ export default function ProductManager() {
     setNameAr(product.nameAr);
     setDescEn(product.descriptionEn);
     setDescAr(product.descriptionAr);
+    setBrand(product.brand || "");
     setCategoryId(String(product.categoryId));
     setSortOrder(String(product.sortOrder));
     setImageFile(null);
@@ -172,7 +217,7 @@ export default function ProductManager() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-2xl font-bold text-neutral-900">Products</h2>
-          <p className="text-neutral-500 text-sm">{filteredProducts.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}</p>
+          <p className="text-neutral-500 text-sm">{filteredAndSorted.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}</p>
         </div>
         <div className="flex items-center gap-3">
           <select
@@ -197,15 +242,36 @@ export default function ProductManager() {
           <thead>
             <tr className="border-b bg-neutral-50">
               <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Image</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Name (EN)</th>
+              <th
+                className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
+                onClick={() => toggleSort("nameEn")}
+              >
+                Name (EN)<SortIcon field="nameEn" />
+              </th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Name (AR)</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Category</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Order</th>
+              <th
+                className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
+                onClick={() => toggleSort("brand")}
+              >
+                Brand<SortIcon field="brand" />
+              </th>
+              <th
+                className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
+                onClick={() => toggleSort("category")}
+              >
+                Category<SortIcon field="category" />
+              </th>
+              <th
+                className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
+                onClick={() => toggleSort("sortOrder")}
+              >
+                Order<SortIcon field="sortOrder" />
+              </th>
               <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredProducts.map((product) => (
+            {filteredAndSorted.map((product) => (
               <tr key={product.id} data-testid={`row-product-${product.id}`} className="border-b last:border-0 hover:bg-neutral-50 transition-colors">
                 <td className="px-4 py-3">
                   {product.imageUrl ? (
@@ -223,6 +289,13 @@ export default function ProductManager() {
                   )}
                 </td>
                 <td className="px-4 py-3 text-sm text-neutral-600" dir="rtl">{product.nameAr}</td>
+                <td className="px-4 py-3">
+                  {product.brand ? (
+                    <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full font-medium">{product.brand}</span>
+                  ) : (
+                    <span className="text-xs text-neutral-300">—</span>
+                  )}
+                </td>
                 <td className="px-4 py-3">
                   <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-1 rounded-full">
                     {getCategoryName(product.categoryId)}
@@ -253,7 +326,7 @@ export default function ProductManager() {
             ))}
           </tbody>
         </table>
-        {filteredProducts.length === 0 && (
+        {filteredAndSorted.length === 0 && (
           <p className="text-neutral-500 text-center py-8">No products yet. Add your first product.</p>
         )}
       </div>
@@ -312,7 +385,17 @@ export default function ProductManager() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="prod-brand">Brand</Label>
+                <Input
+                  id="prod-brand"
+                  data-testid="input-product-brand"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                  placeholder="e.g. Abdeen, Cashmere"
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="prod-category">Category</Label>
                 <select
@@ -329,6 +412,8 @@ export default function ProductManager() {
                   ))}
                 </select>
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="prod-order">Sort Order</Label>
                 <Input
