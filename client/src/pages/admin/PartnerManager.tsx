@@ -143,11 +143,17 @@ export default function PartnerManager() {
             data-testid={`card-partner-${partner.id}`}
             className="border rounded-lg p-3 bg-card flex flex-col items-center gap-2"
           >
-            <img
-              src={partner.imageUrl}
-              alt={partner.name}
-              className="w-24 h-24 object-contain"
-            />
+            {partner.imageUrl ? (
+              <img
+                src={partner.imageUrl}
+                alt={partner.name}
+                className="w-24 h-24 object-contain"
+              />
+            ) : (
+              <div className="w-24 h-24 bg-neutral-100 border border-dashed border-neutral-300 rounded flex items-center justify-center text-neutral-400 text-xs text-center px-1">
+                No image
+              </div>
+            )}
             <p className="text-sm font-medium text-center">{partner.name}</p>
             <div className="flex gap-2">
               <Button
