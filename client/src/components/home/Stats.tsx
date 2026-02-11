@@ -30,7 +30,7 @@ export function Stats() {
               <img
                 src={brand.imageUrl}
                 alt={brand.name}
-                className="h-12 md:h-16 w-auto object-contain grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+                className="h-20 md:h-28 w-auto object-contain grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
               />
             </div>
           ))}
