@@ -55,7 +55,7 @@ export default function Home() {
         </div>
       </section>
 
-      <CategoryGrid limit={4} />
+      <CategoryGrid />
       
     </Layout>
   );
