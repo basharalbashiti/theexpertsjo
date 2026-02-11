@@ -16,6 +16,8 @@ import BuffetBanqueting from "@/pages/BuffetBanqueting";
 import FoodBeverage from "@/pages/FoodBeverage";
 import LinensHousekeeping from "@/pages/LinensHousekeeping";
 import NotFound from "@/pages/not-found";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
 
 function Router() {
   return (
@@ -31,6 +33,8 @@ function Router() {
       <Route path="/food-beverage" component={FoodBeverage} />
       <Route path="/linens" component={LinensHousekeeping} />
       <Route path="/contact" component={Contact} />
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
