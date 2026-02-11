@@ -84,7 +84,7 @@ export default function ProductManager() {
     });
 
     return list;
-  }, [products, filterCategoryId, sortField, sortDir, categories]);
+  }, [products, filterCategoryId, filterBrand, searchName, sortField, sortDir, categories]);
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -227,10 +227,15 @@ export default function ProductManager() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Products</h2>
-          <p className="text-neutral-500 text-sm">{filteredAndSorted.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-neutral-900">Products</h2>
+            <p className="text-neutral-500 text-sm">{filteredAndSorted.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
+          </div>
+          <Button data-testid="button-add-product" onClick={openAdd}>
+            + Add Product
+          </Button>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <Input
@@ -238,7 +243,7 @@ export default function ProductManager() {
             placeholder="Search by name..."
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
-            className="w-44 text-sm"
+            className="w-56 text-sm"
           />
           <select
             data-testid="select-filter-category"
@@ -262,9 +267,6 @@ export default function ProductManager() {
               <option key={b} value={b}>{b}</option>
             ))}
           </select>
-          <Button data-testid="button-add-product" onClick={openAdd}>
-            + Add Product
-          </Button>
         </div>
       </div>
 
