@@ -1,53 +1,33 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { useEffect, useState } from "react";
 import imgBanner from "@/assets/partners-banner-outdoor.png";
-import grandHyatt from "@/assets/partners/grand-hyatt.jpg";
-import coralBaghdad from "@/assets/partners/coral-baghdad.jpg";
-import theHouseHotels from "@/assets/partners/the-house-hotels-logo.webp";
-import landmark from "@/assets/partners/landmark.jpg";
-import wHotel from "@/assets/partners/w-hotel.jpg";
-import fourSeasons from "@/assets/partners/four-seasons-new.png";
-import banyanTree from "@/assets/partners/banyan-tree.png";
-import rosewood from "@/assets/partners/rosewood.jpg";
-import wyndham from "@/assets/partners/wyndham.png";
-import mandarinOriental from "@/assets/partners/mandarin-oriental.png";
-import accor from "@/assets/partners/accor.png";
-import leMeridien from "@/assets/partners/le-meridien.png";
-import crownePlaza from "@/assets/partners/crowne-plaza.png";
-import ihg from "@/assets/partners/ihg.jpg";
-import marriott from "@/assets/partners/marriott.png";
-import millennium from "@/assets/partners/millennium.png";
-import hyatt from "@/assets/partners/hyatt.jpg";
 import imgCTA from "@/assets/partnership-bespoke.png";
+
+interface Partner {
+  id: number;
+  name: string;
+  imageUrl: string;
+  sortOrder: number;
+}
+
+interface Client {
+  id: number;
+  name: string;
+  imageUrl: string;
+  sortOrder: number;
+}
 
 export default function Partners() {
   const { t, lang } = useLanguage();
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
 
-  const hotelPartners = [
-    { type: 'image', src: fourSeasons },
-    { type: 'image', src: grandHyatt },
-    { type: 'image', src: wHotel },
-    { type: 'image', src: landmark },
-    { type: 'image', src: coralBaghdad },
-    { type: 'image', src: theHouseHotels },
-    { type: 'image', src: banyanTree },
-    { type: 'image', src: rosewood },
-    { type: 'image', src: wyndham },
-    { type: 'image', src: mandarinOriental },
-    { type: 'image', src: accor },
-    { type: 'image', src: leMeridien },
-    { type: 'image', src: crownePlaza },
-    { type: 'image', src: ihg },
-    { type: 'image', src: marriott },
-    { type: 'image', src: millennium },
-    { type: 'image', src: hyatt },
-  ];
-  
-  const brands = [
-    { name: "ABDEEN", type: "text", style: "font-sans font-black tracking-tighter text-[#4A5568]" },
-    { name: "Cashmere", type: "text", style: "font-serif italic text-[#718096]" }
-  ];
+  useEffect(() => {
+    fetch("/api/partners").then(r => r.json()).then(setPartners).catch(() => {});
+    fetch("/api/clients").then(r => r.json()).then(setClients).catch(() => {});
+  }, []);
 
   return (
     <Layout>
@@ -72,27 +52,32 @@ export default function Partners() {
       <section className="py-24 bg-white overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-serif font-bold text-neutral-900 mb-4">Proud to Work With</h2>
+            <h2 className="text-4xl font-serif font-bold text-neutral-900 mb-4" data-testid="text-clients-heading">Proud to Work With</h2>
             <p className="text-neutral-500 max-w-2xl mx-auto">
               We collaborate with the finest hotels and resorts in the region to deliver exceptional products and services
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-            {hotelPartners.map((item, i) => (
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8" data-testid="clients-grid">
+            {clients.map((client, i) => (
               <motion.div
-                key={i}
+                key={client.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 className="w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 bg-neutral-50 p-2 border border-neutral-100 flex items-center justify-center text-center group"
+                data-testid={`card-client-${client.id}`}
               >
-                <img 
-                  src={item.src} 
-                  alt="Partner Hotel" 
-                  className="w-full h-full object-contain p-2 rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
-                />
+                {client.imageUrl ? (
+                  <img 
+                    src={client.imageUrl} 
+                    alt={client.name} 
+                    className="w-full h-full object-contain p-2 rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
+                  />
+                ) : (
+                  <span className="text-lg font-bold text-neutral-600 uppercase tracking-widest">{client.name}</span>
+                )}
               </motion.div>
             ))}
           </div>
@@ -101,27 +86,23 @@ export default function Partners() {
 
       <section className="py-24 bg-neutral-50 border-y border-neutral-100">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-serif font-bold text-neutral-900 mb-16">Our Partners</h2>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
-            {brands.map((brand, i) => (
+          <h2 className="text-3xl font-serif font-bold text-neutral-900 mb-16" data-testid="text-partners-heading">Our Partners</h2>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24" data-testid="partners-grid">
+            {partners.map((partner, i) => (
               <motion.div
-                key={i}
+                key={partner.id}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
                 className="flex items-center justify-center"
+                data-testid={`card-partner-${partner.id}`}
               >
-                {brand.type === "image" ? (
-                  // @ts-ignore
-                  <img src={brand.logo} alt="The Experts Brand" className="h-20 md:h-24 w-[288px] md:w-[384px] object-contain" />
-                ) : brand.type === "custom" ? (
-                  // @ts-ignore
-                  brand.content
+                {partner.imageUrl ? (
+                  <img src={partner.imageUrl} alt={partner.name} className="h-20 md:h-24 w-[288px] md:w-[384px] object-contain" />
                 ) : (
-                  // @ts-ignore
-                  <span className={`text-2xl md:text-4xl uppercase tracking-widest ${brand.style} cursor-default`}>
-                    {brand.name}
+                  <span className="text-2xl md:text-4xl uppercase tracking-widest font-sans font-black text-neutral-600 cursor-default">
+                    {partner.name}
                   </span>
                 )}
               </motion.div>
@@ -140,7 +121,7 @@ export default function Partners() {
                   We are always looking for new partnerships with premium hotels and resorts. Contact us to learn how we can work together to elevate your guest experience.
                 </p>
                 <div className="pt-4 flex flex-wrap gap-4">
-                  <a href="/contact" className="bg-primary text-white px-10 py-4 uppercase text-sm font-bold tracking-widest hover:bg-black transition-all">
+                  <a href="/contact" className="bg-primary text-white px-10 py-4 uppercase text-sm font-bold tracking-widest hover:bg-black transition-all" data-testid="link-contact-sales">
                     {t("contact_sales")}
                   </a>
                   <div className="flex items-center gap-4 text-neutral-400 text-sm font-bold uppercase tracking-widest">
