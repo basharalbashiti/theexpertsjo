@@ -6,12 +6,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import ContentEditor from "./ContentEditor";
 import PartnerManager from "./PartnerManager";
+import BrandManager from "./BrandManager";
 import ClientManager from "./ClientManager";
 import CategoryManager from "./CategoryManager";
 import ProductManager from "./ProductManager";
-import type { Category, Product, Partner, Client, SiteContent } from "@shared/schema";
+import type { Category, Product, Partner, Brand, Client, SiteContent } from "@shared/schema";
 
-type AdminPage = "overview" | "content" | "categories" | "products" | "partners" | "clients" | "settings";
+type AdminPage = "overview" | "content" | "categories" | "products" | "brands" | "partners" | "clients" | "settings";
 
 interface MenuItem {
   id: AdminPage;
@@ -25,6 +26,7 @@ const menuItems: MenuItem[] = [
   { id: "content", label: "Site Content", icon: "file-text", description: "Edit text & translations" },
   { id: "categories", label: "Categories", icon: "folder", description: "Manage product categories" },
   { id: "products", label: "Products", icon: "package", description: "Manage products" },
+  { id: "brands", label: "Our Brands", icon: "award", description: "Manage brand logos for homepage slider" },
   { id: "partners", label: "Partners", icon: "handshake", description: "Manage brand partners (Abdeen, Cashmere)" },
   { id: "clients", label: "Clients", icon: "users", description: "Manage hotel brand clients" },
   { id: "settings", label: "Settings", icon: "settings", description: "Account settings" },
@@ -43,6 +45,9 @@ function MenuIcon({ name }: { name: string }) {
     ),
     package: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+    ),
+    award: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
     ),
     handshake: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>
@@ -96,6 +101,10 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
     queryKey: ["/api/partners"],
     queryFn: getQueryFn({ on401: "throw" }),
   });
+  const { data: brandsList = [] } = useQuery<Brand[]>({
+    queryKey: ["/api/brands"],
+    queryFn: getQueryFn({ on401: "throw" }),
+  });
   const { data: clientsList = [] } = useQuery<Client[]>({
     queryKey: ["/api/clients"],
     queryFn: getQueryFn({ on401: "throw" }),
@@ -109,6 +118,7 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
     { label: "Content Items", count: contents.length, page: "content" as AdminPage, color: "bg-blue-50 border-blue-200 text-blue-700", icon: "file-text" },
     { label: "Categories", count: categories.length, page: "categories" as AdminPage, color: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "folder" },
     { label: "Products", count: products.length, page: "products" as AdminPage, color: "bg-purple-50 border-purple-200 text-purple-700", icon: "package" },
+    { label: "Brands", count: brandsList.length, page: "brands" as AdminPage, color: "bg-orange-50 border-orange-200 text-orange-700", icon: "award" },
     { label: "Partners", count: partners.length, page: "partners" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700", icon: "handshake" },
     { label: "Clients", count: clientsList.length, page: "clients" as AdminPage, color: "bg-rose-50 border-rose-200 text-rose-700", icon: "users" },
   ];
@@ -214,6 +224,8 @@ export default function AdminDashboard() {
         return <CategoryManager />;
       case "products":
         return <ProductManager />;
+      case "brands":
+        return <BrandManager />;
       case "partners":
         return <PartnerManager />;
       case "clients":

@@ -378,6 +378,58 @@ export async function registerRoutes(
     }
   });
 
+  // Brands routes
+  app.get("/api/brands", async (_req, res) => {
+    const allBrands = await storage.getAllBrands();
+    res.json(allBrands);
+  });
+
+  app.post("/api/brands", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const { name } = req.body;
+      if (!name) {
+        return res.status(400).json({ message: "Name is required" });
+      }
+      let imageUrl = "";
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      const brand = await storage.createBrand({ name, imageUrl });
+      res.json(brand);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create brand" });
+    }
+  });
+
+  app.put("/api/brands/:id", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates: any = {};
+      if (req.body.name) updates.name = req.body.name;
+      if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      const brand = await storage.updateBrand(id, updates);
+      if (!brand) {
+        return res.status(404).json({ message: "Brand not found" });
+      }
+      res.json(brand);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update brand" });
+    }
+  });
+
+  app.delete("/api/brands/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteBrand(id);
+      if (!success) {
+        return res.status(404).json({ message: "Brand not found" });
+      }
+      res.json({ message: "Brand deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete brand" });
+    }
+  });
+
   app.get("/api/clients", async (_req, res) => {
     const allClients = await storage.getAllClients();
     res.json(allClients);

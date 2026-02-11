@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, clients, products } from "@shared/schema";
+import { users, siteContent, partners, brands, clients, products } from "@shared/schema";
 
 const defaultTranslations: Record<string, { en: string; ar: string }> = {
   home: { en: "Home", ar: "الرئيسية" },
@@ -179,6 +179,18 @@ export async function seedDatabase() {
       await storage.createPartner(partner);
     }
     console.log(`Seeded ${defaultPartners.length} partners`);
+  }
+
+  const existingBrands = await storage.getAllBrands();
+  if (existingBrands.length === 0) {
+    const defaultBrands = [
+      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen.png" },
+      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere.png" },
+    ];
+    for (const brand of defaultBrands) {
+      await storage.createBrand(brand);
+    }
+    console.log(`Seeded ${defaultBrands.length} brands`);
   }
 
   const existingClients = await storage.getAllClients();

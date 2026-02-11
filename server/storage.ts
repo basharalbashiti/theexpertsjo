@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, clients, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Client, type InsertClient } from "@shared/schema";
+import { users, siteContent, partners, categories, products, brands, clients, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type Client, type InsertClient } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
 
@@ -32,6 +32,12 @@ export interface IStorage {
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
   deleteProduct(id: number): Promise<boolean>;
+
+  getAllBrands(): Promise<Brand[]>;
+  getBrand(id: number): Promise<Brand | undefined>;
+  createBrand(brand: InsertBrand): Promise<Brand>;
+  updateBrand(id: number, brand: Partial<InsertBrand>): Promise<Brand | undefined>;
+  deleteBrand(id: number): Promise<boolean>;
 
   getAllClients(): Promise<Client[]>;
   getClient(id: number): Promise<Client | undefined>;
@@ -166,6 +172,30 @@ export class DatabaseStorage implements IStorage {
 
   async deleteProduct(id: number): Promise<boolean> {
     const result = await db.delete(products).where(eq(products.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getAllBrands(): Promise<Brand[]> {
+    return db.select().from(brands).orderBy(asc(brands.sortOrder));
+  }
+
+  async getBrand(id: number): Promise<Brand | undefined> {
+    const [brand] = await db.select().from(brands).where(eq(brands.id, id));
+    return brand || undefined;
+  }
+
+  async createBrand(brand: InsertBrand): Promise<Brand> {
+    const [result] = await db.insert(brands).values(brand).returning();
+    return result;
+  }
+
+  async updateBrand(id: number, brand: Partial<InsertBrand>): Promise<Brand | undefined> {
+    const [result] = await db.update(brands).set(brand).where(eq(brands.id, id)).returning();
+    return result || undefined;
+  }
+
+  async deleteBrand(id: number): Promise<boolean> {
+    const result = await db.delete(brands).where(eq(brands.id, id)).returning();
     return result.length > 0;
   }
 

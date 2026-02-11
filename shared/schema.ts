@@ -96,6 +96,21 @@ export const insertProductSchema = createInsertSchema(products).pick({
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Product = typeof products.$inferSelect;
 
+export const brands = pgTable("brands", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  imageUrl: text("image_url").notNull(),
+  sortOrder: serial("sort_order"),
+});
+
+export const insertBrandSchema = createInsertSchema(brands).pick({
+  name: true,
+  imageUrl: true,
+});
+
+export type InsertBrand = z.infer<typeof insertBrandSchema>;
+export type Brand = typeof brands.$inferSelect;
+
 export const clients = pgTable("clients", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
