@@ -9,12 +9,7 @@ import About from "@/pages/About";
 import Categories from "@/pages/Categories";
 import Contact from "@/pages/Contact";
 import Partners from "@/pages/Partners";
-import RoomService from "@/pages/RoomService";
-import Spa from "@/pages/Spa";
-import Amenities from "@/pages/Amenities";
-import BuffetBanqueting from "@/pages/BuffetBanqueting";
-import FoodBeverage from "@/pages/FoodBeverage";
-import LinensHousekeeping from "@/pages/LinensHousekeeping";
+import CategoryDetail from "@/pages/CategoryDetail";
 import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -26,15 +21,10 @@ function Router() {
       <Route path="/about-us" component={About} />
       <Route path="/categories" component={Categories} />
       <Route path="/partners" component={Partners} />
-      <Route path="/room-service" component={RoomService} />
-      <Route path="/spa" component={Spa} />
-      <Route path="/amenities" component={Amenities} />
-      <Route path="/buffet-banqueting" component={BuffetBanqueting} />
-      <Route path="/food-beverage" component={FoodBeverage} />
-      <Route path="/linens" component={LinensHousekeeping} />
       <Route path="/contact" component={Contact} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/:slug">{(params) => <CategoryDetail slug={params.slug} />}</Route>
       <Route component={NotFound} />
     </Switch>
   );

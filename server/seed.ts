@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, clients } from "@shared/schema";
+import { users, siteContent, partners, clients, products } from "@shared/schema";
 
 const defaultTranslations: Record<string, { en: string; ar: string }> = {
   home: { en: "Home", ar: "الرئيسية" },
@@ -206,5 +206,46 @@ export async function seedDatabase() {
       await storage.createClient(client);
     }
     console.log(`Seeded ${defaultClients.length} clients`);
+  }
+
+  const existingProducts = await storage.getAllProducts();
+  if (existingProducts.length === 0) {
+    const allCategories = await storage.getAllCategories();
+    const roomServiceCat = allCategories.find(c => c.slug === "room-service");
+    if (roomServiceCat) {
+      const defaultProducts = [
+        {
+          nameEn: "Elite Service Trolley",
+          nameAr: "عربة خدمة الغرف الفاخرة",
+          descriptionEn: "Premium stainless steel service trolley with mirror finish, designed for elegant in-room dining presentations.",
+          descriptionAr: "عربة خدمة غرف من الفولاذ المقاوم للصدأ بتشطيب مرآة، مصممة لتقديم الطعام داخل الغرف بأناقة.",
+          imageUrl: "/uploads/rs-trolley.png",
+          categoryId: roomServiceCat.id,
+          sortOrder: 1,
+        },
+        {
+          nameEn: "Signature Thermal Carafe",
+          nameAr: "دورق حراري مميز",
+          descriptionEn: "Double-walled thermal carafe maintaining beverage temperature for hours, crafted with premium materials.",
+          descriptionAr: "دورق حراري مزدوج الجدران يحافظ على حرارة المشروبات لساعات، مصنوع من مواد فاخرة.",
+          imageUrl: "/uploads/rs-carafe.png",
+          categoryId: roomServiceCat.id,
+          sortOrder: 2,
+        },
+        {
+          nameEn: "Mirror-Finish Cloche",
+          nameAr: "غطاء طعام بتشطيب مرآة",
+          descriptionEn: "Handcrafted mirror-finish cloche for dramatic tableside reveals, elevating the guest dining experience.",
+          descriptionAr: "غطاء طعام مصنوع يدوياً بتشطيب مرآة لكشف مثير عن الأطباق، يرتقي بتجربة ضيوف المطعم.",
+          imageUrl: "/uploads/rs-cloche.png",
+          categoryId: roomServiceCat.id,
+          sortOrder: 3,
+        },
+      ];
+      for (const prod of defaultProducts) {
+        await storage.createProduct(prod);
+      }
+      console.log(`Seeded ${defaultProducts.length} products`);
+    }
   }
 }

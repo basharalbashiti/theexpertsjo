@@ -4,11 +4,13 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-02-11: Made category detail pages dynamic — all category slugs use CategoryDetail.tsx which fetches products from the API
+- 2026-02-11: Added category visibility toggle (admin can hide/show categories from public site)
+- 2026-02-11: Added 3 Room Service products (Elite Service Trolley, Signature Thermal Carafe, Mirror-Finish Cloche) to DB and seed
+- 2026-02-11: Navbar and CategoryGrid fetch categories dynamically from API
 - 2026-02-11: Separated Partners (brand partners: Abdeen, Cashmere) from Clients (hotel brands: Four Seasons, Marriott, etc.)
-- 2026-02-11: Added Clients Manager admin page and API routes
 - 2026-02-11: Added admin portal with authentication, content editor, category/product/partner/client managers
-- 2026-02-11: Connected frontend translations to database API (LanguageContext loads from /api/content)
-- 2026-02-11: Added seed script for default admin user, translations, categories, partners, and clients
+- 2026-02-11: Added seed script for default admin user, translations, categories, partners, clients, and products
 
 ## Project Architecture
 - **Frontend**: React + Vite + Tailwind CSS + shadcn/ui + wouter (routing)
