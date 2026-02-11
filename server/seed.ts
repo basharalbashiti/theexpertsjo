@@ -172,8 +172,8 @@ export async function seedDatabase() {
   const existingPartners = await storage.getAllPartners();
   if (existingPartners.length === 0) {
     const defaultPartners = [
-      { name: "ABDEEN", imageUrl: "", sortOrder: 1 },
-      { name: "Cashmere", imageUrl: "", sortOrder: 2 },
+      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen.png", sortOrder: 1 },
+      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere.png", sortOrder: 2 },
     ];
     for (const partner of defaultPartners) {
       await storage.createPartner(partner);
