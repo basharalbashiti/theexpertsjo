@@ -10,7 +10,8 @@ export function Stats() {
 
   if (brands.length === 0) return null;
 
-  const logos = [...brands, ...brands];
+  const repeatCount = Math.max(2, Math.ceil(10 / brands.length));
+  const logos = Array.from({ length: repeatCount * 2 }, () => brands).flat();
 
   return (
     <section className="py-12 bg-neutral-50 border-y border-neutral-200 overflow-hidden">
@@ -18,7 +19,7 @@ export function Stats() {
         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-neutral-50 to-transparent z-10" />
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-neutral-50 to-transparent z-10" />
 
-        <div className="flex animate-logo-scroll">
+        <div className="flex animate-logo-scroll" style={{ width: "max-content" }}>
           {logos.map((brand, index) => (
             <div
               key={`${brand.id}-${index}`}
