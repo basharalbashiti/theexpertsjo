@@ -1,4 +1,4 @@
-import { users, siteContent, partners, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner } from "@shared/schema";
+import { users, siteContent, partners, categories, products, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
 
@@ -17,6 +17,19 @@ export interface IStorage {
   createPartner(partner: InsertPartner): Promise<Partner>;
   updatePartner(id: number, partner: Partial<InsertPartner>): Promise<Partner | undefined>;
   deletePartner(id: number): Promise<boolean>;
+
+  getAllCategories(): Promise<Category[]>;
+  getCategory(id: number): Promise<Category | undefined>;
+  createCategory(category: InsertCategory): Promise<Category>;
+  updateCategory(id: number, category: Partial<InsertCategory>): Promise<Category | undefined>;
+  deleteCategory(id: number): Promise<boolean>;
+
+  getAllProducts(): Promise<Product[]>;
+  getProductsByCategory(categoryId: number): Promise<Product[]>;
+  getProduct(id: number): Promise<Product | undefined>;
+  createProduct(product: InsertProduct): Promise<Product>;
+  updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
+  deleteProduct(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -83,6 +96,59 @@ export class DatabaseStorage implements IStorage {
 
   async deletePartner(id: number): Promise<boolean> {
     const result = await db.delete(partners).where(eq(partners.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getAllCategories(): Promise<Category[]> {
+    return db.select().from(categories).orderBy(asc(categories.sortOrder));
+  }
+
+  async getCategory(id: number): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.id, id));
+    return category || undefined;
+  }
+
+  async createCategory(category: InsertCategory): Promise<Category> {
+    const [result] = await db.insert(categories).values(category).returning();
+    return result;
+  }
+
+  async updateCategory(id: number, category: Partial<InsertCategory>): Promise<Category | undefined> {
+    const [result] = await db.update(categories).set(category).where(eq(categories.id, id)).returning();
+    return result || undefined;
+  }
+
+  async deleteCategory(id: number): Promise<boolean> {
+    await db.delete(products).where(eq(products.categoryId, id));
+    const result = await db.delete(categories).where(eq(categories.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    return db.select().from(products).orderBy(asc(products.sortOrder));
+  }
+
+  async getProductsByCategory(categoryId: number): Promise<Product[]> {
+    return db.select().from(products).where(eq(products.categoryId, categoryId)).orderBy(asc(products.sortOrder));
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
+  }
+
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const [result] = await db.insert(products).values(product).returning();
+    return result;
+  }
+
+  async updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined> {
+    const [result] = await db.update(products).set(product).where(eq(products.id, id)).returning();
+    return result || undefined;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    const result = await db.delete(products).where(eq(products.id, id)).returning();
     return result.length > 0;
   }
 }

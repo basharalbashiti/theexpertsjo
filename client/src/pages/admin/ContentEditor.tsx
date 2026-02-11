@@ -8,9 +8,40 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import type { SiteContent } from "@shared/schema";
 
+const sectionLabels: Record<string, string> = {
+  hero: "Hero Banners",
+  cat: "Category Names",
+  stat: "Statistics",
+  home: "Home Page",
+  about: "About Page",
+  chairman: "Chairman Section",
+  our: "Section Titles",
+  sustain: "Sustainability",
+  ecovadis: "EcoVadis",
+  partner: "Partners Page",
+  footer: "Footer",
+  rs: "Room Service Products",
+  spa: "Spa Products",
+  amenities: "Amenities Products",
+  buffet: "Buffet Products",
+  fb: "Food & Beverage Products",
+  linens: "Linens Products",
+  general: "General",
+};
+
+function getSection(key: string): string {
+  const parts = key.split("_");
+  if (parts.length >= 2) {
+    const prefix = parts[0];
+    if (sectionLabels[prefix]) return prefix;
+  }
+  return "general";
+}
+
 export default function ContentEditor() {
   const { toast } = useToast();
   const [search, setSearch] = useState("");
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const [editedContents, setEditedContents] = useState<Record<number, { valueEn: string; valueAr: string }>>({});
 
   const { data: contents = [], isLoading } = useQuery<SiteContent[]>({
@@ -20,13 +51,12 @@ export default function ContentEditor() {
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      const updatedContents = contents.map((item) => {
-        const edited = editedContents[item.id];
-        if (edited) {
-          return { ...item, valueEn: edited.valueEn, valueAr: edited.valueAr };
-        }
-        return item;
-      });
+      const updatedContents = contents
+        .filter((item) => editedContents[item.id])
+        .map((item) => {
+          const edited = editedContents[item.id];
+          return { key: item.key, valueEn: edited.valueEn, valueAr: edited.valueAr };
+        });
       await apiRequest("PUT", "/api/content", { contents: updatedContents });
     },
     onSuccess: () => {
@@ -39,20 +69,32 @@ export default function ContentEditor() {
     },
   });
 
-  const grouped = useMemo(() => {
+  const sections = useMemo(() => {
     const groups: Record<string, SiteContent[]> = {};
-    const filtered = contents.filter((c) =>
-      c.key.toLowerCase().includes(search.toLowerCase()) ||
-      c.valueEn.toLowerCase().includes(search.toLowerCase())
-    );
-    for (const item of filtered) {
-      const prefix = item.key.split("_").slice(0, -1).join("_") || item.key;
-      const groupKey = prefix.replace(/_$/, "");
-      if (!groups[groupKey]) groups[groupKey] = [];
-      groups[groupKey].push(item);
+    for (const item of contents) {
+      const section = getSection(item.key);
+      if (!groups[section]) groups[section] = [];
+      groups[section].push(item);
     }
     return groups;
-  }, [contents, search]);
+  }, [contents]);
+
+  const sectionKeys = Object.keys(sections).sort((a, b) => {
+    const order = Object.keys(sectionLabels);
+    return order.indexOf(a) - order.indexOf(b);
+  });
+
+  const displayedItems = useMemo(() => {
+    let items = activeSection ? (sections[activeSection] || []) : contents;
+    if (search) {
+      items = items.filter(
+        (c) =>
+          c.key.toLowerCase().includes(search.toLowerCase()) ||
+          c.valueEn.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return items;
+  }, [activeSection, sections, contents, search]);
 
   const handleChange = (id: number, field: "valueEn" | "valueAr", value: string) => {
     const existing = contents.find((c) => c.id === id);
@@ -70,68 +112,108 @@ export default function ContentEditor() {
   const hasChanges = Object.keys(editedContents).length > 0;
 
   if (isLoading) {
-    return <p className="text-muted-foreground p-4">Loading content...</p>;
+    return <p className="text-neutral-500 p-4">Loading content...</p>;
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
-        <Input
-          data-testid="input-content-search"
-          placeholder="Search by key or value..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-        />
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-neutral-900">Site Content</h2>
+          <p className="text-neutral-500 text-sm">Edit text and translations for your website</p>
+        </div>
         <Button
           data-testid="button-save-content"
           onClick={() => saveMutation.mutate()}
           disabled={!hasChanges || saveMutation.isPending}
+          className={hasChanges ? "" : "opacity-50"}
         >
-          {saveMutation.isPending ? "Saving..." : "Save Changes"}
+          {saveMutation.isPending ? "Saving..." : `Save Changes${hasChanges ? ` (${Object.keys(editedContents).length})` : ""}`}
         </Button>
       </div>
 
-      {Object.entries(grouped).map(([groupName, items]) => (
-        <div key={groupName} className="space-y-3">
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider border-b pb-1">
-            {groupName}
-          </h3>
-          {items.map((item) => {
+      <div className="flex gap-6">
+        <div className="w-56 shrink-0">
+          <div className="bg-white rounded-xl border p-2 sticky top-6">
+            <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wider px-3 py-2">Sections</p>
+            <button
+              data-testid="section-all"
+              onClick={() => setActiveSection(null)}
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                activeSection === null ? "bg-primary/10 text-primary font-medium" : "text-neutral-600 hover:bg-neutral-50"
+              }`}
+            >
+              All ({contents.length})
+            </button>
+            {sectionKeys.map((key) => (
+              <button
+                key={key}
+                data-testid={`section-${key}`}
+                onClick={() => setActiveSection(key)}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                  activeSection === key ? "bg-primary/10 text-primary font-medium" : "text-neutral-600 hover:bg-neutral-50"
+                }`}
+              >
+                {sectionLabels[key] || key} ({sections[key].length})
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-0 space-y-4">
+          <Input
+            data-testid="input-content-search"
+            placeholder="Search by key or value..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="bg-white"
+          />
+
+          {displayedItems.map((item) => {
             const edited = editedContents[item.id];
+            const isEdited = !!edited;
             return (
-              <div key={item.id} data-testid={`content-item-${item.id}`} className="grid gap-2 p-3 border rounded-lg bg-card">
-                <Label className="text-xs font-mono text-muted-foreground">{item.key}</Label>
-                <div className="grid md:grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <Label className="text-xs">English</Label>
+              <div
+                key={item.id}
+                data-testid={`content-item-${item.id}`}
+                className={`rounded-xl border bg-white p-4 transition-colors ${isEdited ? "border-primary/30 bg-primary/5" : ""}`}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-mono text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded">{item.key}</span>
+                  {isEdited && <span className="text-xs text-primary font-medium">Modified</span>}
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-neutral-500">English</Label>
                     <Textarea
                       data-testid={`textarea-en-${item.id}`}
                       value={edited?.valueEn ?? item.valueEn}
                       onChange={(e) => handleChange(item.id, "valueEn", e.target.value)}
                       rows={2}
+                      className="bg-white"
                     />
                   </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs">Arabic</Label>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-neutral-500">Arabic</Label>
                     <Textarea
                       data-testid={`textarea-ar-${item.id}`}
                       value={edited?.valueAr ?? item.valueAr}
                       onChange={(e) => handleChange(item.id, "valueAr", e.target.value)}
                       rows={2}
                       dir="rtl"
+                      className="bg-white"
                     />
                   </div>
                 </div>
               </div>
             );
           })}
-        </div>
-      ))}
 
-      {Object.keys(grouped).length === 0 && (
-        <p className="text-muted-foreground text-center py-8">No content items found.</p>
-      )}
+          {displayedItems.length === 0 && (
+            <p className="text-neutral-500 text-center py-8">No content items found.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

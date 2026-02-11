@@ -199,5 +199,135 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/categories", async (_req, res) => {
+    const allCategories = await storage.getAllCategories();
+    res.json(allCategories);
+  });
+
+  app.post("/api/categories", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const { nameEn, nameAr, slug, sortOrder } = req.body;
+      if (!nameEn || !slug) {
+        return res.status(400).json({ message: "Name and slug are required" });
+      }
+      let imageUrl = "";
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      const category = await storage.createCategory({
+        nameEn,
+        nameAr: nameAr || "",
+        slug,
+        imageUrl,
+        sortOrder: parseInt(sortOrder) || 0,
+      });
+      res.json(category);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create category" });
+    }
+  });
+
+  app.put("/api/categories/:id", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates: any = {};
+      if (req.body.nameEn) updates.nameEn = req.body.nameEn;
+      if (req.body.nameAr !== undefined) updates.nameAr = req.body.nameAr;
+      if (req.body.slug) updates.slug = req.body.slug;
+      if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      const category = await storage.updateCategory(id, updates);
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      res.json(category);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update category" });
+    }
+  });
+
+  app.delete("/api/categories/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteCategory(id);
+      if (!success) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      res.json({ message: "Category deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete category" });
+    }
+  });
+
+  app.get("/api/products", async (req, res) => {
+    const categoryId = req.query.categoryId ? parseInt(req.query.categoryId as string) : null;
+    if (categoryId) {
+      const prods = await storage.getProductsByCategory(categoryId);
+      res.json(prods);
+    } else {
+      const prods = await storage.getAllProducts();
+      res.json(prods);
+    }
+  });
+
+  app.post("/api/products", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const { nameEn, nameAr, descriptionEn, descriptionAr, categoryId, sortOrder } = req.body;
+      if (!nameEn || !categoryId) {
+        return res.status(400).json({ message: "Name and category are required" });
+      }
+      let imageUrl = "";
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      const product = await storage.createProduct({
+        nameEn,
+        nameAr: nameAr || "",
+        descriptionEn: descriptionEn || "",
+        descriptionAr: descriptionAr || "",
+        imageUrl,
+        categoryId: parseInt(categoryId),
+        sortOrder: parseInt(sortOrder) || 0,
+      });
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create product" });
+    }
+  });
+
+  app.put("/api/products/:id", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates: any = {};
+      if (req.body.nameEn) updates.nameEn = req.body.nameEn;
+      if (req.body.nameAr !== undefined) updates.nameAr = req.body.nameAr;
+      if (req.body.descriptionEn !== undefined) updates.descriptionEn = req.body.descriptionEn;
+      if (req.body.descriptionAr !== undefined) updates.descriptionAr = req.body.descriptionAr;
+      if (req.body.categoryId) updates.categoryId = parseInt(req.body.categoryId);
+      if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      const product = await storage.updateProduct(id, updates);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update product" });
+    }
+  });
+
+  app.delete("/api/products/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteProduct(id);
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json({ message: "Product deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete product" });
+    }
+  });
+
   return httpServer;
 }

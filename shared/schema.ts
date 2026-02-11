@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, serial, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, serial, timestamp, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -47,3 +47,47 @@ export const insertPartnerSchema = createInsertSchema(partners).pick({
 
 export type InsertPartner = z.infer<typeof insertPartnerSchema>;
 export type Partner = typeof partners.$inferSelect;
+
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  nameEn: text("name_en").notNull(),
+  nameAr: text("name_ar").notNull().default(""),
+  slug: text("slug").notNull().unique(),
+  imageUrl: text("image_url").notNull().default(""),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
+
+export const insertCategorySchema = createInsertSchema(categories).pick({
+  nameEn: true,
+  nameAr: true,
+  slug: true,
+  imageUrl: true,
+  sortOrder: true,
+});
+
+export type InsertCategory = z.infer<typeof insertCategorySchema>;
+export type Category = typeof categories.$inferSelect;
+
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  nameEn: text("name_en").notNull(),
+  nameAr: text("name_ar").notNull().default(""),
+  descriptionEn: text("description_en").notNull().default(""),
+  descriptionAr: text("description_ar").notNull().default(""),
+  imageUrl: text("image_url").notNull().default(""),
+  categoryId: integer("category_id").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
+
+export const insertProductSchema = createInsertSchema(products).pick({
+  nameEn: true,
+  nameAr: true,
+  descriptionEn: true,
+  descriptionAr: true,
+  imageUrl: true,
+  categoryId: true,
+  sortOrder: true,
+});
+
+export type InsertProduct = z.infer<typeof insertProductSchema>;
+export type Product = typeof products.$inferSelect;

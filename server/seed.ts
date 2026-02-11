@@ -147,4 +147,25 @@ export async function seedDatabase() {
     await storage.bulkUpsertContent(contents);
     console.log(`Seeded ${contents.length} content entries`);
   }
+
+  const existingCategories = await storage.getAllCategories();
+  if (existingCategories.length === 0) {
+    const defaultCategories = [
+      { nameEn: "Room Service", nameAr: "خدمة الغرف", slug: "room-service", imageUrl: "", sortOrder: 1 },
+      { nameEn: "Linens", nameAr: "البياضات", slug: "linens", imageUrl: "", sortOrder: 2 },
+      { nameEn: "Spa", nameAr: "السبا", slug: "spa", imageUrl: "", sortOrder: 3 },
+      { nameEn: "Amenities", nameAr: "المرافق", slug: "amenities", imageUrl: "", sortOrder: 4 },
+      { nameEn: "Food & Beverage", nameAr: "الأغذية والمشروبات", slug: "food-beverage", imageUrl: "", sortOrder: 5 },
+      { nameEn: "Buffet & Banqueting", nameAr: "البوفيه والمآدب", slug: "buffet-banqueting", imageUrl: "", sortOrder: 6 },
+      { nameEn: "Towels", nameAr: "المناشف", slug: "towels", imageUrl: "", sortOrder: 7 },
+      { nameEn: "Mini Bar & Safes", nameAr: "الميني بار والخزن", slug: "minibar", imageUrl: "", sortOrder: 8 },
+      { nameEn: "Housekeeping", nameAr: "التدبير الفندقي", slug: "housekeeping", imageUrl: "", sortOrder: 9 },
+      { nameEn: "Furniture", nameAr: "الأثاث", slug: "furniture", imageUrl: "", sortOrder: 10 },
+      { nameEn: "Banqueting", nameAr: "قاعات الاحتفالات", slug: "banqueting", imageUrl: "", sortOrder: 11 },
+    ];
+    for (const cat of defaultCategories) {
+      await storage.createCategory(cat);
+    }
+    console.log(`Seeded ${defaultCategories.length} categories`);
+  }
 }
