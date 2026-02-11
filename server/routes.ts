@@ -173,13 +173,17 @@ export async function registerRoutes(
       const id = parseInt(req.params.id);
       const updates: any = {};
       if (req.body.name) updates.name = req.body.name;
-      if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       if (req.body.displayType) updates.displayType = req.body.displayType;
-      if (req.body.fontFamily) updates.fontFamily = req.body.fontFamily;
-      if (req.body.fontWeight) updates.fontWeight = req.body.fontWeight;
-      if (req.body.fontStyle !== undefined) updates.fontStyle = req.body.fontStyle;
-      if (req.body.textColor) updates.textColor = req.body.textColor;
-      if (req.body.letterSpacing) updates.letterSpacing = req.body.letterSpacing;
+      if (req.body.displayType === "text") {
+        updates.imageUrl = "";
+        if (req.body.fontFamily) updates.fontFamily = req.body.fontFamily;
+        if (req.body.fontWeight) updates.fontWeight = req.body.fontWeight;
+        if (req.body.fontStyle !== undefined) updates.fontStyle = req.body.fontStyle;
+        if (req.body.textColor) updates.textColor = req.body.textColor;
+        if (req.body.letterSpacing) updates.letterSpacing = req.body.letterSpacing;
+      } else {
+        if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      }
       const partner = await storage.updatePartner(id, updates);
       if (!partner) {
         return res.status(404).json({ message: "Partner not found" });
