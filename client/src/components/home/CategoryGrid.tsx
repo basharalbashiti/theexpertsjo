@@ -79,10 +79,10 @@ export function CategoryGrid({ limit, compact, showDiscoverMore }: { limit?: num
           />
         </div>
 
-        <div className={compact ? "grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
+        <div className={compact ? "flex gap-4 overflow-x-auto" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
           {displayCategories.map((cat, index) => (
             <Link key={cat.id} href={cat.href}>
-              <div className={`group overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"}`} data-testid={`card-category-${cat.id}`}>
+              <div className={`group overflow-hidden relative cursor-pointer ${compact ? "aspect-square w-40 md:w-48 lg:w-52 flex-shrink-0" : "aspect-[4/5]"}`} data-testid={`card-category-${cat.id}`}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
