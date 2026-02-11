@@ -20,6 +20,7 @@ const sectionLabels: Record<string, string> = {
   ecovadis: "EcoVadis",
   partner: "Partners Page",
   footer: "Footer",
+  contact: "Contact Page",
   rs: "Room Service Products",
   spa: "Spa Products",
   amenities: "Amenities Products",
@@ -29,12 +30,59 @@ const sectionLabels: Record<string, string> = {
   general: "General",
 };
 
+const keyToSection: Record<string, string> = {
+  about: "about",
+  about_desc: "about",
+  who_we_are: "about",
+  founded_in: "about",
+  home: "home",
+  all_in_one: "home",
+  hospitality_solution: "home",
+  discover_more: "home",
+  products: "home",
+  our_products: "our",
+  explore_range: "our",
+  looking_specific: "our",
+  sustainability: "sustain",
+  sustainability_quote: "sustain",
+  harmony: "sustain",
+  contact: "contact",
+  contact_us: "contact",
+  contact_sales: "contact",
+  get_in_touch: "contact",
+  send_message: "contact",
+  full_name: "contact",
+  email_addr: "contact",
+  subject: "contact",
+  message: "contact",
+  submit: "contact",
+  dubai: "contact",
+  riyadh: "contact",
+  amman: "contact",
+  partners: "partner",
+  partners_clients: "partner",
+  trusted_by: "partner",
+  become_partner: "partner",
+  categories: "cat",
+  quick_links: "footer",
+  rights_reserved: "footer",
+  back_to_categories: "cat",
+  download_sop: "about",
+  employee_handbook: "about",
+  mission_desc: "our",
+  vision_desc: "our",
+};
+
 function getSection(key: string): string {
+  if (keyToSection[key]) return keyToSection[key];
   const parts = key.split("_");
-  if (parts.length >= 2) {
-    const prefix = parts[0];
+  for (let i = parts.length; i >= 1; i--) {
+    const prefix = parts.slice(0, i).join("_");
     if (sectionLabels[prefix]) return prefix;
   }
+  const numericStripped = parts[0].replace(/\d+$/, "");
+  if (numericStripped && sectionLabels[numericStripped]) return numericStripped;
+  if (parts.length >= 2 && sectionLabels[parts[0]]) return parts[0];
   return "general";
 }
 
