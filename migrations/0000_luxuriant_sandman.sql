@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS "categories" (
+CREATE TABLE "categories" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name_en" text NOT NULL,
 	"name_ar" text DEFAULT '' NOT NULL,
@@ -8,21 +8,21 @@ CREATE TABLE IF NOT EXISTS "categories" (
 	CONSTRAINT "categories_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "clients" (
+CREATE TABLE "clients" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"image_url" text NOT NULL,
 	"sort_order" serial NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "partners" (
+CREATE TABLE "partners" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"image_url" text NOT NULL,
 	"sort_order" serial NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "products" (
+CREATE TABLE "products" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name_en" text NOT NULL,
 	"name_ar" text DEFAULT '' NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS "products" (
 	"sort_order" integer DEFAULT 0 NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "site_content" (
+CREATE TABLE "site_content" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"key" text NOT NULL,
 	"value_en" text DEFAULT '' NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS "site_content" (
 	CONSTRAINT "site_content_key_unique" UNIQUE("key")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "users" (
+CREATE TABLE "users" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"username" text NOT NULL,
 	"password" text NOT NULL,
