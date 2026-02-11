@@ -108,16 +108,23 @@ export function CategoryGrid({ limit, compact, showDiscoverMore }: { limit?: num
           ))}
           {showDiscoverMore && (
             <Link href="/categories">
-              <a className={`group block overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"} bg-neutral-100 hover:bg-neutral-200 transition-colors duration-500 flex items-center justify-center`} data-testid="link-discover-more">
+              <a className={`group block overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"}`} data-testid="link-discover-more">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: (displayCategories.length) * 0.05 }}
-                  className="w-full h-full flex flex-col items-center justify-center gap-3"
+                  className="w-full h-full relative"
                 >
-                  <span className="text-3xl text-primary">+</span>
-                  <span className="text-sm uppercase tracking-widest font-bold text-neutral-600 group-hover:text-primary transition-colors">Discover More</span>
+                  <div
+                    className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${imgBanqueting})` }}
+                  />
+                  <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors duration-500" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary group-hover:translate-x-1 transition-transform duration-300"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <span className={`uppercase tracking-widest font-bold text-white group-hover:text-primary transition-colors ${compact ? "text-xs" : "text-sm"}`}>Discover More</span>
+                  </div>
                 </motion.div>
               </a>
             </Link>
