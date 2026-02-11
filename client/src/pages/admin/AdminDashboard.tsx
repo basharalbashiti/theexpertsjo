@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import ContentEditor from "./ContentEditor";
 import PartnerManager from "./PartnerManager";
 import CategoryManager from "./CategoryManager";
 import ProductManager from "./ProductManager";
+import type { Category, Product, Partner, SiteContent } from "@shared/schema";
 
 type AdminPage = "overview" | "content" | "categories" | "products" | "partners" | "settings";
 
@@ -78,11 +79,28 @@ const sitemap: SitemapItem[] = [
 ];
 
 function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void }) {
-  const quickActions = [
-    { label: "Edit Site Text", page: "content" as AdminPage, color: "bg-blue-50 border-blue-200 text-blue-700" },
-    { label: "Manage Categories", page: "categories" as AdminPage, color: "bg-emerald-50 border-emerald-200 text-emerald-700" },
-    { label: "Manage Products", page: "products" as AdminPage, color: "bg-purple-50 border-purple-200 text-purple-700" },
-    { label: "Manage Partners", page: "partners" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700" },
+  const { data: categories = [] } = useQuery<Category[]>({
+    queryKey: ["/api/categories"],
+    queryFn: getQueryFn({ on401: "throw" }),
+  });
+  const { data: products = [] } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
+    queryFn: getQueryFn({ on401: "throw" }),
+  });
+  const { data: partners = [] } = useQuery<Partner[]>({
+    queryKey: ["/api/partners"],
+    queryFn: getQueryFn({ on401: "throw" }),
+  });
+  const { data: contents = [] } = useQuery<SiteContent[]>({
+    queryKey: ["/api/content"],
+    queryFn: getQueryFn({ on401: "throw" }),
+  });
+
+  const stats = [
+    { label: "Content Items", count: contents.length, page: "content" as AdminPage, color: "bg-blue-50 border-blue-200 text-blue-700", icon: "file-text" },
+    { label: "Categories", count: categories.length, page: "categories" as AdminPage, color: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "folder" },
+    { label: "Products", count: products.length, page: "products" as AdminPage, color: "bg-purple-50 border-purple-200 text-purple-700", icon: "package" },
+    { label: "Partners", count: partners.length, page: "partners" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700", icon: "handshake" },
   ];
 
   return (
@@ -93,14 +111,18 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {quickActions.map((action) => (
+        {stats.map((stat) => (
           <button
-            key={action.page}
-            data-testid={`quick-action-${action.page}`}
-            onClick={() => onNavigate(action.page)}
-            className={`p-6 rounded-xl border-2 text-left hover:shadow-md transition-all ${action.color}`}
+            key={stat.page}
+            data-testid={`quick-action-${stat.page}`}
+            onClick={() => onNavigate(stat.page)}
+            className={`p-6 rounded-xl border-2 text-left hover:shadow-md transition-all ${stat.color}`}
           >
-            <p className="font-semibold text-lg">{action.label}</p>
+            <div className="flex items-center justify-between mb-2">
+              <MenuIcon name={stat.icon} />
+              <span className="text-3xl font-bold">{stat.count}</span>
+            </div>
+            <p className="font-semibold">{stat.label}</p>
           </button>
         ))}
       </div>
@@ -151,6 +173,12 @@ export default function AdminDashboard() {
     },
   });
 
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      setLocation("/admin/login");
+    }
+  }, [isLoading, isAuthenticated, setLocation]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-neutral-50">
@@ -163,7 +191,6 @@ export default function AdminDashboard() {
   }
 
   if (!isAuthenticated) {
-    setLocation("/admin/login");
     return null;
   }
 
