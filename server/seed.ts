@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent } from "@shared/schema";
+import { users, siteContent, partners } from "@shared/schema";
 
 const defaultTranslations: Record<string, { en: string; ar: string }> = {
   home: { en: "Home", ar: "الرئيسية" },
@@ -167,5 +167,32 @@ export async function seedDatabase() {
       await storage.createCategory(cat);
     }
     console.log(`Seeded ${defaultCategories.length} categories`);
+  }
+
+  const existingPartners = await storage.getAllPartners();
+  if (existingPartners.length === 0) {
+    const defaultPartners = [
+      { name: "Four Seasons", imageUrl: "/uploads/four-seasons-new.png", sortOrder: 1 },
+      { name: "Grand Hyatt", imageUrl: "/uploads/grand-hyatt.jpg", sortOrder: 2 },
+      { name: "W Hotel", imageUrl: "/uploads/w-hotel.jpg", sortOrder: 3 },
+      { name: "Landmark", imageUrl: "/uploads/landmark.jpg", sortOrder: 4 },
+      { name: "Coral Baghdad", imageUrl: "/uploads/coral-baghdad.jpg", sortOrder: 5 },
+      { name: "The House Hotels", imageUrl: "/uploads/the-house-hotels-logo.webp", sortOrder: 6 },
+      { name: "Banyan Tree", imageUrl: "/uploads/banyan-tree.png", sortOrder: 7 },
+      { name: "Rosewood", imageUrl: "/uploads/rosewood.jpg", sortOrder: 8 },
+      { name: "Wyndham", imageUrl: "/uploads/wyndham.png", sortOrder: 9 },
+      { name: "Mandarin Oriental", imageUrl: "/uploads/mandarin-oriental.png", sortOrder: 10 },
+      { name: "Accor", imageUrl: "/uploads/accor.png", sortOrder: 11 },
+      { name: "Le Meridien", imageUrl: "/uploads/le-meridien.png", sortOrder: 12 },
+      { name: "Crowne Plaza", imageUrl: "/uploads/crowne-plaza.png", sortOrder: 13 },
+      { name: "IHG", imageUrl: "/uploads/ihg.jpg", sortOrder: 14 },
+      { name: "Marriott", imageUrl: "/uploads/marriott.png", sortOrder: 15 },
+      { name: "Millennium", imageUrl: "/uploads/millennium.png", sortOrder: 16 },
+      { name: "Hyatt", imageUrl: "/uploads/hyatt.jpg", sortOrder: 17 },
+    ];
+    for (const partner of defaultPartners) {
+      await storage.createPartner(partner);
+    }
+    console.log(`Seeded ${defaultPartners.length} partners`);
   }
 }
