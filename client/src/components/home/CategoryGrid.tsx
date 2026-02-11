@@ -79,10 +79,10 @@ export function CategoryGrid({ limit, compact, showDiscoverMore }: { limit?: num
           />
         </div>
 
-        <div className={compact ? "flex gap-4 overflow-x-auto" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
+        <div className={compact ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
           {displayCategories.map((cat, index) => (
             <Link key={cat.id} href={cat.href}>
-              <div className={`group overflow-hidden relative cursor-pointer ${compact ? "aspect-square w-40 md:w-48 lg:w-52 flex-shrink-0" : "aspect-[4/5]"}`} data-testid={`card-category-${cat.id}`}>
+              <a className={`group block overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"}`} data-testid={`card-category-${cat.id}`}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -103,18 +103,26 @@ export function CategoryGrid({ limit, compact, showDiscoverMore }: { limit?: num
                     <div className="h-0.5 w-0 bg-primary mt-2 group-hover:w-10 transition-all duration-500" />
                   </div>
                 </motion.div>
-              </div>
+              </a>
             </Link>
           ))}
-        </div>
-
-        {showDiscoverMore && (
-          <div className="text-center mt-10">
-            <Link href="/categories" className="inline-block text-sm uppercase tracking-widest font-bold text-neutral-500 hover:text-primary transition-colors" data-testid="link-discover-more">
-              View All Categories &rarr;
+          {showDiscoverMore && (
+            <Link href="/categories">
+              <a className={`group block overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"} bg-neutral-100 hover:bg-neutral-200 transition-colors duration-500 flex items-center justify-center`} data-testid="link-discover-more">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: (displayCategories.length) * 0.05 }}
+                  className="w-full h-full flex flex-col items-center justify-center gap-3"
+                >
+                  <span className="text-3xl text-primary">+</span>
+                  <span className="text-sm uppercase tracking-widest font-bold text-neutral-600 group-hover:text-primary transition-colors">Discover More</span>
+                </motion.div>
+              </a>
             </Link>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </section>
   );
