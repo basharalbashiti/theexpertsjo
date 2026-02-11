@@ -1,9 +1,26 @@
 import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
 import logo from "@/assets/logo.png";
 
+interface Category {
+  id: number;
+  nameEn: string;
+  nameAr: string;
+  slug: string;
+}
+
 export function Footer() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+
+  const { data: categories = [] } = useQuery<Category[]>({
+    queryKey: ["/api/categories"],
+    queryFn: async () => {
+      const res = await fetch("/api/categories");
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
 
   return (
     <footer className="bg-neutral-900 text-white py-16">
@@ -33,10 +50,15 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg mb-6">{t("categories")}</h4>
             <ul className="space-y-3 text-sm text-neutral-400">
-              <li><Link href="/amenities"><a className="hover:text-primary transition-colors">{t("cat_amenities")}</a></Link></li>
-              <li><Link href="/linens"><a className="hover:text-primary transition-colors">{t("cat_linens")}</a></Link></li>
-              <li><Link href="/room-service"><a className="hover:text-primary transition-colors">{t("cat_room_service")}</a></Link></li>
-              <li><Link href="/spa"><a className="hover:text-primary transition-colors">{t("cat_spa")}</a></Link></li>
+              {categories.slice(0, 6).map((cat) => (
+                <li key={cat.id}>
+                  <Link href={`/${cat.slug}`}>
+                    <a className="hover:text-primary transition-colors">
+                      {lang === "ar" ? cat.nameAr : cat.nameEn}
+                    </a>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

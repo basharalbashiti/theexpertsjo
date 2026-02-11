@@ -37,8 +37,12 @@ export default function ProductManager() {
   const [sortDir, setSortDir] = useState<SortDir>("asc");
 
   const { data: categories = [] } = useQuery<Category[]>({
-    queryKey: ["/api/categories"],
-    queryFn: getQueryFn({ on401: "throw" }),
+    queryKey: ["/api/categories", { all: true }],
+    queryFn: async () => {
+      const res = await fetch("/api/categories?all=true", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch categories");
+      return res.json();
+    },
   });
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
