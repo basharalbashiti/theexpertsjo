@@ -25,6 +25,7 @@ export default function ProductManager() {
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [filterCategoryId, setFilterCategoryId] = useState<number | null>(null);
+  const [filterBrand, setFilterBrand] = useState<string>("");
   const [nameEn, setNameEn] = useState("");
   const [nameAr, setNameAr] = useState("");
   const [descEn, setDescEn] = useState("");
@@ -55,10 +56,16 @@ export default function ProductManager() {
     return cat?.nameEn || "Unknown";
   };
 
+  const brandList = useMemo(() => {
+    const brands = new Set<string>();
+    products.forEach((p) => { if (p.brand) brands.add(p.brand); });
+    return Array.from(brands).sort();
+  }, [products]);
+
   const filteredAndSorted = useMemo(() => {
-    let list = filterCategoryId
-      ? products.filter((p) => p.categoryId === filterCategoryId)
-      : [...products];
+    let list = [...products];
+    if (filterCategoryId) list = list.filter((p) => p.categoryId === filterCategoryId);
+    if (filterBrand) list = list.filter((p) => p.brand === filterBrand);
 
     list.sort((a, b) => {
       let cmp = 0;
@@ -221,7 +228,7 @@ export default function ProductManager() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-2xl font-bold text-neutral-900">Products</h2>
-          <p className="text-neutral-500 text-sm">{filteredAndSorted.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}</p>
+          <p className="text-neutral-500 text-sm">{filteredAndSorted.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
         </div>
         <div className="flex items-center gap-3">
           <select
@@ -233,6 +240,17 @@ export default function ProductManager() {
             <option value="">All Categories</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>{cat.nameEn}</option>
+            ))}
+          </select>
+          <select
+            data-testid="select-filter-brand"
+            value={filterBrand}
+            onChange={(e) => setFilterBrand(e.target.value)}
+            className="text-sm border rounded-lg px-3 py-2 bg-white text-neutral-700"
+          >
+            <option value="">All Brands</option>
+            {brandList.map((b) => (
+              <option key={b} value={b}>{b}</option>
             ))}
           </select>
           <Button data-testid="button-add-product" onClick={openAdd}>
