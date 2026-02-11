@@ -79,10 +79,10 @@ export function CategoryGrid({ limit, compact, showDiscoverMore }: { limit?: num
           />
         </div>
 
-        <div className={compact ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 justify-items-center" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
+        <div className={compact ? "grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
           {displayCategories.map((cat, index) => (
             <Link key={cat.id} href={cat.href}>
-              <a className={`group block overflow-hidden relative cursor-pointer ${compact ? "aspect-square w-full" : "aspect-[4/5]"}`} data-testid={`card-category-${cat.id}`}>
+              <div className={`group overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"}`} data-testid={`card-category-${cat.id}`}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -103,17 +103,15 @@ export function CategoryGrid({ limit, compact, showDiscoverMore }: { limit?: num
                     <div className="h-0.5 w-0 bg-primary mt-2 group-hover:w-10 transition-all duration-500" />
                   </div>
                 </motion.div>
-              </a>
+              </div>
             </Link>
           ))}
         </div>
 
         {showDiscoverMore && (
           <div className="text-center mt-10">
-            <Link href="/categories">
-              <a className="inline-block text-sm uppercase tracking-widest font-bold text-neutral-500 hover:text-primary transition-colors" data-testid="link-discover-more">
-                View All Categories &rarr;
-              </a>
+            <Link href="/categories" className="inline-block text-sm uppercase tracking-widest font-bold text-neutral-500 hover:text-primary transition-colors" data-testid="link-discover-more">
+              View All Categories &rarr;
             </Link>
           </div>
         )}
