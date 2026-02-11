@@ -39,7 +39,7 @@ const fallbackImages: Record<string, string> = {
   "housekeeping": imgLinens,
 };
 
-export function CategoryGrid({ limit }: { limit?: number }) {
+export function CategoryGrid({ limit, compact }: { limit?: number; compact?: boolean }) {
   const { t, lang } = useLanguage();
   const [dbCategories, setDbCategories] = useState<DbCategory[]>([]);
 
@@ -79,15 +79,15 @@ export function CategoryGrid({ limit }: { limit?: number }) {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className={compact ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
           {displayCategories.map((cat, index) => (
             <Link key={cat.id} href={cat.href}>
-              <a className="group block overflow-hidden relative aspect-[4/5] cursor-pointer" data-testid={`card-category-${cat.id}`}>
+              <a className={`group block overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"}`} data-testid={`card-category-${cat.id}`}>
                 <motion.div
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.05 }}
                   className="w-full h-full relative"
                 >
                   <div 
@@ -96,11 +96,11 @@ export function CategoryGrid({ limit }: { limit?: number }) {
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500" />
                   
-                  <div className="absolute inset-0 flex flex-col justify-end p-8 rtl:items-start">
-                    <h3 className="text-white text-2xl font-serif font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  <div className={`absolute inset-0 flex flex-col justify-end rtl:items-start ${compact ? "p-3" : "p-8"}`}>
+                    <h3 className={`text-white font-serif font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${compact ? "text-sm" : "text-2xl"}`}>
                       {cat.title}
                     </h3>
-                    <div className="h-0.5 w-0 bg-primary mt-4 group-hover:w-16 transition-all duration-500" />
+                    <div className="h-0.5 w-0 bg-primary mt-2 group-hover:w-10 transition-all duration-500" />
                   </div>
                 </motion.div>
               </a>
