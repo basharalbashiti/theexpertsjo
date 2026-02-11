@@ -19,6 +19,7 @@ export interface IStorage {
   deletePartner(id: number): Promise<boolean>;
 
   getAllCategories(): Promise<Category[]>;
+  getVisibleCategories(): Promise<Category[]>;
   getCategory(id: number): Promise<Category | undefined>;
   createCategory(category: InsertCategory): Promise<Category>;
   updateCategory(id: number, category: Partial<InsertCategory>): Promise<Category | undefined>;
@@ -107,6 +108,10 @@ export class DatabaseStorage implements IStorage {
 
   async getAllCategories(): Promise<Category[]> {
     return db.select().from(categories).orderBy(asc(categories.sortOrder));
+  }
+
+  async getVisibleCategories(): Promise<Category[]> {
+    return db.select().from(categories).where(eq(categories.visible, true)).orderBy(asc(categories.sortOrder));
   }
 
   async getCategory(id: number): Promise<Category | undefined> {

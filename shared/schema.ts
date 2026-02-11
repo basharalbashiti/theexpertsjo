@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, serial, timestamp, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, serial, timestamp, integer, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -55,6 +55,7 @@ export const categories = pgTable("categories", {
   slug: text("slug").notNull().unique(),
   imageUrl: text("image_url").notNull().default(""),
   sortOrder: integer("sort_order").notNull().default(0),
+  visible: boolean("visible").notNull().default(true),
 });
 
 export const insertCategorySchema = createInsertSchema(categories).pick({
@@ -63,6 +64,7 @@ export const insertCategorySchema = createInsertSchema(categories).pick({
   slug: true,
   imageUrl: true,
   sortOrder: true,
+  visible: true,
 });
 
 export type InsertCategory = z.infer<typeof insertCategorySchema>;

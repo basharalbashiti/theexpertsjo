@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
+import { useEffect, useState } from "react";
+
 import imgTowels from "@/assets/cat-towels.jpg";
 import imgMinibar from "@/assets/cat-minibar.jpg";
 import imgAmenities from "@/assets/cat-amenities-wide.png";
@@ -11,20 +13,51 @@ import imgLinens from "@/assets/cat-linens.png";
 import imgRoomService from "@/assets/cat-room-service.png";
 import imgSpa from "@/assets/cat-spa-simple.png";
 
+interface DbCategory {
+  id: number;
+  nameEn: string;
+  nameAr: string;
+  slug: string;
+  imageUrl: string;
+  sortOrder: number;
+  visible: boolean;
+}
+
+const fallbackImages: Record<string, string> = {
+  "room-service": imgRoomService,
+  "linens": imgLinens,
+  "spa": imgSpa,
+  "amenities": imgAmenities,
+  "food-beverage": imgFood,
+  "banqueting": imgBanqueting,
+  "buffet-banqueting": imgBuffet,
+  "buffet-stands": imgBuffet,
+  "towels": imgTowels,
+  "mini-bar-safes": imgMinibar,
+  "mini-bar--safes": imgMinibar,
+  "furniture": imgBanqueting,
+  "housekeeping": imgLinens,
+};
+
 export function CategoryGrid({ limit }: { limit?: number }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const [dbCategories, setDbCategories] = useState<DbCategory[]>([]);
 
-  const allCategories = [
-    { id: 1, title: t("cat_room_service"), image: imgRoomService, href: "/room-service" },
-    { id: 2, title: t("cat_linens"), image: imgLinens, href: "/linens" },
-    { id: 3, title: t("cat_spa"), image: imgSpa, href: "/spa" },
-    { id: 4, title: t("cat_amenities"), image: imgAmenities, href: "/amenities" },
-    { id: 5, title: t("cat_food"), image: imgFood, href: "/food-beverage" },
-    { id: 6, title: t("cat_banqueting"), image: imgBanqueting, href: "/buffet-banqueting" },
-    { id: 7, title: t("cat_buffet"), image: imgBuffet, href: "/buffet-banqueting" },
-  ];
+  useEffect(() => {
+    fetch("/api/categories")
+      .then(r => r.json())
+      .then(setDbCategories)
+      .catch(() => {});
+  }, []);
 
-  const categories = limit ? allCategories.slice(0, limit) : allCategories;
+  const categories = dbCategories.map(cat => ({
+    id: cat.id,
+    title: lang === "AR" && cat.nameAr ? cat.nameAr : cat.nameEn,
+    image: cat.imageUrl || fallbackImages[cat.slug] || imgRoomService,
+    href: `/${cat.slug}`,
+  }));
+
+  const displayCategories = limit ? categories.slice(0, limit) : categories;
 
   return (
     <section className="py-24 bg-white">
@@ -47,9 +80,9 @@ export function CategoryGrid({ limit }: { limit?: number }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((cat, index) => (
+          {displayCategories.map((cat, index) => (
             <Link key={cat.id} href={cat.href}>
-              <a className="group block overflow-hidden relative aspect-[4/5] cursor-pointer">
+              <a className="group block overflow-hidden relative aspect-[4/5] cursor-pointer" data-testid={`card-category-${cat.id}`}>
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}

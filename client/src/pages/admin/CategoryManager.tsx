@@ -26,8 +26,30 @@ export default function CategoryManager() {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const { data: categories = [], isLoading } = useQuery<Category[]>({
-    queryKey: ["/api/categories"],
-    queryFn: getQueryFn({ on401: "throw" }),
+    queryKey: ["/api/categories", "all"],
+    queryFn: async () => {
+      const res = await fetch("/api/categories?all=true", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch");
+      return res.json();
+    },
+  });
+
+  const toggleVisibilityMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/categories/${id}/toggle-visibility`, {
+        method: "PATCH",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
+      toast({ title: "Visibility updated" });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
   });
 
   const createMutation = useMutation({
@@ -170,6 +192,7 @@ export default function CategoryManager() {
               <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Name (EN)</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Name (AR)</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Slug</th>
+              <th className="text-center px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Visible</th>
               <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -189,6 +212,30 @@ export default function CategoryManager() {
                 <td className="px-4 py-3 text-sm font-medium text-neutral-900">{cat.nameEn}</td>
                 <td className="px-4 py-3 text-sm text-neutral-600" dir="rtl">{cat.nameAr}</td>
                 <td className="px-4 py-3 text-xs font-mono text-neutral-400">/{cat.slug}</td>
+                <td className="px-4 py-3 text-center">
+                  <button
+                    data-testid={`button-toggle-visibility-${cat.id}`}
+                    onClick={() => toggleVisibilityMutation.mutate(cat.id)}
+                    disabled={toggleVisibilityMutation.isPending}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+                      cat.visible
+                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
+                        : "bg-neutral-100 text-neutral-400 border border-neutral-200 hover:bg-neutral-200"
+                    }`}
+                  >
+                    {cat.visible ? (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        Visible
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                        Hidden
+                      </>
+                    )}
+                  </button>
+                </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">
                     <Button

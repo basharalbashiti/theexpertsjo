@@ -7,11 +7,20 @@ import { useLanguage } from "@/context/LanguageContext";
 
 import logo from "@/assets/logo.png";
 
+interface CategoryItem {
+  id: number;
+  nameEn: string;
+  nameAr: string;
+  slug: string;
+  visible: boolean;
+}
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { lang, toggleLang, t } = useLanguage();
   const [location] = useLocation();
+  const [dbCategories, setDbCategories] = useState<CategoryItem[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +30,18 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    fetch("/api/categories")
+      .then(r => r.json())
+      .then(setDbCategories)
+      .catch(() => {});
+  }, []);
+
+  const categorySubLinks = dbCategories.map(cat => ({
+    name: lang === "AR" && cat.nameAr ? cat.nameAr : cat.nameEn,
+    href: `/${cat.slug}`,
+  }));
+
   const navLinks = [
     { name: t("home"), href: "/" },
     { name: t("about"), href: "/about-us" },
@@ -28,14 +49,7 @@ export function Navbar() {
       name: t("products"), 
       href: "/categories",
       isDropdown: true,
-      subLinks: [
-        { name: t("cat_room_service"), href: "/room-service" },
-        { name: t("cat_linens"), href: "/linens" },
-        { name: t("cat_spa"), href: "/spa" },
-        { name: t("cat_amenities"), href: "/amenities" },
-        { name: t("cat_food"), href: "/food-beverage" },
-        { name: t("cat_banqueting"), href: "/buffet-banqueting" },
-      ]
+      subLinks: categorySubLinks,
     },
     { name: t("partners"), href: "/partners" },
     { name: t("contact"), href: "/contact" },

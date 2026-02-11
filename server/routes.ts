@@ -199,9 +199,15 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/categories", async (_req, res) => {
-    const allCategories = await storage.getAllCategories();
-    res.json(allCategories);
+  app.get("/api/categories", async (req, res) => {
+    const showAll = req.query.all === "true";
+    if (showAll && req.session.userId) {
+      const allCategories = await storage.getAllCategories();
+      res.json(allCategories);
+    } else {
+      const visibleCategories = await storage.getVisibleCategories();
+      res.json(visibleCategories);
+    }
   });
 
   app.post("/api/categories", requireAuth, upload.single("image"), async (req, res) => {
@@ -235,6 +241,7 @@ export async function registerRoutes(
       if (req.body.nameAr !== undefined) updates.nameAr = req.body.nameAr;
       if (req.body.slug) updates.slug = req.body.slug;
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.body.visible !== undefined) updates.visible = req.body.visible === "true" || req.body.visible === true;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       const category = await storage.updateCategory(id, updates);
       if (!category) {
@@ -243,6 +250,20 @@ export async function registerRoutes(
       res.json(category);
     } catch (error) {
       res.status(500).json({ message: "Failed to update category" });
+    }
+  });
+
+  app.patch("/api/categories/:id/toggle-visibility", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const category = await storage.getCategory(id);
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      const updated = await storage.updateCategory(id, { visible: !category.visible });
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to toggle visibility" });
     }
   });
 
