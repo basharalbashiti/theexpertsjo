@@ -26,6 +26,7 @@ export default function ProductManager() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [filterCategoryId, setFilterCategoryId] = useState<number | null>(null);
   const [filterBrand, setFilterBrand] = useState<string>("");
+  const [searchName, setSearchName] = useState<string>("");
   const [nameEn, setNameEn] = useState("");
   const [nameAr, setNameAr] = useState("");
   const [descEn, setDescEn] = useState("");
@@ -66,6 +67,7 @@ export default function ProductManager() {
     let list = [...products];
     if (filterCategoryId) list = list.filter((p) => p.categoryId === filterCategoryId);
     if (filterBrand) list = list.filter((p) => p.brand === filterBrand);
+    if (searchName) list = list.filter((p) => p.nameEn.toLowerCase().includes(searchName.toLowerCase()) || p.nameAr.includes(searchName));
 
     list.sort((a, b) => {
       let cmp = 0;
@@ -230,7 +232,14 @@ export default function ProductManager() {
           <h2 className="text-2xl font-bold text-neutral-900">Products</h2>
           <p className="text-neutral-500 text-sm">{filteredAndSorted.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          <Input
+            data-testid="input-search-name"
+            placeholder="Search by name..."
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            className="w-44 text-sm"
+          />
           <select
             data-testid="select-filter-category"
             value={filterCategoryId || ""}
