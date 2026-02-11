@@ -329,5 +329,56 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/clients", async (_req, res) => {
+    const allClients = await storage.getAllClients();
+    res.json(allClients);
+  });
+
+  app.post("/api/clients", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const { name } = req.body;
+      if (!name) {
+        return res.status(400).json({ message: "Name is required" });
+      }
+      let imageUrl = "";
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      const client = await storage.createClient({ name, imageUrl });
+      res.json(client);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create client" });
+    }
+  });
+
+  app.put("/api/clients/:id", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates: any = {};
+      if (req.body.name) updates.name = req.body.name;
+      if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      const client = await storage.updateClient(id, updates);
+      if (!client) {
+        return res.status(404).json({ message: "Client not found" });
+      }
+      res.json(client);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update client" });
+    }
+  });
+
+  app.delete("/api/clients/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteClient(id);
+      if (!success) {
+        return res.status(404).json({ message: "Client not found" });
+      }
+      res.json({ message: "Client deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete client" });
+    }
+  });
+
   return httpServer;
 }

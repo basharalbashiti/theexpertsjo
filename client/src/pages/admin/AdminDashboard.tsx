@@ -6,11 +6,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import ContentEditor from "./ContentEditor";
 import PartnerManager from "./PartnerManager";
+import ClientManager from "./ClientManager";
 import CategoryManager from "./CategoryManager";
 import ProductManager from "./ProductManager";
-import type { Category, Product, Partner, SiteContent } from "@shared/schema";
+import type { Category, Product, Partner, Client, SiteContent } from "@shared/schema";
 
-type AdminPage = "overview" | "content" | "categories" | "products" | "partners" | "settings";
+type AdminPage = "overview" | "content" | "categories" | "products" | "partners" | "clients" | "settings";
 
 interface MenuItem {
   id: AdminPage;
@@ -24,7 +25,8 @@ const menuItems: MenuItem[] = [
   { id: "content", label: "Site Content", icon: "file-text", description: "Edit text & translations" },
   { id: "categories", label: "Categories", icon: "folder", description: "Manage product categories" },
   { id: "products", label: "Products", icon: "package", description: "Manage products" },
-  { id: "partners", label: "Partners", icon: "handshake", description: "Manage partner logos" },
+  { id: "partners", label: "Partners", icon: "handshake", description: "Manage brand partners (Abdeen, Cashmere)" },
+  { id: "clients", label: "Clients", icon: "users", description: "Manage hotel brand clients" },
   { id: "settings", label: "Settings", icon: "settings", description: "Account settings" },
 ];
 
@@ -44,6 +46,9 @@ function MenuIcon({ name }: { name: string }) {
     ),
     handshake: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>
+    ),
+    users: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     ),
     settings: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -91,6 +96,10 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
     queryKey: ["/api/partners"],
     queryFn: getQueryFn({ on401: "throw" }),
   });
+  const { data: clientsList = [] } = useQuery<Client[]>({
+    queryKey: ["/api/clients"],
+    queryFn: getQueryFn({ on401: "throw" }),
+  });
   const { data: contents = [] } = useQuery<SiteContent[]>({
     queryKey: ["/api/content"],
     queryFn: getQueryFn({ on401: "throw" }),
@@ -101,6 +110,7 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
     { label: "Categories", count: categories.length, page: "categories" as AdminPage, color: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "folder" },
     { label: "Products", count: products.length, page: "products" as AdminPage, color: "bg-purple-50 border-purple-200 text-purple-700", icon: "package" },
     { label: "Partners", count: partners.length, page: "partners" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700", icon: "handshake" },
+    { label: "Clients", count: clientsList.length, page: "clients" as AdminPage, color: "bg-rose-50 border-rose-200 text-rose-700", icon: "users" },
   ];
 
   return (
@@ -206,6 +216,8 @@ export default function AdminDashboard() {
         return <ProductManager />;
       case "partners":
         return <PartnerManager />;
+      case "clients":
+        return <ClientManager />;
       case "settings":
         return (
           <div className="space-y-6">

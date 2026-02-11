@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct } from "@shared/schema";
+import { users, siteContent, partners, categories, products, clients, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Client, type InsertClient } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
 
@@ -30,6 +30,12 @@ export interface IStorage {
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
   deleteProduct(id: number): Promise<boolean>;
+
+  getAllClients(): Promise<Client[]>;
+  getClient(id: number): Promise<Client | undefined>;
+  createClient(client: InsertClient): Promise<Client>;
+  updateClient(id: number, client: Partial<InsertClient>): Promise<Client | undefined>;
+  deleteClient(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -149,6 +155,30 @@ export class DatabaseStorage implements IStorage {
 
   async deleteProduct(id: number): Promise<boolean> {
     const result = await db.delete(products).where(eq(products.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getAllClients(): Promise<Client[]> {
+    return db.select().from(clients).orderBy(asc(clients.sortOrder));
+  }
+
+  async getClient(id: number): Promise<Client | undefined> {
+    const [client] = await db.select().from(clients).where(eq(clients.id, id));
+    return client || undefined;
+  }
+
+  async createClient(client: InsertClient): Promise<Client> {
+    const [result] = await db.insert(clients).values(client).returning();
+    return result;
+  }
+
+  async updateClient(id: number, client: Partial<InsertClient>): Promise<Client | undefined> {
+    const [result] = await db.update(clients).set(client).where(eq(clients.id, id)).returning();
+    return result || undefined;
+  }
+
+  async deleteClient(id: number): Promise<boolean> {
+    const result = await db.delete(clients).where(eq(clients.id, id)).returning();
     return result.length > 0;
   }
 }
