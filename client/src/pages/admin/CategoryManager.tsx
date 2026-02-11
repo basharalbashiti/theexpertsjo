@@ -183,8 +183,8 @@ export default function CategoryManager() {
         </Button>
       </div>
 
-      <div className="bg-white rounded-xl border overflow-hidden">
-        <table className="w-full">
+      <div className="bg-white rounded-xl border overflow-x-auto">
+        <table className="w-full min-w-[700px]">
           <thead>
             <tr className="border-b bg-neutral-50">
               <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Order</th>
