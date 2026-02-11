@@ -106,23 +106,17 @@ export function CategoryGrid({ limit, compact, showDiscoverMore }: { limit?: num
               </a>
             </Link>
           ))}
-          {showDiscoverMore && (
+        </div>
+
+        {showDiscoverMore && (
+          <div className="text-center mt-10">
             <Link href="/categories">
-              <a className={`group block overflow-hidden relative cursor-pointer ${compact ? "aspect-square" : "aspect-[4/5]"} bg-neutral-100 hover:bg-neutral-200 transition-colors duration-500 flex items-center justify-center`} data-testid="link-discover-more">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: (displayCategories.length) * 0.05 }}
-                  className="w-full h-full flex flex-col items-center justify-center gap-3"
-                >
-                  <span className="text-3xl text-primary">+</span>
-                  <span className="text-sm uppercase tracking-widest font-bold text-neutral-600 group-hover:text-primary transition-colors">Discover More</span>
-                </motion.div>
+              <a className="inline-block text-sm uppercase tracking-widest font-bold text-neutral-500 hover:text-primary transition-colors" data-testid="link-discover-more">
+                View All Categories &rarr;
               </a>
             </Link>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

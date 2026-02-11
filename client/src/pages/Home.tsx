@@ -55,7 +55,7 @@ export default function Home() {
         </div>
       </section>
 
-      <CategoryGrid limit={5} compact showDiscoverMore />
+      <CategoryGrid limit={6} compact showDiscoverMore />
       
     </Layout>
   );
