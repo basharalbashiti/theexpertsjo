@@ -1,62 +1,36 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { useLanguage } from "@/context/LanguageContext";
-
-function Counter({ from, to }: { from: number; to: number }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  const [count, setCount] = useState(from);
-
-  useEffect(() => {
-    if (inView) {
-      const duration = 2000;
-      const stepTime = 20;
-      const steps = duration / stepTime;
-      const increment = (to - from) / steps;
-      
-      let current = from;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= to) {
-          setCount(to);
-          clearInterval(timer);
-        } else {
-          setCount(Math.floor(current));
-        }
-      }, stepTime);
-      
-      return () => clearInterval(timer);
-    }
-  }, [inView, from, to]);
-
-  return <span ref={ref}>{count}</span>;
-}
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
+import type { Client } from "@shared/schema";
 
 export function Stats() {
-  const { t } = useLanguage();
+  const { data: clients = [] } = useQuery<Client[]>({
+    queryKey: ["/api/clients"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+  });
 
-  const stats = [
-    { label: t("stat_offices"), value: 4 },
-    { label: t("stat_warehouses"), value: 6 },
-    { label: t("stat_countries"), value: 7 },
-    { label: t("stat_skus"), value: 5000 },
-  ];
+  if (clients.length === 0) return null;
+
+  const logos = [...clients, ...clients];
 
   return (
-    <section className="py-20 bg-neutral-50 border-y border-neutral-200">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <h3 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-2">
-                <Counter from={0} to={stat.value} />
-                {stat.label === t("stat_skus") ? "+" : ""}
-              </h3>
-              <p className="text-neutral-500 uppercase tracking-widest text-sm font-medium">
-                {stat.label}
-              </p>
+    <section className="py-12 bg-neutral-50 border-y border-neutral-200 overflow-hidden">
+      <div className="relative">
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-neutral-50 to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-neutral-50 to-transparent z-10" />
+
+        <div className="flex animate-logo-scroll">
+          {logos.map((client, index) => (
+            <div
+              key={`${client.id}-${index}`}
+              data-testid={`logo-slider-${client.id}-${index}`}
+              className="flex-shrink-0 mx-8 md:mx-12 flex items-center justify-center"
+              style={{ minWidth: "140px" }}
+            >
+              <img
+                src={client.imageUrl}
+                alt={client.name}
+                className="h-12 md:h-16 w-auto object-contain grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+              />
             </div>
           ))}
         </div>
