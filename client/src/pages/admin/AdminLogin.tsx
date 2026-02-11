@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -30,17 +30,18 @@ export default function AdminLogin() {
     },
   });
 
-  if (authLoading) {
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      setLocation("/admin");
+    }
+  }, [authLoading, isAuthenticated, setLocation]);
+
+  if (authLoading || isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-muted-foreground">Loading...</p>
       </div>
     );
-  }
-
-  if (isAuthenticated) {
-    setLocation("/admin");
-    return null;
   }
 
   const handleSubmit = (e: React.FormEvent) => {
