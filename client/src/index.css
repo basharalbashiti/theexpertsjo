@@ -28,8 +28,8 @@
 
 :root {
   /* Luxury Minimalist Palette - Restored */
-  /* Background: Very slightly off-white for richness */
-  --background: 0 0% 98%; 
+  /* Background: Pure white */
+  --background: 0 0% 100%; 
   /* Foreground: Soft black, not harsh #000 */
   --foreground: 220 10% 10%; 
 
