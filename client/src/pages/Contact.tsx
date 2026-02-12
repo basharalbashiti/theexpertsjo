@@ -15,27 +15,21 @@ export default function Contact() {
           <div className="bg-white rounded-2xl shadow-lg shadow-neutral-200/50 border border-neutral-100 p-6 md:p-8">
             <form className="space-y-8 text-left">
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="relative">
-                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("full_name")}</label>
-                  <div className="relative">
-                    <User size={16} className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300" />
-                    <input
-                      type="text"
-                      placeholder="John Doe"
-                      className="w-full pl-7 border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800 placeholder:text-neutral-300"
-                    />
-                  </div>
+                <div className="relative flex items-center gap-3 border-b-2 border-neutral-200 focus-within:border-primary transition-colors">
+                  <User size={16} className="text-neutral-300 flex-shrink-0" />
+                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider flex-shrink-0">{t("full_name")}</label>
+                  <input
+                    type="text"
+                    className="w-full py-3 outline-none bg-transparent text-neutral-800 placeholder:text-neutral-300"
+                  />
                 </div>
-                <div className="relative">
-                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("email_addr")}</label>
-                  <div className="relative">
-                    <Mail size={16} className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300" />
-                    <input
-                      type="email"
-                      placeholder="john@example.com"
-                      className="w-full pl-7 border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800 placeholder:text-neutral-300"
-                    />
-                  </div>
+                <div className="relative flex items-center gap-3 border-b-2 border-neutral-200 focus-within:border-primary transition-colors">
+                  <Mail size={16} className="text-neutral-300 flex-shrink-0" />
+                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider flex-shrink-0">{t("email_addr")}</label>
+                  <input
+                    type="email"
+                    className="w-full py-3 outline-none bg-transparent text-neutral-800 placeholder:text-neutral-300"
+                  />
                 </div>
               </div>
 
