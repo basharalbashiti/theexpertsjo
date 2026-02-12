@@ -7,26 +7,29 @@ export default function Contact() {
 
   return (
     <Layout>
-      <section className="pt-32 pb-24 bg-white">
-        <div className="container mx-auto px-6">
+      <section className="pt-32 pb-16 bg-white">
+        <div className="container mx-auto px-6 max-w-2xl text-center">
           <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">{t("send_message")}</h1>
-          <p className="text-neutral-500 mb-16 max-w-xl">{t("get_in_touch")}</p>
-          <div className="grid md:grid-cols-2 gap-16">
-          <div>
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <input type="text" placeholder={t("full_name")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-                <input type="email" placeholder={t("email_addr")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-              </div>
-              <input type="text" placeholder={t("subject")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-              <textarea placeholder={t("message")} rows={4} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors resize-none" />
-              <button className="bg-primary text-white px-12 py-4 uppercase text-xs font-bold tracking-widest hover:bg-black transition-colors mt-8">
+          <p className="text-neutral-500 mb-12">{t("get_in_touch")}</p>
+          <form className="space-y-6 text-left">
+            <div className="grid md:grid-cols-2 gap-6">
+              <input type="text" placeholder={t("full_name")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
+              <input type="email" placeholder={t("email_addr")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
+            </div>
+            <input type="text" placeholder={t("subject")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
+            <textarea placeholder={t("message")} rows={4} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors resize-none" />
+            <div className="text-center">
+              <button className="bg-primary text-white px-12 py-4 uppercase text-xs font-bold tracking-widest hover:bg-black transition-colors mt-4">
                 {t("submit")}
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
+        </div>
+      </section>
 
-          <div className="space-y-12">
+      <section className="py-16 bg-neutral-50">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16">
             <div>
               <h2 className="text-3xl font-serif font-bold mb-8 text-primary">{t("our_locations")}</h2>
               <div className="space-y-8">
@@ -44,7 +47,7 @@ export default function Contact() {
                       href={loc.mapUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-12 h-12 bg-neutral-100 flex items-center justify-center group-hover:bg-primary transition-colors flex-shrink-0"
+                      className="w-12 h-12 bg-white flex items-center justify-center group-hover:bg-primary transition-colors flex-shrink-0"
                     >
                       <MapPin size={20} className="group-hover:text-white" />
                     </a>
@@ -65,7 +68,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="pt-8 border-t border-neutral-100">
+            <div>
               <h2 className="text-3xl font-serif font-bold mb-8 text-primary">Key Contacts</h2>
               <div className="grid gap-8">
                 <div className="space-y-2">
@@ -87,7 +90,6 @@ export default function Contact() {
               </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
     </Layout>
