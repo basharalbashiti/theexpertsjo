@@ -151,7 +151,7 @@ export function Navbar() {
               onClick={toggleLang}
               className={cn(
                 "text-xs font-bold px-2 py-1 border transition-all hover:bg-primary hover:text-white",
-                isScrolled ? "text-black border-black/20" : "text-white border-white/20"
+                isScrolled || needsDarkNav ? "text-black border-black/20" : "text-white border-white/20"
               )}
             >
               {lang === "EN" ? "AR" : "EN"}
@@ -162,7 +162,7 @@ export function Navbar() {
           <div className="flex items-center space-x-4 md:hidden">
              <button 
               onClick={toggleLang}
-              className={cn("text-xs font-bold px-2 py-1 border", isScrolled ? "text-black border-black/20" : "text-white border-white/20")}
+              className={cn("text-xs font-bold px-2 py-1 border", isScrolled || needsDarkNav ? "text-black border-black/20" : "text-white border-white/20")}
             >
               {lang === "EN" ? "AR" : "EN"}
             </button>
