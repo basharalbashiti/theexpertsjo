@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
-import { MapPin, Send, User, Mail, FileText, MessageSquare } from "lucide-react";
+import { MapPin, Send } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
@@ -8,53 +8,43 @@ export default function Contact() {
   return (
     <Layout>
       <section className="pt-32 pb-20 bg-neutral-50">
-        <div className="container mx-auto px-6 max-w-2xl text-center">
+        <div className="container mx-auto px-6 max-w-4xl text-center">
           <h1 className="text-3xl md:text-4xl font-serif font-bold mb-2">{t("send_message")}</h1>
           <p className="text-neutral-500 text-sm mb-10">{t("get_in_touch")}</p>
 
           <div className="bg-white rounded-2xl shadow-lg shadow-neutral-200/50 border border-neutral-100 p-6 md:p-8">
-            <form className="space-y-8 text-left">
+            <form className="space-y-6 text-left">
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="relative flex items-center gap-3 border-b-2 border-neutral-200 focus-within:border-primary transition-colors">
-                  <User size={16} className="text-neutral-300 flex-shrink-0" />
-                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider flex-shrink-0">{t("full_name")}</label>
+                <div className="flex items-center gap-4">
+                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[100px]">{t("full_name")}</label>
                   <input
                     type="text"
-                    className="w-full py-3 outline-none bg-transparent text-neutral-800 placeholder:text-neutral-300"
+                    className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
                   />
                 </div>
-                <div className="relative flex items-center gap-3 border-b-2 border-neutral-200 focus-within:border-primary transition-colors">
-                  <Mail size={16} className="text-neutral-300 flex-shrink-0" />
-                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider flex-shrink-0">{t("email_addr")}</label>
+                <div className="flex items-center gap-4">
+                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[120px]">{t("email_addr")}</label>
                   <input
                     type="email"
-                    className="w-full py-3 outline-none bg-transparent text-neutral-800 placeholder:text-neutral-300"
+                    className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("subject")}</label>
-                <div className="relative">
-                  <FileText size={16} className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300" />
-                  <input
-                    type="text"
-                    placeholder="How can we help?"
-                    className="w-full pl-7 border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800 placeholder:text-neutral-300"
-                  />
-                </div>
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[100px]">{t("subject")}</label>
+                <input
+                  type="text"
+                  className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
+                />
               </div>
 
-              <div>
-                <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("message")}</label>
-                <div className="relative">
-                  <MessageSquare size={16} className="absolute left-0 top-3 text-neutral-300" />
-                  <textarea
-                    placeholder="Tell us about your project or inquiry..."
-                    rows={5}
-                    className="w-full pl-7 border-2 border-neutral-200 rounded-lg py-3 px-3 focus:border-primary outline-none transition-colors bg-neutral-50/50 text-neutral-800 placeholder:text-neutral-300 resize-none"
-                  />
-                </div>
+              <div className="flex gap-4">
+                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[100px] pt-3">{t("message")}</label>
+                <textarea
+                  rows={5}
+                  className="w-full border-2 border-neutral-200 rounded-lg py-3 px-3 focus:border-primary outline-none transition-colors bg-neutral-50/50 text-neutral-800 resize-none"
+                />
               </div>
 
               <div className="text-center pt-2">
