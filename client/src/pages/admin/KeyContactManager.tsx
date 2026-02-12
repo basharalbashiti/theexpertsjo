@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getQueryFn, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -29,11 +29,48 @@ export default function KeyContactManager() {
   const [email, setEmail] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const [avatarUploadId, setAvatarUploadId] = useState<number | null>(null);
 
   const { data: contacts = [], isLoading } = useQuery<KeyContact[]>({
     queryKey: ["/api/key-contacts?all=true"],
     queryFn: getQueryFn({ on401: "throw" }),
   });
+
+  const avatarUploadMutation = useMutation({
+    mutationFn: async ({ id, file }: { id: number; file: File }) => {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch(`/api/key-contacts/${id}`, {
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/key-contacts?all=true"] });
+      toast({ title: t("photo_updated") || "Photo updated" });
+    },
+    onError: (err: Error) => {
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
+    },
+  });
+
+  const handleAvatarClick = (contactId: number) => {
+    setAvatarUploadId(contactId);
+    avatarInputRef.current?.click();
+  };
+
+  const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && avatarUploadId !== null) {
+      avatarUploadMutation.mutate({ id: avatarUploadId, file });
+    }
+    e.target.value = "";
+    setAvatarUploadId(null);
+  };
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -191,6 +228,14 @@ export default function KeyContactManager() {
         </Button>
       </div>
 
+      <input
+        ref={avatarInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleAvatarFileChange}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {contacts.map((contact) => (
           <div
@@ -198,19 +243,29 @@ export default function KeyContactManager() {
             data-testid={`card-contact-${contact.id}`}
             className={`border rounded-xl p-5 bg-card flex flex-col items-center gap-3 ${!contact.visible ? "opacity-50" : ""}`}
           >
-            {contact.imageUrl ? (
-              <img
-                src={contact.imageUrl}
-                alt={contact.nameEn}
-                className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200"
-              />
-            ) : (
-              <div className="w-20 h-20 rounded-full bg-neutral-900 flex items-center justify-center">
-                <span className="text-xl font-serif font-bold text-white tracking-wider">
-                  {getInitials(contact.nameEn)}
-                </span>
+            <button
+              type="button"
+              onClick={() => handleAvatarClick(contact.id)}
+              className="relative w-20 h-20 rounded-full group cursor-pointer"
+              title={t("change_photo") || "Change photo"}
+            >
+              {contact.imageUrl ? (
+                <img
+                  src={contact.imageUrl}
+                  alt={contact.nameEn}
+                  className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200"
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-neutral-900 flex items-center justify-center">
+                  <span className="text-xl font-serif font-bold text-white tracking-wider">
+                    {getInitials(contact.nameEn)}
+                  </span>
+                </div>
+              )}
+              <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
               </div>
-            )}
+            </button>
             <div className="text-center">
               <p className="font-semibold text-neutral-900">{contact.nameEn}</p>
               {contact.nameAr && <p className="text-sm text-neutral-500" dir="rtl">{contact.nameAr}</p>}
@@ -356,7 +411,10 @@ export default function KeyContactManager() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="contact-image">{t("photo")}</Label>
+                <Label htmlFor="contact-image">{t("photo")} <span className="text-neutral-400 font-normal">({t("optional") || "Optional"})</span></Label>
+                {editingContact?.imageUrl && !imageFile && (
+                  <img src={editingContact.imageUrl} alt="" className="w-12 h-12 rounded-full object-cover border" />
+                )}
                 <Input
                   id="contact-image"
                   data-testid="input-contact-image"

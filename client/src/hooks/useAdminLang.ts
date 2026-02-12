@@ -233,6 +233,9 @@ const translations: Record<string, { EN: string; AR: string }> = {
   phone: { EN: "Phone", AR: "الهاتف" },
   email_address: { EN: "Email", AR: "البريد الإلكتروني" },
   photo: { EN: "Photo", AR: "الصورة" },
+  change_photo: { EN: "Change photo", AR: "تغيير الصورة" },
+  photo_updated: { EN: "Photo updated", AR: "تم تحديث الصورة" },
+  optional: { EN: "Optional", AR: "اختياري" },
 
   quick_links: { EN: "Quick Links", AR: "روابط سريعة" },
   quick_links_desc: { EN: "Manage footer quick links displayed on the website.", AR: "إدارة الروابط السريعة المعروضة في تذييل الموقع." },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getQueryFn, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,8 @@ export default function LeadershipManager() {
   const [email, setEmail] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const [avatarUploadId, setAvatarUploadId] = useState<number | null>(null);
 
   const { data: leaders = [], isLoading } = useQuery<Leadership[]>({
     queryKey: ["/api/leadership?all=true"],
@@ -51,6 +53,41 @@ export default function LeadershipManager() {
       toast({ title: t("visibility_updated") });
     },
   });
+
+  const avatarUploadMutation = useMutation({
+    mutationFn: async ({ id, file }: { id: number; file: File }) => {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch(`/api/leadership/${id}`, {
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/leadership?all=true"] });
+      toast({ title: t("photo_updated") || "Photo updated" });
+    },
+    onError: (err: Error) => {
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
+    },
+  });
+
+  const handleAvatarClick = (leaderId: number) => {
+    setAvatarUploadId(leaderId);
+    avatarInputRef.current?.click();
+  };
+
+  const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && avatarUploadId !== null) {
+      avatarUploadMutation.mutate({ id: avatarUploadId, file });
+    }
+    e.target.value = "";
+    setAvatarUploadId(null);
+  };
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -191,6 +228,14 @@ export default function LeadershipManager() {
         </Button>
       </div>
 
+      <input
+        ref={avatarInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleAvatarFileChange}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {leaders.map((leader) => (
           <div
@@ -198,19 +243,29 @@ export default function LeadershipManager() {
             data-testid={`card-leader-${leader.id}`}
             className={`border rounded-xl p-5 bg-card flex flex-col items-center gap-3 ${!leader.visible ? "opacity-50" : ""}`}
           >
-            {leader.imageUrl ? (
-              <img
-                src={leader.imageUrl}
-                alt={leader.nameEn}
-                className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200"
-              />
-            ) : (
-              <div className="w-20 h-20 rounded-full bg-neutral-900 flex items-center justify-center">
-                <span className="text-xl font-serif font-bold text-white tracking-wider">
-                  {getInitials(leader.nameEn)}
-                </span>
+            <button
+              type="button"
+              onClick={() => handleAvatarClick(leader.id)}
+              className="relative w-20 h-20 rounded-full group cursor-pointer"
+              title={t("change_photo") || "Change photo"}
+            >
+              {leader.imageUrl ? (
+                <img
+                  src={leader.imageUrl}
+                  alt={leader.nameEn}
+                  className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200"
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-neutral-900 flex items-center justify-center">
+                  <span className="text-xl font-serif font-bold text-white tracking-wider">
+                    {getInitials(leader.nameEn)}
+                  </span>
+                </div>
+              )}
+              <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
               </div>
-            )}
+            </button>
             <div className="text-center">
               <p className="font-semibold text-neutral-900">{leader.nameEn}</p>
               {leader.nameAr && <p className="text-sm text-neutral-500" dir="rtl">{leader.nameAr}</p>}
@@ -356,7 +411,10 @@ export default function LeadershipManager() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="leader-image">{t("photo")}</Label>
+                <Label htmlFor="leader-image">{t("photo")} <span className="text-neutral-400 font-normal">({t("optional") || "Optional"})</span></Label>
+                {editingLeader?.imageUrl && !imageFile && (
+                  <img src={editingLeader.imageUrl} alt="" className="w-12 h-12 rounded-full object-cover border" />
+                )}
                 <Input
                   id="leader-image"
                   data-testid="input-leader-image"
