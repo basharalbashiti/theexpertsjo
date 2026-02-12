@@ -7,11 +7,8 @@ export default function Contact() {
 
   return (
     <Layout>
-      <section className="pt-32 pb-20 bg-gradient-to-b from-neutral-50 to-white">
+      <section className="pt-32 pb-20 bg-neutral-50">
         <div className="container mx-auto px-6 max-w-2xl text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-            <Send size={28} className="text-primary" />
-          </div>
           <h1 className="text-4xl md:text-5xl font-serif font-bold mb-3">{t("send_message")}</h1>
           <p className="text-neutral-500 mb-12">{t("get_in_touch")}</p>
 
