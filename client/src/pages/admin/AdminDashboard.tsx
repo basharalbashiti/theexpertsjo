@@ -13,9 +13,10 @@ import CategoryManager from "./CategoryManager";
 import ProductManager from "./ProductManager";
 import SiteImageManager from "./SiteImageManager";
 import QuickLinksManager from "./QuickLinksManager";
-import type { Category, Product, Partner, Brand, Client, SiteContent } from "@shared/schema";
+import LeadershipManager from "./LeadershipManager";
+import type { Category, Product, Partner, Brand, Client, SiteContent, Leadership } from "@shared/schema";
 
-type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners" | "clients" | "quick-links" | "settings";
+type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners" | "clients" | "leadership" | "quick-links" | "settings";
 
 interface MenuItem {
   id: AdminPage;
@@ -52,6 +53,9 @@ function MenuIcon({ name }: { name: string }) {
     ),
     settings: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+    ),
+    crown: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
     ),
     link: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -191,6 +195,7 @@ export default function AdminDashboard() {
     { id: "brands", label: t("our_brands"), icon: "award", description: t("desc_brands") },
     { id: "partners", label: t("partners"), icon: "handshake", description: t("desc_partners") },
     { id: "clients", label: t("clients"), icon: "users", description: t("desc_clients") },
+    { id: "leadership", label: t("leadership"), icon: "crown", description: t("desc_leadership") },
     { id: "quick-links", label: t("quick_links"), icon: "link", description: t("desc_quick_links") },
     { id: "settings", label: t("settings"), icon: "settings", description: t("desc_settings") },
   ];
@@ -244,6 +249,8 @@ export default function AdminDashboard() {
         return <PartnerManager />;
       case "clients":
         return <ClientManager />;
+      case "leadership":
+        return <LeadershipManager />;
       case "quick-links":
         return <QuickLinksManager />;
       case "settings":

@@ -1,15 +1,23 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteImages } from "@/hooks/useSiteImages";
+import type { Leadership } from "@shared/schema";
 import imgBannerFallback from "@/assets/hero-1.jpg";
 import imgMissionFallback from "@/assets/hero-2.jpg";
 import imgVisionFallback from "@/assets/hero-3.jpg";
 import imgChairmanFallback from "@/assets/cat-furniture.jpg";
 
 export default function About() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { getImage } = useSiteImages();
+
+  const { data: leaders = [] } = useQuery<Leadership[]>({
+    queryKey: ["/api/leadership"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+  });
 
   const imgBanner = getImage("about_banner", imgBannerFallback);
   const imgMission = getImage("about_mission", imgMissionFallback);
@@ -21,13 +29,6 @@ export default function About() {
     { label: t("stat_brands"), value: "50+" },
     { label: t("stat_projects"), value: "200+" },
     { label: t("stat_clients"), value: "1000+" },
-  ];
-
-  const leadership = [
-    { name: t("leader1_name"), role: t("leader1_role"), initials: t("leader1_name").split(" ").map(w => w[0]).join("") },
-    { name: t("leader2_name"), role: t("leader2_role"), initials: t("leader2_name").split(" ").map(w => w[0]).join("") },
-    { name: t("leader3_name"), role: t("leader3_role"), initials: t("leader3_name").split(" ").map(w => w[0]).join("") },
-    { name: t("leader4_name"), role: t("leader4_role"), initials: t("leader4_name").split(" ").map(w => w[0]).join("") },
   ];
 
   return (
@@ -140,25 +141,35 @@ export default function About() {
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-serif font-bold mb-16 underline decoration-primary underline-offset-8">{t("our_leadership")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {leadership.map((person, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group"
-              >
-                <div className="relative mx-auto w-28 h-28 mb-6">
-                  <div className="w-full h-full rounded-full bg-neutral-900 flex items-center justify-center transition-all duration-500 group-hover:bg-primary">
-                    <span className="text-2xl font-serif font-bold text-white tracking-wider">{person.initials}</span>
+            {leaders.map((person, i) => {
+              const name = lang === "AR" && person.nameAr ? person.nameAr : person.nameEn;
+              const role = lang === "AR" && person.roleAr ? person.roleAr : person.roleEn;
+              const initials = person.nameEn.split(" ").map(w => w[0]).join("").toUpperCase();
+              return (
+                <motion.div 
+                  key={person.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group"
+                  data-testid={`card-leader-${person.id}`}
+                >
+                  <div className="relative mx-auto w-28 h-28 mb-6">
+                    {person.imageUrl ? (
+                      <img src={person.imageUrl} alt={name} className="w-full h-full rounded-full object-cover border-2 border-neutral-200 transition-all duration-500 group-hover:border-primary" />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-neutral-900 flex items-center justify-center transition-all duration-500 group-hover:bg-primary">
+                        <span className="text-2xl font-serif font-bold text-white tracking-wider">{initials}</span>
+                      </div>
+                    )}
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary border-2 border-neutral-50 group-hover:bg-neutral-900 transition-colors" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary border-2 border-neutral-50 group-hover:bg-neutral-900 transition-colors" />
-                </div>
-                <h4 className="font-serif font-bold text-lg">{person.name}</h4>
-                <p className="text-primary text-xs uppercase tracking-widest mt-1">{person.role}</p>
-              </motion.div>
-            ))}
+                  <h4 className="font-serif font-bold text-lg">{name}</h4>
+                  <p className="text-primary text-xs uppercase tracking-widest mt-1">{role}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

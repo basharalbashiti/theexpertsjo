@@ -44,6 +44,7 @@ const translations: Record<string, { EN: string; AR: string }> = {
   desc_brands: { EN: "Manage brand logos for homepage slider", AR: "إدارة شعارات العلامات التجارية" },
   desc_partners: { EN: "Manage brand partners (Abdeen, Cashmere)", AR: "إدارة شركاء العلامة التجارية" },
   desc_clients: { EN: "Manage hotel brand clients", AR: "إدارة عملاء الفنادق" },
+  desc_leadership: { EN: "Manage leadership team members", AR: "إدارة أعضاء فريق القيادة" },
   desc_settings: { EN: "Account settings", AR: "إعدادات الحساب" },
 
   welcome_dashboard: { EN: "Welcome to Admin Dashboard", AR: "مرحباً بك في لوحة الإدارة" },
@@ -217,6 +218,21 @@ const translations: Record<string, { EN: string; AR: string }> = {
 
   account_settings: { EN: "Account Settings", AR: "إعدادات الحساب" },
   password_change_soon: { EN: "Password change feature coming soon.", AR: "ميزة تغيير كلمة المرور ستتوفر قريباً." },
+
+  leadership: { EN: "Leadership", AR: "القيادة" },
+  add_leader: { EN: "Add Leader", AR: "إضافة قائد" },
+  edit_leader: { EN: "Edit Leader", AR: "تعديل القائد" },
+  delete_leader: { EN: "Delete Leader", AR: "حذف القائد" },
+  leader_added: { EN: "Leader added successfully", AR: "تمت إضافة القائد بنجاح" },
+  leader_updated: { EN: "Leader updated successfully", AR: "تم تحديث القائد بنجاح" },
+  leader_deleted: { EN: "Leader deleted successfully", AR: "تم حذف القائد بنجاح" },
+  add_leader_desc: { EN: "Add a new leadership team member", AR: "إضافة عضو جديد في فريق القيادة" },
+  update_leader_details: { EN: "Update leader information", AR: "تحديث معلومات القائد" },
+  delete_leader_confirm: { EN: "Are you sure you want to remove this leader? This cannot be undone.", AR: "هل أنت متأكد من حذف هذا القائد؟ لا يمكن التراجع عن هذا." },
+  no_leaders: { EN: "No leadership members yet. Add your first leader.", AR: "لا يوجد أعضاء في فريق القيادة بعد. أضف أول قائد." },
+  role_en: { EN: "Role (English)", AR: "المنصب (بالإنجليزية)" },
+  role_ar: { EN: "Role (Arabic)", AR: "المنصب (بالعربية)" },
+  photo: { EN: "Photo", AR: "الصورة" },
 
   quick_links: { EN: "Quick Links", AR: "روابط سريعة" },
   quick_links_desc: { EN: "Manage footer quick links displayed on the website.", AR: "إدارة الروابط السريعة المعروضة في تذييل الموقع." },

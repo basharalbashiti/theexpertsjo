@@ -142,6 +142,28 @@ export const insertClientSchema = createInsertSchema(clients).pick({
 export type InsertClient = z.infer<typeof insertClientSchema>;
 export type Client = typeof clients.$inferSelect;
 
+export const leadership = pgTable("leadership", {
+  id: serial("id").primaryKey(),
+  nameEn: text("name_en").notNull(),
+  nameAr: text("name_ar").notNull().default(""),
+  roleEn: text("role_en").notNull(),
+  roleAr: text("role_ar").notNull().default(""),
+  imageUrl: text("image_url").notNull().default(""),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
+
+export const insertLeadershipSchema = createInsertSchema(leadership).pick({
+  nameEn: true,
+  nameAr: true,
+  roleEn: true,
+  roleAr: true,
+  imageUrl: true,
+  sortOrder: true,
+});
+
+export type InsertLeadership = z.infer<typeof insertLeadershipSchema>;
+export type Leadership = typeof leadership.$inferSelect;
+
 export const quickLinks = pgTable("quick_links", {
   id: serial("id").primaryKey(),
   labelEn: text("label_en").notNull(),
