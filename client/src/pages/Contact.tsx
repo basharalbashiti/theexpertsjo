@@ -1,38 +1,18 @@
 import { Layout } from "@/components/layout/Layout";
-import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { useSiteImages } from "@/hooks/useSiteImages";
-import imgBanner from "@/assets/contact-banner-ultra-clear.png";
 
 export default function Contact() {
   const { t } = useLanguage();
-  const { getImage } = useSiteImages();
 
   return (
     <Layout>
-      <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-16">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${getImage("contact_banner", imgBanner)})` }}
-        />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-serif font-bold mb-6 text-white"
-          >
-            {t("contact").split(" ")[0]} <span className="text-primary">{t("contact").split(" ").slice(1).join(" ")}</span>
-          </motion.h1>
-          <p className="max-w-2xl mx-auto text-white/80">{t("get_in_touch")}</p>
-        </div>
-      </div>
-
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16">
+      <section className="pt-32 pb-24 bg-white">
+        <div className="container mx-auto px-6">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">{t("send_message")}</h1>
+          <p className="text-neutral-500 mb-16 max-w-xl">{t("get_in_touch")}</p>
+          <div className="grid md:grid-cols-2 gap-16">
           <div>
-            <h2 className="text-3xl font-serif font-bold mb-12">{t("send_message")}</h2>
             <form className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <input type="text" placeholder={t("full_name")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
@@ -107,6 +87,7 @@ export default function Contact() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </section>
     </Layout>
