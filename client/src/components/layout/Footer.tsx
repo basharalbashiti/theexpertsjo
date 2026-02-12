@@ -3,6 +3,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/queryClient";
 import defaultLogo from "@/assets/logo.png";
+import { MapPin, Mail, Phone, ChevronRight, ArrowUpRight } from "lucide-react";
 import type { SiteImage } from "@shared/schema";
 
 interface Category {
@@ -31,47 +32,77 @@ export function Footer() {
   });
 
   return (
-    <footer className="bg-neutral-900 text-white py-16">
-      <div className="container mx-auto px-6">
+    <footer className="bg-neutral-900 text-white">
+      <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="flex flex-col gap-10">
+          <div className="md:col-span-1">
             <Link href="/">
-              <a className="block">
-                <img src={logo} alt="The Experts Logo" className="h-16 w-auto brightness-0 invert" />
+              <a className="block mb-6">
+                <img src={logo} alt="The Experts Logo" className="h-14 w-auto brightness-0 invert" />
               </a>
             </Link>
-            <p className="text-neutral-400 text-sm leading-relaxed mt-4">
+            <p className="text-neutral-500 text-sm leading-relaxed">
               {t("footer_desc")}
             </p>
           </div>
           
           <div>
-            <h4 className="font-serif text-lg mb-6">{t("quick_links")}</h4>
-            <ul className="space-y-3 text-sm text-neutral-400">
-              <li><Link href="/"><a className="hover:text-primary transition-colors">{t("home")}</a></Link></li>
-              <li><Link href="/about-us"><a className="hover:text-primary transition-colors">{t("about")}</a></Link></li>
-              <li><Link href="/categories"><a className="hover:text-primary transition-colors">{t("products")}</a></Link></li>
-              <li><Link href="/contact"><a className="hover:text-primary transition-colors">{t("contact")}</a></Link></li>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-300 mb-6">{t("quick_links")}</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/">
+                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
+                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
+                    {t("home")}
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/about-us">
+                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
+                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
+                    {t("about")}
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/categories">
+                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
+                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
+                    {t("products")}
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact">
+                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
+                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
+                    {t("contact")}
+                  </a>
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6">{t("categories")}</h4>
-            <ul className="space-y-3 text-sm text-neutral-400">
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-300 mb-6">{t("categories")}</h4>
+            <ul className="space-y-3">
               {categories.slice(0, 4).map((cat) => (
                 <li key={cat.id}>
                   <Link href={`/${cat.slug}`}>
-                    <a className="hover:text-primary transition-colors">
+                    <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
+                      <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
                       {lang === "ar" ? cat.nameAr : cat.nameEn}
                     </a>
                   </Link>
                 </li>
               ))}
               {categories.length > 4 && (
-                <li>
+                <li className="pt-1">
                   <Link href="/categories">
-                    <a className="hover:text-primary transition-colors text-primary font-medium">
-                      {t("more")} →
+                    <a className="text-xs text-primary/70 hover:text-primary transition-colors inline-flex items-center gap-1 font-medium uppercase tracking-wider">
+                      {t("more")}
+                      <ArrowUpRight size={11} />
                     </a>
                   </Link>
                 </li>
@@ -80,17 +111,37 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6">{t("contact_us")}</h4>
-            <div className="space-y-3 text-sm text-neutral-400">
-              <p>Amman – Jordan</p>
-              <p>sales@theexpertsjo.com</p>
-              <p>Mob: +962 79 0484745</p>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-300 mb-6">{t("contact_us")}</h4>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <MapPin size={14} className="text-primary/60 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-neutral-500">Amman – Jordan</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <Mail size={14} className="text-primary/60 mt-0.5 flex-shrink-0" />
+                <a href="mailto:sales@theexpertsjo.com" className="text-sm text-neutral-500 hover:text-primary transition-colors">
+                  sales@theexpertsjo.com
+                </a>
+              </div>
+              <div className="flex items-start gap-3">
+                <Phone size={14} className="text-primary/60 mt-0.5 flex-shrink-0" />
+                <a href="tel:+962790484745" className="text-sm text-neutral-500 hover:text-primary transition-colors">
+                  +962 79 0484745
+                </a>
+              </div>
             </div>
           </div>
         </div>
-        
-        <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-xs text-neutral-500">
-          © {new Date().getFullYear()} The Experts. {t("rights_reserved")}
+      </div>
+
+      <div className="border-t border-neutral-800/60">
+        <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-2">
+          <p className="text-xs text-neutral-600">
+            © {new Date().getFullYear()} The Experts. {t("rights_reserved")}
+          </p>
+          <p className="text-xs text-neutral-700">
+            Hospitality Supplies
+          </p>
         </div>
       </div>
     </footer>
