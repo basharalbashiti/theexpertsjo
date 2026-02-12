@@ -248,6 +248,21 @@ const translations: Record<string, { EN: string; AR: string }> = {
   delete_link_confirm: { EN: "Are you sure you want to delete this link? This action cannot be undone.", AR: "هل أنت متأكد من حذف هذا الرابط؟ لا يمكن التراجع عن هذا الإجراء." },
   no_quick_links: { EN: "No quick links yet. Add your first link.", AR: "لا توجد روابط سريعة بعد. أضف أول رابط." },
 
+  key_contacts: { EN: "Key Contacts", AR: "جهات الاتصال الرئيسية" },
+  desc_key_contacts: { EN: "Manage key contact persons for contact page", AR: "إدارة جهات الاتصال الرئيسية لصفحة الاتصال" },
+  add_contact: { EN: "Add Contact", AR: "إضافة جهة اتصال" },
+  edit_contact: { EN: "Edit Contact", AR: "تعديل جهة الاتصال" },
+  delete_contact: { EN: "Delete Contact", AR: "حذف جهة الاتصال" },
+  contact_added: { EN: "Contact added successfully", AR: "تمت إضافة جهة الاتصال بنجاح" },
+  contact_updated: { EN: "Contact updated successfully", AR: "تم تحديث جهة الاتصال بنجاح" },
+  contact_deleted: { EN: "Contact deleted successfully", AR: "تم حذف جهة الاتصال بنجاح" },
+  add_contact_desc: { EN: "Add a new key contact person", AR: "إضافة جهة اتصال رئيسية جديدة" },
+  update_contact_details: { EN: "Update contact information", AR: "تحديث معلومات جهة الاتصال" },
+  delete_contact_confirm: { EN: "Are you sure you want to remove this contact? This cannot be undone.", AR: "هل أنت متأكد من حذف جهة الاتصال هذه؟ لا يمكن التراجع عن هذا." },
+  no_contacts: { EN: "No key contacts yet. Add your first contact.", AR: "لا توجد جهات اتصال رئيسية بعد. أضف أول جهة اتصال." },
+  hide: { EN: "Hide", AR: "إخفاء" },
+  show: { EN: "Show", AR: "إظهار" },
+
 };
 
 const STORAGE_KEY = "admin_lang";

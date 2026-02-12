@@ -31,8 +31,25 @@ export default function LeadershipManager() {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const { data: leaders = [], isLoading } = useQuery<Leadership[]>({
-    queryKey: ["/api/leadership"],
+    queryKey: ["/api/leadership?all=true"],
     queryFn: getQueryFn({ on401: "throw" }),
+  });
+
+  const toggleVisibility = useMutation({
+    mutationFn: async ({ id, visible }: { id: number; visible: boolean }) => {
+      const res = await fetch(`/api/leadership/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visible }),
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/leadership?all=true"] });
+      toast({ title: t("visibility_updated") });
+    },
   });
 
   const createMutation = useMutation({
@@ -55,7 +72,7 @@ export default function LeadershipManager() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leadership"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/leadership?all=true"] });
       resetForm();
       toast({ title: t("leader_added") });
     },
@@ -84,7 +101,7 @@ export default function LeadershipManager() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leadership"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/leadership?all=true"] });
       resetForm();
       toast({ title: t("leader_updated") });
     },
@@ -102,7 +119,7 @@ export default function LeadershipManager() {
       if (!res.ok) throw new Error(await res.text());
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leadership"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/leadership?all=true"] });
       setDeleteConfirm(null);
       toast({ title: t("leader_deleted") });
     },
@@ -179,7 +196,7 @@ export default function LeadershipManager() {
           <div
             key={leader.id}
             data-testid={`card-leader-${leader.id}`}
-            className="border rounded-xl p-5 bg-card flex flex-col items-center gap-3"
+            className={`border rounded-xl p-5 bg-card flex flex-col items-center gap-3 ${!leader.visible ? "opacity-50" : ""}`}
           >
             {leader.imageUrl ? (
               <img
@@ -206,8 +223,21 @@ export default function LeadershipManager() {
                 </div>
               )}
             </div>
-            <p className="text-xs text-neutral-400">{t("sort_order")}: {leader.sortOrder}</p>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-neutral-400">{t("sort_order")}: {leader.sortOrder}</span>
+              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${leader.visible ? "bg-green-100 text-green-700" : "bg-neutral-100 text-neutral-500"}`}>
+                {leader.visible ? t("visible") : t("hidden")}
+              </span>
+            </div>
             <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                data-testid={`button-toggle-leader-${leader.id}`}
+                onClick={() => toggleVisibility.mutate({ id: leader.id, visible: !leader.visible })}
+              >
+                {leader.visible ? t("hide") : t("show")}
+              </Button>
               <Button
                 variant="outline"
                 size="sm"

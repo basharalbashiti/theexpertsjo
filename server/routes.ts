@@ -506,9 +506,15 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/leadership", async (_req, res) => {
-    const leaders = await storage.getAllLeadership();
-    res.json(leaders);
+  app.get("/api/leadership", async (req, res) => {
+    const showAll = req.query.all === "true";
+    if (showAll && req.session.userId) {
+      const leaders = await storage.getAllLeadership();
+      res.json(leaders);
+    } else {
+      const leaders = await storage.getVisibleLeadership();
+      res.json(leaders);
+    }
   });
 
   app.post("/api/leadership", requireAuth, upload.single("image"), async (req, res) => {
@@ -548,6 +554,7 @@ export async function registerRoutes(
       if (req.body.phone !== undefined) updates.phone = req.body.phone;
       if (req.body.email !== undefined) updates.email = req.body.email;
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.body.visible !== undefined) updates.visible = req.body.visible === "true" || req.body.visible === true;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       const leader = await storage.updateLeader(id, updates);
       if (!leader) {
@@ -569,6 +576,80 @@ export async function registerRoutes(
       res.json({ message: "Leader deleted" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete leader" });
+    }
+  });
+
+  // Key Contacts routes
+  app.get("/api/key-contacts", async (req, res) => {
+    const showAll = req.query.all === "true";
+    if (showAll && req.session.userId) {
+      const contacts = await storage.getAllKeyContacts();
+      res.json(contacts);
+    } else {
+      const contacts = await storage.getVisibleKeyContacts();
+      res.json(contacts);
+    }
+  });
+
+  app.post("/api/key-contacts", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const { nameEn, nameAr, roleEn, roleAr, phone, email, sortOrder } = req.body;
+      if (!nameEn || !roleEn) {
+        return res.status(400).json({ message: "Name and role are required" });
+      }
+      let imageUrl = "";
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      const contact = await storage.createKeyContact({
+        nameEn,
+        nameAr: nameAr || "",
+        roleEn,
+        roleAr: roleAr || "",
+        phone: phone || "",
+        email: email || "",
+        imageUrl,
+        sortOrder: parseInt(sortOrder) || 0,
+      });
+      res.json(contact);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create key contact" });
+    }
+  });
+
+  app.put("/api/key-contacts/:id", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates: any = {};
+      if (req.body.nameEn !== undefined) updates.nameEn = req.body.nameEn;
+      if (req.body.nameAr !== undefined) updates.nameAr = req.body.nameAr;
+      if (req.body.roleEn !== undefined) updates.roleEn = req.body.roleEn;
+      if (req.body.roleAr !== undefined) updates.roleAr = req.body.roleAr;
+      if (req.body.phone !== undefined) updates.phone = req.body.phone;
+      if (req.body.email !== undefined) updates.email = req.body.email;
+      if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.body.visible !== undefined) updates.visible = req.body.visible === "true" || req.body.visible === true;
+      if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      const contact = await storage.updateKeyContact(id, updates);
+      if (!contact) {
+        return res.status(404).json({ message: "Key contact not found" });
+      }
+      res.json(contact);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update key contact" });
+    }
+  });
+
+  app.delete("/api/key-contacts/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteKeyContact(id);
+      if (!success) {
+        return res.status(404).json({ message: "Key contact not found" });
+      }
+      res.json({ message: "Key contact deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete key contact" });
     }
   });
 

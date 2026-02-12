@@ -4,6 +4,7 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-02-12: Separated Key Contacts from Leadership — new key_contacts table and KeyContactManager admin page; Contact page now uses key contacts API; visibility toggle on both Leadership and Key Contacts
 - 2026-02-12: Added Leadership Manager — dedicated admin page to manage leadership team (add/edit/delete with bilingual names/roles, photo upload, sort order); About page dynamically displays leaders from database
 - 2026-02-12: Added Quick Links manager — admin can add/edit/delete/toggle footer quick links, footer uses dynamic quick links from database
 - 2026-02-12: Added Arabic language support to admin panel — independent language toggle (EN/AR), RTL direction support, 170+ translated keys covering all admin pages, localStorage persistence under "admin_lang"
@@ -45,13 +46,14 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - `clients` - Hotel brand clients like Four Seasons, Marriott (id, name, image_url, sort_order)
 - `categories` - Product categories (id, name_en, name_ar, slug, image_url, sort_order)
 - `products` - Products (id, name_en, name_ar, description_en, description_ar, image_url, category_id, sort_order)
-- `leadership` - Leadership team members (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order)
+- `leadership` - Leadership team members (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order, visible)
+- `key_contacts` - Key contact persons for contact page (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order, visible)
 - `quick_links` - Footer quick links (id, label_en, label_ar, url, sort_order, visible)
 
 ### Admin Portal
 - URL: `/admin/login` (login page), `/admin` (dashboard)
 - Default credentials: username `admin`, password `admin123`
-- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners, Clients, Leadership, Quick Links, Settings
+- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners, Clients, Leadership, Key Contacts, Quick Links, Settings
 - Brands = logos displayed on homepage slider
 - Partners = brand partners (Abdeen, Cashmere)
 - Clients = hotel brand clients (Four Seasons, Grand Hyatt, Marriott, etc.)

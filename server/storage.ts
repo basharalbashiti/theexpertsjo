@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, brands, siteImages, clients, leadership, quickLinks, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type QuickLink, type InsertQuickLink } from "@shared/schema";
+import { users, siteContent, partners, categories, products, brands, siteImages, clients, leadership, keyContacts, quickLinks, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
 
@@ -50,10 +50,18 @@ export interface IStorage {
   deleteClient(id: number): Promise<boolean>;
 
   getAllLeadership(): Promise<Leadership[]>;
+  getVisibleLeadership(): Promise<Leadership[]>;
   getLeader(id: number): Promise<Leadership | undefined>;
   createLeader(leader: InsertLeadership): Promise<Leadership>;
   updateLeader(id: number, leader: Partial<InsertLeadership>): Promise<Leadership | undefined>;
   deleteLeader(id: number): Promise<boolean>;
+
+  getAllKeyContacts(): Promise<KeyContact[]>;
+  getVisibleKeyContacts(): Promise<KeyContact[]>;
+  getKeyContact(id: number): Promise<KeyContact | undefined>;
+  createKeyContact(contact: InsertKeyContact): Promise<KeyContact>;
+  updateKeyContact(id: number, contact: Partial<InsertKeyContact>): Promise<KeyContact | undefined>;
+  deleteKeyContact(id: number): Promise<boolean>;
 
   getAllQuickLinks(): Promise<QuickLink[]>;
   getVisibleQuickLinks(): Promise<QuickLink[]>;
@@ -266,6 +274,10 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(leadership).orderBy(asc(leadership.sortOrder));
   }
 
+  async getVisibleLeadership(): Promise<Leadership[]> {
+    return db.select().from(leadership).where(eq(leadership.visible, true)).orderBy(asc(leadership.sortOrder));
+  }
+
   async getLeader(id: number): Promise<Leadership | undefined> {
     const [leader] = await db.select().from(leadership).where(eq(leadership.id, id));
     return leader || undefined;
@@ -283,6 +295,34 @@ export class DatabaseStorage implements IStorage {
 
   async deleteLeader(id: number): Promise<boolean> {
     const result = await db.delete(leadership).where(eq(leadership.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getAllKeyContacts(): Promise<KeyContact[]> {
+    return db.select().from(keyContacts).orderBy(asc(keyContacts.sortOrder));
+  }
+
+  async getVisibleKeyContacts(): Promise<KeyContact[]> {
+    return db.select().from(keyContacts).where(eq(keyContacts.visible, true)).orderBy(asc(keyContacts.sortOrder));
+  }
+
+  async getKeyContact(id: number): Promise<KeyContact | undefined> {
+    const [contact] = await db.select().from(keyContacts).where(eq(keyContacts.id, id));
+    return contact || undefined;
+  }
+
+  async createKeyContact(contact: InsertKeyContact): Promise<KeyContact> {
+    const [result] = await db.insert(keyContacts).values(contact).returning();
+    return result;
+  }
+
+  async updateKeyContact(id: number, contact: Partial<InsertKeyContact>): Promise<KeyContact | undefined> {
+    const [result] = await db.update(keyContacts).set(contact).where(eq(keyContacts.id, id)).returning();
+    return result || undefined;
+  }
+
+  async deleteKeyContact(id: number): Promise<boolean> {
+    const result = await db.delete(keyContacts).where(eq(keyContacts.id, id)).returning();
     return result.length > 0;
   }
 

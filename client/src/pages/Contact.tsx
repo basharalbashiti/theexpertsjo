@@ -3,7 +3,7 @@ import { MapPin, Send, User, Mail, FileText, MessageSquare, Phone } from "lucide
 import { useLanguage } from "@/context/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 
-interface Leader {
+interface KeyContact {
   id: number;
   nameEn: string;
   nameAr: string;
@@ -13,21 +13,20 @@ interface Leader {
   email: string;
   imageUrl: string;
   sortOrder: number;
+  visible: boolean;
 }
 
 export default function Contact() {
   const { t, lang } = useLanguage();
 
-  const { data: leaders = [] } = useQuery<Leader[]>({
-    queryKey: ["/api/leadership"],
+  const { data: keyContacts = [] } = useQuery<KeyContact[]>({
+    queryKey: ["/api/key-contacts"],
     queryFn: async () => {
-      const res = await fetch("/api/leadership");
+      const res = await fetch("/api/key-contacts");
       if (!res.ok) return [];
       return res.json();
     },
   });
-
-  const keyContacts = leaders.filter((l) => l.phone || l.email);
 
   return (
     <Layout>
@@ -137,28 +136,28 @@ export default function Contact() {
                   {lang === "AR" ? "جهات الاتصال الرئيسية" : "Key Contacts"}
                 </h2>
                 <div className="grid gap-8">
-                  {keyContacts.map((leader) => (
-                    <div key={leader.id} data-testid={`contact-leader-${leader.id}`} className="space-y-2">
+                  {keyContacts.map((contact) => (
+                    <div key={contact.id} data-testid={`contact-keycontact-${contact.id}`} className="space-y-2">
                       <h4 className="font-serif font-bold text-xl text-neutral-900">
-                        {lang === "AR" && leader.nameAr ? leader.nameAr : leader.nameEn}
+                        {lang === "AR" && contact.nameAr ? contact.nameAr : contact.nameEn}
                       </h4>
                       <p className="text-primary text-xs uppercase tracking-widest font-bold">
-                        {lang === "AR" && leader.roleAr ? leader.roleAr : leader.roleEn}
+                        {lang === "AR" && contact.roleAr ? contact.roleAr : contact.roleEn}
                       </p>
                       <div className="text-sm text-neutral-600 space-y-1">
-                        {leader.phone && (
+                        {contact.phone && (
                           <p className="flex items-center gap-2">
                             <Phone size={14} className="text-neutral-400" />
-                            <a href={`tel:${leader.phone.replace(/\s/g, '')}`} className="hover:text-primary transition-colors">
-                              {leader.phone}
+                            <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="hover:text-primary transition-colors">
+                              {contact.phone}
                             </a>
                           </p>
                         )}
-                        {leader.email && (
+                        {contact.email && (
                           <p className="flex items-center gap-2">
                             <Mail size={14} className="text-neutral-400" />
-                            <a href={`mailto:${leader.email}`} className="hover:text-primary transition-colors">
-                              {leader.email}
+                            <a href={`mailto:${contact.email}`} className="hover:text-primary transition-colors">
+                              {contact.email}
                             </a>
                           </p>
                         )}

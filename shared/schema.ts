@@ -152,6 +152,7 @@ export const leadership = pgTable("leadership", {
   email: text("email").notNull().default(""),
   imageUrl: text("image_url").notNull().default(""),
   sortOrder: integer("sort_order").notNull().default(0),
+  visible: boolean("visible").notNull().default(true),
 });
 
 export const insertLeadershipSchema = createInsertSchema(leadership).pick({
@@ -163,10 +164,39 @@ export const insertLeadershipSchema = createInsertSchema(leadership).pick({
   email: true,
   imageUrl: true,
   sortOrder: true,
+  visible: true,
 });
 
 export type InsertLeadership = z.infer<typeof insertLeadershipSchema>;
 export type Leadership = typeof leadership.$inferSelect;
+
+export const keyContacts = pgTable("key_contacts", {
+  id: serial("id").primaryKey(),
+  nameEn: text("name_en").notNull(),
+  nameAr: text("name_ar").notNull().default(""),
+  roleEn: text("role_en").notNull(),
+  roleAr: text("role_ar").notNull().default(""),
+  phone: text("phone").notNull().default(""),
+  email: text("email").notNull().default(""),
+  imageUrl: text("image_url").notNull().default(""),
+  sortOrder: integer("sort_order").notNull().default(0),
+  visible: boolean("visible").notNull().default(true),
+});
+
+export const insertKeyContactSchema = createInsertSchema(keyContacts).pick({
+  nameEn: true,
+  nameAr: true,
+  roleEn: true,
+  roleAr: true,
+  phone: true,
+  email: true,
+  imageUrl: true,
+  sortOrder: true,
+  visible: true,
+});
+
+export type InsertKeyContact = z.infer<typeof insertKeyContactSchema>;
+export type KeyContact = typeof keyContacts.$inferSelect;
 
 export const quickLinks = pgTable("quick_links", {
   id: serial("id").primaryKey(),
