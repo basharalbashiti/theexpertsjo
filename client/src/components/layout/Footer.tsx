@@ -58,7 +58,7 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg mb-6">{t("categories")}</h4>
             <ul className="space-y-3 text-sm text-neutral-400">
-              {categories.slice(0, 6).map((cat) => (
+              {categories.slice(0, 4).map((cat) => (
                 <li key={cat.id}>
                   <Link href={`/${cat.slug}`}>
                     <a className="hover:text-primary transition-colors">
@@ -67,6 +67,15 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              {categories.length > 4 && (
+                <li>
+                  <Link href="/categories">
+                    <a className="hover:text-primary transition-colors text-primary font-medium">
+                      {t("more")} →
+                    </a>
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 
