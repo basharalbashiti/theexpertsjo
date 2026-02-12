@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
-import { MapPin } from "lucide-react";
+import { MapPin, Send, User, Mail, FileText, MessageSquare } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
@@ -7,27 +7,77 @@ export default function Contact() {
 
   return (
     <Layout>
-      <section className="pt-32 pb-16 bg-white">
+      <section className="pt-32 pb-20 bg-gradient-to-b from-neutral-50 to-white">
         <div className="container mx-auto px-6 max-w-2xl text-center">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">{t("send_message")}</h1>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
+            <Send size={28} className="text-primary" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-3">{t("send_message")}</h1>
           <p className="text-neutral-500 mb-12">{t("get_in_touch")}</p>
-          <form className="space-y-6 text-left">
-            <div className="grid md:grid-cols-2 gap-6">
-              <input type="text" placeholder={t("full_name")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-              <input type="email" placeholder={t("email_addr")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-            </div>
-            <input type="text" placeholder={t("subject")} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors" />
-            <textarea placeholder={t("message")} rows={4} className="w-full border-b border-neutral-300 py-4 focus:border-primary outline-none transition-colors resize-none" />
-            <div className="text-center">
-              <button className="bg-primary text-white px-12 py-4 uppercase text-xs font-bold tracking-widest hover:bg-black transition-colors mt-4">
-                {t("submit")}
-              </button>
-            </div>
-          </form>
+
+          <div className="bg-white rounded-2xl shadow-lg shadow-neutral-200/50 border border-neutral-100 p-8 md:p-10">
+            <form className="space-y-8 text-left">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="relative">
+                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("full_name")}</label>
+                  <div className="relative">
+                    <User size={16} className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300" />
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      className="w-full pl-7 border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800 placeholder:text-neutral-300"
+                    />
+                  </div>
+                </div>
+                <div className="relative">
+                  <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("email_addr")}</label>
+                  <div className="relative">
+                    <Mail size={16} className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300" />
+                    <input
+                      type="email"
+                      placeholder="john@example.com"
+                      className="w-full pl-7 border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800 placeholder:text-neutral-300"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("subject")}</label>
+                <div className="relative">
+                  <FileText size={16} className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300" />
+                  <input
+                    type="text"
+                    placeholder="How can we help?"
+                    className="w-full pl-7 border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800 placeholder:text-neutral-300"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 block">{t("message")}</label>
+                <div className="relative">
+                  <MessageSquare size={16} className="absolute left-0 top-3 text-neutral-300" />
+                  <textarea
+                    placeholder="Tell us about your project or inquiry..."
+                    rows={5}
+                    className="w-full pl-7 border-2 border-neutral-200 rounded-lg py-3 px-3 focus:border-primary outline-none transition-colors bg-neutral-50/50 text-neutral-800 placeholder:text-neutral-300 resize-none"
+                  />
+                </div>
+              </div>
+
+              <div className="text-center pt-2">
+                <button className="inline-flex items-center gap-3 bg-primary text-white px-14 py-4 rounded-lg uppercase text-xs font-bold tracking-widest hover:bg-black transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+                  <Send size={16} />
+                  {t("submit")}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
 
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16">
             <div>
@@ -47,7 +97,7 @@ export default function Contact() {
                       href={loc.mapUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-12 h-12 bg-white flex items-center justify-center group-hover:bg-primary transition-colors flex-shrink-0"
+                      className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center group-hover:bg-primary transition-colors flex-shrink-0"
                     >
                       <MapPin size={20} className="group-hover:text-white" />
                     </a>
