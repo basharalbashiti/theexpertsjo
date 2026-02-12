@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
-import { MapPin, Send } from "lucide-react";
+import { MapPin, Send, User, Mail, FileText, MessageSquare } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
@@ -15,15 +15,17 @@ export default function Contact() {
           <div className="bg-white rounded-2xl shadow-lg shadow-neutral-200/50 border border-neutral-100 p-6 md:p-8">
             <form className="space-y-6 text-left">
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="flex items-center gap-4">
-                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[100px]">{t("full_name")}</label>
+                <div className="flex items-center gap-3">
+                  <User size={16} className="text-neutral-300 flex-shrink-0" />
+                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("full_name")}</label>
                   <input
                     type="text"
                     className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
                   />
                 </div>
-                <div className="flex items-center gap-4">
-                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[120px]">{t("email_addr")}</label>
+                <div className="flex items-center gap-3">
+                  <Mail size={16} className="text-neutral-300 flex-shrink-0" />
+                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[110px]">{t("email_addr")}</label>
                   <input
                     type="email"
                     className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
@@ -31,16 +33,18 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[100px]">{t("subject")}</label>
+              <div className="flex items-center gap-3">
+                <FileText size={16} className="text-neutral-300 flex-shrink-0" />
+                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("subject")}</label>
                 <input
                   type="text"
                   className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
                 />
               </div>
 
-              <div className="flex gap-4">
-                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[100px] pt-3">{t("message")}</label>
+              <div className="flex gap-3">
+                <MessageSquare size={16} className="text-neutral-300 flex-shrink-0 mt-3" />
+                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px] pt-3">{t("message")}</label>
                 <textarea
                   rows={5}
                   className="w-full border-2 border-neutral-200 rounded-lg py-3 px-3 focus:border-primary outline-none transition-colors bg-neutral-50/50 text-neutral-800 resize-none"
