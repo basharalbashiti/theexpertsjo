@@ -9,10 +9,10 @@ export default function Contact() {
     <Layout>
       <section className="pt-32 pb-20 bg-neutral-50">
         <div className="container mx-auto px-6 max-w-2xl text-center">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-3">{t("send_message")}</h1>
-          <p className="text-neutral-500 mb-12">{t("get_in_touch")}</p>
+          <h1 className="text-3xl md:text-4xl font-serif font-bold mb-2">{t("send_message")}</h1>
+          <p className="text-neutral-500 text-sm mb-10">{t("get_in_touch")}</p>
 
-          <div className="bg-white rounded-2xl shadow-lg shadow-neutral-200/50 border border-neutral-100 p-8 md:p-10">
+          <div className="bg-white rounded-2xl shadow-lg shadow-neutral-200/50 border border-neutral-100 p-6 md:p-8">
             <form className="space-y-8 text-left">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="relative">
