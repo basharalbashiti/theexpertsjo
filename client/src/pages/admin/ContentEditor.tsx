@@ -21,6 +21,7 @@ const sectionLabels: Record<string, string> = {
   partner: "Partners Page",
   footer: "Footer",
   contact: "Contact Page",
+  leader: "Leadership",
   general: "General",
 };
 
@@ -68,6 +69,7 @@ const keyToSection: Record<string, string> = {
   employee_handbook: "about",
   mission_desc: "our",
   vision_desc: "our",
+  our_leadership: "leader",
   room_service_hero_desc: "hero",
   category_hero_desc: "hero",
 };
@@ -97,6 +99,7 @@ const sectionToTranslationKey: Record<string, string> = {
   partner: "sec_partner",
   footer: "sec_footer",
   contact: "sec_contact",
+  leader: "sec_leader",
   general: "sec_general",
 };
 

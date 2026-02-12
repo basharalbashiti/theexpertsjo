@@ -24,10 +24,10 @@ export default function About() {
   ];
 
   const leadership = [
-    { name: "Alaa Abdin", role: "General Manager" },
-    { name: "Rafat Daood", role: "Sales Manager" },
-    { name: "Marwan Abu Sakha", role: "Group Corporate Development Manager" },
-    { name: "Khaled Ghunaim", role: "General Manager - Jordan" },
+    { name: t("leader1_name"), role: t("leader1_role"), initials: t("leader1_name").split(" ").map(w => w[0]).join("") },
+    { name: t("leader2_name"), role: t("leader2_role"), initials: t("leader2_name").split(" ").map(w => w[0]).join("") },
+    { name: t("leader3_name"), role: t("leader3_role"), initials: t("leader3_name").split(" ").map(w => w[0]).join("") },
+    { name: t("leader4_name"), role: t("leader4_role"), initials: t("leader4_name").split(" ").map(w => w[0]).join("") },
   ];
 
   return (
@@ -143,14 +143,17 @@ export default function About() {
             {leadership.map((person, i) => (
               <motion.div 
                 key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 className="group"
               >
-                <div className="aspect-[3/4] bg-neutral-200 mb-6 overflow-hidden relative">
-                   <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative mx-auto w-28 h-28 mb-6">
+                  <div className="w-full h-full rounded-full bg-neutral-900 flex items-center justify-center transition-all duration-500 group-hover:bg-primary">
+                    <span className="text-2xl font-serif font-bold text-white tracking-wider">{person.initials}</span>
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary border-2 border-neutral-50 group-hover:bg-neutral-900 transition-colors" />
                 </div>
                 <h4 className="font-serif font-bold text-lg">{person.name}</h4>
                 <p className="text-primary text-xs uppercase tracking-widest mt-1">{person.role}</p>

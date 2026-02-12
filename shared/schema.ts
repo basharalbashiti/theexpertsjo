@@ -161,23 +161,3 @@ export const insertQuickLinkSchema = createInsertSchema(quickLinks).pick({
 
 export type InsertQuickLink = z.infer<typeof insertQuickLinkSchema>;
 export type QuickLink = typeof quickLinks.$inferSelect;
-
-export const leadership = pgTable("leadership", {
-  id: serial("id").primaryKey(),
-  nameEn: text("name_en").notNull(),
-  nameAr: text("name_ar").notNull().default(""),
-  roleEn: text("role_en").notNull().default(""),
-  roleAr: text("role_ar").notNull().default(""),
-  sortOrder: integer("sort_order").notNull().default(0),
-});
-
-export const insertLeadershipSchema = createInsertSchema(leadership).pick({
-  nameEn: true,
-  nameAr: true,
-  roleEn: true,
-  roleAr: true,
-  sortOrder: true,
-});
-
-export type InsertLeadership = z.infer<typeof insertLeadershipSchema>;
-export type Leadership = typeof leadership.$inferSelect;

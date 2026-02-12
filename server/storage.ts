@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, brands, siteImages, clients, quickLinks, leadership, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type QuickLink, type InsertQuickLink, type Leadership, type InsertLeadership } from "@shared/schema";
+import { users, siteContent, partners, categories, products, brands, siteImages, clients, quickLinks, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type QuickLink, type InsertQuickLink } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
 
@@ -56,11 +56,6 @@ export interface IStorage {
   updateQuickLink(id: number, link: Partial<InsertQuickLink>): Promise<QuickLink | undefined>;
   deleteQuickLink(id: number): Promise<boolean>;
 
-  getAllLeadership(): Promise<Leadership[]>;
-  getLeader(id: number): Promise<Leadership | undefined>;
-  createLeader(leader: InsertLeadership): Promise<Leadership>;
-  updateLeader(id: number, leader: Partial<InsertLeadership>): Promise<Leadership | undefined>;
-  deleteLeader(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -289,29 +284,6 @@ export class DatabaseStorage implements IStorage {
     return result.length > 0;
   }
 
-  async getAllLeadership(): Promise<Leadership[]> {
-    return db.select().from(leadership).orderBy(asc(leadership.sortOrder));
-  }
-
-  async getLeader(id: number): Promise<Leadership | undefined> {
-    const [leader] = await db.select().from(leadership).where(eq(leadership.id, id));
-    return leader || undefined;
-  }
-
-  async createLeader(leader: InsertLeadership): Promise<Leadership> {
-    const [result] = await db.insert(leadership).values(leader).returning();
-    return result;
-  }
-
-  async updateLeader(id: number, leader: Partial<InsertLeadership>): Promise<Leadership | undefined> {
-    const [result] = await db.update(leadership).set(leader).where(eq(leadership.id, id)).returning();
-    return result || undefined;
-  }
-
-  async deleteLeader(id: number): Promise<boolean> {
-    const result = await db.delete(leadership).where(eq(leadership.id, id)).returning();
-    return result.length > 0;
-  }
 }
 
 export const storage = new DatabaseStorage();

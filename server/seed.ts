@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, brands, siteImages, clients, products, quickLinks, leadership } from "@shared/schema";
+import { users, siteContent, partners, brands, siteImages, clients, products, quickLinks } from "@shared/schema";
 import fs from "fs";
 import path from "path";
 
@@ -53,6 +53,14 @@ const defaultTranslations: Record<string, { en: string; ar: string }> = {
   our_vision: { en: "Our Vision", ar: "رؤيتنا" },
   vision_desc: { en: "To be the global leader in hotel procurement, delivering innovative, high-quality solutions.", ar: "أن نكون الرائد العالمي في شراء مستلزمات الفنادق، ونقدم حلولاً مبتكرة وعالية الجودة." },
   our_leadership: { en: "Our Leadership", ar: "قيادتنا" },
+  leader1_name: { en: "Alaa Abdin", ar: "علاء عابدين" },
+  leader1_role: { en: "General Manager", ar: "مدير عام" },
+  leader2_name: { en: "Rafat Daood", ar: "رأفت داود" },
+  leader2_role: { en: "Sales Manager", ar: "مدير المبيعات" },
+  leader3_name: { en: "Marwan Abu Sakha", ar: "مروان أبو سخا" },
+  leader3_role: { en: "Group Corporate Development Manager", ar: "مدير تطوير المجموعة" },
+  leader4_name: { en: "Khaled Ghunaim", ar: "خالد غنيم" },
+  leader4_role: { en: "General Manager - Jordan", ar: "مدير عام - الأردن" },
   sustainability_quote: { en: "Sustainability is transforming the hospitality industry, driving a shift toward eco-friendly practices and responsible sourcing.", ar: "الاستدامة تحول صناعة الضيافة، وتدفع التحول نحو الممارسات الصديقة للبيئة والتوريد المسؤول." },
   our_practices: { en: "Our Practices", ar: "ممارساتنا" },
   harmony: { en: "Harmony of Quality and Nature", ar: "تناغم الجودة والطبيعة" },
@@ -302,17 +310,4 @@ export async function seedDatabase() {
     console.log(`Seeded ${defaultQuickLinks.length} quick links`);
   }
 
-  const existingLeadership = await storage.getAllLeadership();
-  if (existingLeadership.length === 0) {
-    const defaultLeaders = [
-      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", sortOrder: 1 },
-      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", sortOrder: 2 },
-      { nameEn: "Marwan Abu Sakha", nameAr: "مروان أبو سخا", roleEn: "Group Corporate Development Manager", roleAr: "مدير تطوير المجموعة", sortOrder: 3 },
-      { nameEn: "Khaled Ghunaim", nameAr: "خالد غنيم", roleEn: "General Manager - Jordan", roleAr: "مدير عام - الأردن", sortOrder: 4 },
-    ];
-    for (const leader of defaultLeaders) {
-      await storage.createLeader(leader);
-    }
-    console.log(`Seeded ${defaultLeaders.length} leadership members`);
-  }
 }
