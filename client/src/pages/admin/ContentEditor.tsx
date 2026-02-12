@@ -11,7 +11,6 @@ import type { SiteContent } from "@shared/schema";
 
 const sectionLabels: Record<string, string> = {
   hero: "Hero Banners",
-  cat: "Category Names",
   stat: "Statistics",
   home: "Home Page",
   about: "About Page",
@@ -22,14 +21,10 @@ const sectionLabels: Record<string, string> = {
   partner: "Partners Page",
   footer: "Footer",
   contact: "Contact Page",
-  rs: "Room Service Products",
-  spa: "Spa Products",
-  amenities: "Amenities Products",
-  buffet: "Buffet Products",
-  fb: "Food & Beverage Products",
-  linens: "Linens Products",
   general: "General",
 };
+
+const hiddenPrefixes = ["cat_", "rs_", "spa_", "amenities_", "buffet_", "fb_", "linens_"];
 
 const keyToSection: Record<string, string> = {
   about: "hero",
@@ -66,15 +61,13 @@ const keyToSection: Record<string, string> = {
   partners_clients: "hero",
   trusted_by: "hero",
   become_partner: "partner",
-  categories: "cat",
   quick_links: "footer",
   rights_reserved: "footer",
-  back_to_categories: "cat",
+  back_to_categories: "hero",
   download_sop: "about",
   employee_handbook: "about",
   mission_desc: "our",
   vision_desc: "our",
-  cat_room_service: "hero",
   room_service_hero_desc: "hero",
   category_hero_desc: "hero",
 };
@@ -94,7 +87,6 @@ function getSection(key: string): string {
 
 const sectionToTranslationKey: Record<string, string> = {
   hero: "sec_hero",
-  cat: "sec_cat",
   stat: "sec_stat",
   home: "sec_home",
   about: "sec_about",
@@ -105,12 +97,6 @@ const sectionToTranslationKey: Record<string, string> = {
   partner: "sec_partner",
   footer: "sec_footer",
   contact: "sec_contact",
-  rs: "sec_rs",
-  spa: "sec_spa",
-  amenities: "sec_amenities",
-  buffet: "sec_buffet",
-  fb: "sec_fb",
-  linens: "sec_linens",
   general: "sec_general",
 };
 
@@ -152,15 +138,19 @@ export default function ContentEditor() {
     },
   });
 
+  const filteredContents = useMemo(() => {
+    return contents.filter((item) => !hiddenPrefixes.some((p) => item.key.startsWith(p)));
+  }, [contents]);
+
   const sections = useMemo(() => {
     const groups: Record<string, SiteContent[]> = {};
-    for (const item of contents) {
+    for (const item of filteredContents) {
       const section = getSection(item.key);
       if (!groups[section]) groups[section] = [];
       groups[section].push(item);
     }
     return groups;
-  }, [contents]);
+  }, [filteredContents]);
 
   const sectionKeys = Object.keys(sections).sort((a, b) => {
     const order = Object.keys(sectionLabels);
@@ -168,7 +158,7 @@ export default function ContentEditor() {
   });
 
   const displayedItems = useMemo(() => {
-    let items = activeSection ? (sections[activeSection] || []) : contents;
+    let items = activeSection ? (sections[activeSection] || []) : filteredContents;
     if (search) {
       items = items.filter(
         (c) =>
@@ -226,7 +216,7 @@ export default function ContentEditor() {
                 activeSection === null ? "bg-primary/10 text-primary font-medium" : "text-neutral-600 hover:bg-neutral-50"
               }`}
             >
-              {t("all")} ({contents.length})
+              {t("all")} ({filteredContents.length})
             </button>
             {sectionKeys.map((key) => (
               <button

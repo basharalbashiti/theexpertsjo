@@ -227,12 +227,6 @@ export async function registerRoutes(
         imageUrl,
         sortOrder: parseInt(sortOrder) || 0,
       });
-      const contentKey = `cat_${slug.replace(/-/g, "_")}`;
-      await storage.upsertContent({
-        key: contentKey,
-        valueEn: nameEn,
-        valueAr: nameAr || "",
-      });
       res.json(category);
     } catch (error) {
       res.status(500).json({ message: "Failed to create category" });
@@ -252,14 +246,6 @@ export async function registerRoutes(
       const category = await storage.updateCategory(id, updates);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
-      }
-      if (category.slug && (updates.nameEn || updates.nameAr)) {
-        const contentKey = `cat_${category.slug.replace(/-/g, "_")}`;
-        await storage.upsertContent({
-          key: contentKey,
-          valueEn: category.nameEn,
-          valueAr: category.nameAr,
-        });
       }
       res.json(category);
     } catch (error) {
