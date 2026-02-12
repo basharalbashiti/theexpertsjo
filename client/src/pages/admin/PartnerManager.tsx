@@ -12,10 +12,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import type { Partner } from "@shared/schema";
 
 export default function PartnerManager() {
   const { toast } = useToast();
+  const { t } = useAdminLang();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
@@ -43,10 +45,10 @@ export default function PartnerManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/partners"] });
       resetForm();
-      toast({ title: "Partner added" });
+      toast({ title: t("partner_added") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -66,10 +68,10 @@ export default function PartnerManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/partners"] });
       resetForm();
-      toast({ title: "Partner updated" });
+      toast({ title: t("partner_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -84,10 +86,10 @@ export default function PartnerManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/partners"] });
       setDeleteConfirm(null);
-      toast({ title: "Partner deleted" });
+      toast({ title: t("partner_deleted") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -124,15 +126,15 @@ export default function PartnerManager() {
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   if (isLoading) {
-    return <p className="text-muted-foreground p-4">Loading partners...</p>;
+    return <p className="text-muted-foreground p-4">{t("loading_partners")}</p>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Partners ({partners.length})</h3>
+        <h3 className="text-lg font-semibold">{t("partners")} ({partners.length})</h3>
         <Button data-testid="button-add-partner" onClick={openAdd}>
-          Add Partner
+          {t("add_partner")}
         </Button>
       </div>
 
@@ -151,7 +153,7 @@ export default function PartnerManager() {
               />
             ) : (
               <div className="w-24 h-24 bg-neutral-100 border border-dashed border-neutral-300 rounded flex items-center justify-center text-neutral-400 text-xs text-center px-1">
-                No image
+                {t("no_image")}
               </div>
             )}
             <p className="text-sm font-medium text-center">{partner.name}</p>
@@ -162,7 +164,7 @@ export default function PartnerManager() {
                 data-testid={`button-edit-partner-${partner.id}`}
                 onClick={() => openEdit(partner)}
               >
-                Edit
+                {t("edit")}
               </Button>
               <Button
                 variant="destructive"
@@ -170,7 +172,7 @@ export default function PartnerManager() {
                 data-testid={`button-delete-partner-${partner.id}`}
                 onClick={() => setDeleteConfirm(partner.id)}
               >
-                Delete
+                {t("delete")}
               </Button>
             </div>
           </div>
@@ -178,20 +180,20 @@ export default function PartnerManager() {
       </div>
 
       {partners.length === 0 && (
-        <p className="text-muted-foreground text-center py-8">No partners yet.</p>
+        <p className="text-muted-foreground text-center py-8">{t("no_partners")}</p>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) resetForm(); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingPartner ? "Edit Partner" : "Add Partner"}</DialogTitle>
+            <DialogTitle>{editingPartner ? t("edit_partner") : t("add_partner")}</DialogTitle>
             <DialogDescription>
-              {editingPartner ? "Update partner details." : "Add a new partner to display on the site."}
+              {editingPartner ? t("update_partner_details") : t("add_partner_desc")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="partner-name">Name</Label>
+              <Label htmlFor="partner-name">{t("name")}</Label>
               <Input
                 id="partner-name"
                 data-testid="input-partner-name"
@@ -201,7 +203,7 @@ export default function PartnerManager() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="partner-image">Image</Label>
+              <Label htmlFor="partner-image">{t("image")}</Label>
               <Input
                 id="partner-image"
                 data-testid="input-partner-image"
@@ -213,10 +215,10 @@ export default function PartnerManager() {
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={resetForm}>
-                Cancel
+                {t("cancel")}
               </Button>
               <Button type="submit" data-testid="button-submit-partner" disabled={isPending}>
-                {isPending ? "Saving..." : editingPartner ? "Update" : "Add"}
+                {isPending ? t("saving") : editingPartner ? t("update") : t("add")}
               </Button>
             </div>
           </form>
@@ -226,14 +228,14 @@ export default function PartnerManager() {
       <Dialog open={deleteConfirm !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Partner</DialogTitle>
+            <DialogTitle>{t("delete_partner")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this partner? This action cannot be undone.
+              {t("delete_partner_confirm")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -241,7 +243,7 @@ export default function PartnerManager() {
               disabled={deleteMutation.isPending}
               onClick={() => deleteConfirm !== null && deleteMutation.mutate(deleteConfirm)}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? t("deleting") : t("delete")}
             </Button>
           </div>
         </DialogContent>

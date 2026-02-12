@@ -1,4 +1,5 @@
 import { LanguageProvider } from "./context/LanguageContext";
+import { AdminLangProvider } from "./hooks/useAdminLang";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -14,6 +15,14 @@ import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 
+function AdminWrapper({ component: Component }: { component: React.ComponentType }) {
+  return (
+    <AdminLangProvider>
+      <Component />
+    </AdminLangProvider>
+  );
+}
+
 function Router() {
   return (
     <Switch>
@@ -22,8 +31,8 @@ function Router() {
       <Route path="/categories" component={Categories} />
       <Route path="/partners" component={Partners} />
       <Route path="/contact" component={Contact} />
-      <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/login">{() => <AdminWrapper component={AdminLogin} />}</Route>
+      <Route path="/admin">{() => <AdminWrapper component={AdminDashboard} />}</Route>
       <Route path="/:slug">{(params) => <CategoryDetail slug={params.slug} />}</Route>
       <Route component={NotFound} />
     </Switch>

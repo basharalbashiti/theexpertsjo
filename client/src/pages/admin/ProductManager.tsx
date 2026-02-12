@@ -13,6 +13,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import type { Product, Category } from "@shared/schema";
 
@@ -21,6 +22,7 @@ type SortDir = "asc" | "desc";
 
 export default function ProductManager() {
   const { toast } = useToast();
+  const { t } = useAdminLang();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -54,7 +56,7 @@ export default function ProductManager() {
 
   const getCategoryName = (catId: number) => {
     const cat = categories.find((c) => c.id === catId);
-    return cat?.nameEn || "Unknown";
+    return cat?.nameEn || t("unknown");
   };
 
   const brandList = useMemo(() => {
@@ -124,10 +126,10 @@ export default function ProductManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
       resetForm();
-      toast({ title: "Product added" });
+      toast({ title: t("product_added") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -153,10 +155,10 @@ export default function ProductManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
       resetForm();
-      toast({ title: "Product updated" });
+      toast({ title: t("product_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -171,10 +173,10 @@ export default function ProductManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
       setDeleteConfirm(null);
-      toast({ title: "Product deleted" });
+      toast({ title: t("product_deleted") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -222,7 +224,7 @@ export default function ProductManager() {
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   if (isLoading) {
-    return <p className="text-neutral-500 p-4">Loading products...</p>;
+    return <p className="text-neutral-500 p-4">{t("loading_products")}</p>;
   }
 
   return (
@@ -230,17 +232,17 @@ export default function ProductManager() {
       <div className="space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-neutral-900">Products</h2>
-            <p className="text-neutral-500 text-sm">{filteredAndSorted.length} products{filterCategoryId ? ` in ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
+            <h2 className="text-2xl font-bold text-neutral-900">{t("products")}</h2>
+            <p className="text-neutral-500 text-sm">{filteredAndSorted.length} {t("n_products")}{filterCategoryId ? ` ${t("in")} ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
           </div>
           <Button data-testid="button-add-product" onClick={openAdd}>
-            + Add Product
+            {`+ ${t("add_product")}`}
           </Button>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <Input
             data-testid="input-search-name"
-            placeholder="Search by name..."
+            placeholder={t("search_name")}
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
             className="w-56 text-sm"
@@ -251,7 +253,7 @@ export default function ProductManager() {
             onChange={(e) => setFilterCategoryId(e.target.value ? parseInt(e.target.value) : null)}
             className="text-sm border rounded-lg px-3 py-2 bg-white text-neutral-700"
           >
-            <option value="">All Categories</option>
+            <option value="">{t("all_categories")}</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>{cat.nameEn}</option>
             ))}
@@ -262,7 +264,7 @@ export default function ProductManager() {
             onChange={(e) => setFilterBrand(e.target.value)}
             className="text-sm border rounded-lg px-3 py-2 bg-white text-neutral-700"
           >
-            <option value="">All Brands</option>
+            <option value="">{t("all_brands")}</option>
             {brandList.map((b) => (
               <option key={b} value={b}>{b}</option>
             ))}
@@ -278,29 +280,29 @@ export default function ProductManager() {
                 className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
                 onClick={() => toggleSort("sortOrder")}
               >
-                Order<SortIcon field="sortOrder" />
+                {t("order")}<SortIcon field="sortOrder" />
               </th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Image</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("image")}</th>
               <th
                 className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
                 onClick={() => toggleSort("nameEn")}
               >
-                Name (EN)<SortIcon field="nameEn" />
+                {t("name_en")}<SortIcon field="nameEn" />
               </th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Name (AR)</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("name_ar")}</th>
               <th
                 className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
                 onClick={() => toggleSort("brand")}
               >
-                Brand<SortIcon field="brand" />
+                {t("brand")}<SortIcon field="brand" />
               </th>
               <th
                 className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer select-none hover:text-neutral-700"
                 onClick={() => toggleSort("category")}
               >
-                Category<SortIcon field="category" />
+                {t("category")}<SortIcon field="category" />
               </th>
-              <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
+              <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -343,7 +345,7 @@ export default function ProductManager() {
                       data-testid={`button-edit-product-${product.id}`}
                       onClick={() => openEdit(product)}
                     >
-                      Edit
+                      {t("edit")}
                     </Button>
                     <Button
                       variant="destructive"
@@ -351,7 +353,7 @@ export default function ProductManager() {
                       data-testid={`button-delete-product-${product.id}`}
                       onClick={() => setDeleteConfirm(product.id)}
                     >
-                      Delete
+                      {t("delete")}
                     </Button>
                   </div>
                 </td>
@@ -360,22 +362,22 @@ export default function ProductManager() {
           </tbody>
         </table>
         {filteredAndSorted.length === 0 && (
-          <p className="text-neutral-500 text-center py-8">No products yet. Add your first product.</p>
+          <p className="text-neutral-500 text-center py-8">{t("no_products")}</p>
         )}
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) resetForm(); }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingProduct ? "Edit Product" : "Add Product"}</DialogTitle>
+            <DialogTitle>{editingProduct ? t("edit_product") : t("add_product")}</DialogTitle>
             <DialogDescription>
-              {editingProduct ? "Update product details." : "Create a new product."}
+              {editingProduct ? t("update_product_details") : t("create_product")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="prod-name-en">Name (English)</Label>
+                <Label htmlFor="prod-name-en">{t("name_english")}</Label>
                 <Input
                   id="prod-name-en"
                   data-testid="input-product-name-en"
@@ -385,7 +387,7 @@ export default function ProductManager() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="prod-name-ar">Name (Arabic)</Label>
+                <Label htmlFor="prod-name-ar">{t("name_arabic")}</Label>
                 <Input
                   id="prod-name-ar"
                   data-testid="input-product-name-ar"
@@ -397,7 +399,7 @@ export default function ProductManager() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="prod-desc-en">Description (English)</Label>
+                <Label htmlFor="prod-desc-en">{t("description_en")}</Label>
                 <Textarea
                   id="prod-desc-en"
                   data-testid="input-product-desc-en"
@@ -407,7 +409,7 @@ export default function ProductManager() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="prod-desc-ar">Description (Arabic)</Label>
+                <Label htmlFor="prod-desc-ar">{t("description_ar")}</Label>
                 <Textarea
                   id="prod-desc-ar"
                   data-testid="input-product-desc-ar"
@@ -420,7 +422,7 @@ export default function ProductManager() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="prod-brand">Brand</Label>
+                <Label htmlFor="prod-brand">{t("brand")}</Label>
                 <Input
                   id="prod-brand"
                   data-testid="input-product-brand"
@@ -430,7 +432,7 @@ export default function ProductManager() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="prod-category">Category</Label>
+                <Label htmlFor="prod-category">{t("category")}</Label>
                 <select
                   id="prod-category"
                   data-testid="select-product-category"
@@ -439,7 +441,7 @@ export default function ProductManager() {
                   required
                   className="w-full text-sm border rounded-lg px-3 py-2 bg-white text-neutral-700"
                 >
-                  <option value="">Select category...</option>
+                  <option value="">{t("select_category")}</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>{cat.nameEn}</option>
                   ))}
@@ -448,7 +450,7 @@ export default function ProductManager() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="prod-order">Sort Order</Label>
+                <Label htmlFor="prod-order">{t("sort_order")}</Label>
                 <Input
                   id="prod-order"
                   data-testid="input-product-order"
@@ -458,7 +460,7 @@ export default function ProductManager() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="prod-image">Image</Label>
+                <Label htmlFor="prod-image">{t("image")}</Label>
                 <Input
                   id="prod-image"
                   data-testid="input-product-image"
@@ -470,10 +472,10 @@ export default function ProductManager() {
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={resetForm}>
-                Cancel
+                {t("cancel")}
               </Button>
               <Button type="submit" data-testid="button-submit-product" disabled={isPending}>
-                {isPending ? "Saving..." : editingProduct ? "Update" : "Add Product"}
+                {isPending ? t("saving") : editingProduct ? t("update") : t("add_product")}
               </Button>
             </div>
           </form>
@@ -483,20 +485,20 @@ export default function ProductManager() {
       <Dialog open={deleteConfirm !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Product</DialogTitle>
+            <DialogTitle>{t("delete_product")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this product? This action cannot be undone.
+              {t("delete_product_confirm")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t("cancel")}</Button>
             <Button
               variant="destructive"
               data-testid="button-confirm-delete-product"
               disabled={deleteMutation.isPending}
               onClick={() => deleteConfirm !== null && deleteMutation.mutate(deleteConfirm)}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? t("deleting") : t("delete")}
             </Button>
           </div>
         </DialogContent>

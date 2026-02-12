@@ -12,10 +12,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import type { Category } from "@shared/schema";
 
 export default function CategoryManager() {
   const { toast } = useToast();
+  const { t } = useAdminLang();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
@@ -45,10 +47,10 @@ export default function CategoryManager() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
-      toast({ title: "Visibility updated" });
+      toast({ title: t("visibility_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -71,10 +73,10 @@ export default function CategoryManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
       resetForm();
-      toast({ title: "Category added" });
+      toast({ title: t("category_added") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -97,10 +99,10 @@ export default function CategoryManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
       resetForm();
-      toast({ title: "Category updated" });
+      toast({ title: t("category_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -115,10 +117,10 @@ export default function CategoryManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
       setDeleteConfirm(null);
-      toast({ title: "Category deleted" });
+      toast({ title: t("category_deleted") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -168,18 +170,18 @@ export default function CategoryManager() {
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   if (isLoading) {
-    return <p className="text-neutral-500 p-4">Loading categories...</p>;
+    return <p className="text-neutral-500 p-4">{t("loading_categories")}</p>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Categories</h2>
-          <p className="text-neutral-500 text-sm">{categories.length} categories</p>
+          <h2 className="text-2xl font-bold text-neutral-900">{t("categories")}</h2>
+          <p className="text-neutral-500 text-sm">{categories.length} {t("n_categories")}</p>
         </div>
         <Button data-testid="button-add-category" onClick={openAdd}>
-          + Add Category
+          + {t("add_category")}
         </Button>
       </div>
 
@@ -187,13 +189,13 @@ export default function CategoryManager() {
         <table className="w-full min-w-[700px]">
           <thead>
             <tr className="border-b bg-neutral-50">
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Order</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Image</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Name (EN)</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Name (AR)</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Slug</th>
-              <th className="text-center px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Visible</th>
-              <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("order")}</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("image")}</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("name_en")}</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("name_ar")}</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("slug")}</th>
+              <th className="text-center px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("visible")}</th>
+              <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -226,12 +228,12 @@ export default function CategoryManager() {
                     {cat.visible ? (
                       <>
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                        Visible
+                        {t("visible")}
                       </>
                     ) : (
                       <>
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
-                        Hidden
+                        {t("hidden")}
                       </>
                     )}
                   </button>
@@ -244,7 +246,7 @@ export default function CategoryManager() {
                       data-testid={`button-edit-category-${cat.id}`}
                       onClick={() => openEdit(cat)}
                     >
-                      Edit
+                      {t("edit")}
                     </Button>
                     <Button
                       variant="destructive"
@@ -252,7 +254,7 @@ export default function CategoryManager() {
                       data-testid={`button-delete-category-${cat.id}`}
                       onClick={() => setDeleteConfirm(cat.id)}
                     >
-                      Delete
+                      {t("delete")}
                     </Button>
                   </div>
                 </td>
@@ -261,22 +263,22 @@ export default function CategoryManager() {
           </tbody>
         </table>
         {categories.length === 0 && (
-          <p className="text-neutral-500 text-center py-8">No categories yet. Add your first category.</p>
+          <p className="text-neutral-500 text-center py-8">{t("no_categories")}</p>
         )}
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) resetForm(); }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>{editingCategory ? "Edit Category" : "Add Category"}</DialogTitle>
+            <DialogTitle>{editingCategory ? t("edit_category") : t("add_category")}</DialogTitle>
             <DialogDescription>
-              {editingCategory ? "Update category details." : "Create a new product category."}
+              {editingCategory ? t("update_category_details") : t("create_category")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="cat-name-en">Name (English)</Label>
+                <Label htmlFor="cat-name-en">{t("name_english")}</Label>
                 <Input
                   id="cat-name-en"
                   data-testid="input-category-name-en"
@@ -289,7 +291,7 @@ export default function CategoryManager() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cat-name-ar">Name (Arabic)</Label>
+                <Label htmlFor="cat-name-ar">{t("name_arabic")}</Label>
                 <Input
                   id="cat-name-ar"
                   data-testid="input-category-name-ar"
@@ -301,7 +303,7 @@ export default function CategoryManager() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="cat-slug">URL Slug</Label>
+                <Label htmlFor="cat-slug">{t("url_slug")}</Label>
                 <Input
                   id="cat-slug"
                   data-testid="input-category-slug"
@@ -312,7 +314,7 @@ export default function CategoryManager() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cat-order">Sort Order</Label>
+                <Label htmlFor="cat-order">{t("sort_order")}</Label>
                 <Input
                   id="cat-order"
                   data-testid="input-category-order"
@@ -323,7 +325,7 @@ export default function CategoryManager() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="cat-image">Category Image</Label>
+              <Label htmlFor="cat-image">{t("category_image")}</Label>
               <Input
                 id="cat-image"
                 data-testid="input-category-image"
@@ -332,15 +334,15 @@ export default function CategoryManager() {
                 onChange={(e) => setImageFile(e.target.files?.[0] || null)}
               />
               {editingCategory?.imageUrl && !imageFile && (
-                <p className="text-xs text-neutral-400">Current image will be kept if no new file is selected.</p>
+                <p className="text-xs text-neutral-400">{t("current_image_kept")}</p>
               )}
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={resetForm}>
-                Cancel
+                {t("cancel")}
               </Button>
               <Button type="submit" data-testid="button-submit-category" disabled={isPending}>
-                {isPending ? "Saving..." : editingCategory ? "Update" : "Add Category"}
+                {isPending ? t("saving") : editingCategory ? t("update") : t("add_category")}
               </Button>
             </div>
           </form>
@@ -350,20 +352,20 @@ export default function CategoryManager() {
       <Dialog open={deleteConfirm !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Category</DialogTitle>
+            <DialogTitle>{t("delete_category")}</DialogTitle>
             <DialogDescription>
-              Are you sure? This will also delete all products in this category. This action cannot be undone.
+              {t("delete_cat_confirm")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t("cancel")}</Button>
             <Button
               variant="destructive"
               data-testid="button-confirm-delete-category"
               disabled={deleteMutation.isPending}
               onClick={() => deleteConfirm !== null && deleteMutation.mutate(deleteConfirm)}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? t("deleting") : t("delete")}
             </Button>
           </div>
         </DialogContent>

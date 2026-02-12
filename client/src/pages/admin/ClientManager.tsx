@@ -12,10 +12,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import type { Client } from "@shared/schema";
 
 export default function ClientManager() {
   const { toast } = useToast();
+  const { t } = useAdminLang();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
@@ -43,10 +45,10 @@ export default function ClientManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/clients"] });
       resetForm();
-      toast({ title: "Client added" });
+      toast({ title: t("client_added") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -66,10 +68,10 @@ export default function ClientManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/clients"] });
       resetForm();
-      toast({ title: "Client updated" });
+      toast({ title: t("client_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -84,10 +86,10 @@ export default function ClientManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/clients"] });
       setDeleteConfirm(null);
-      toast({ title: "Client removed" });
+      toast({ title: t("client_removed") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -122,18 +124,18 @@ export default function ClientManager() {
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   if (isLoading) {
-    return <p className="text-neutral-500 p-4">Loading clients...</p>;
+    return <p className="text-neutral-500 p-4">{t("loading_clients")}</p>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Clients</h2>
-          <p className="text-neutral-500 text-sm">{clientsList.length} hotel brand clients (Four Seasons, Marriott, etc.)</p>
+          <h2 className="text-2xl font-bold text-neutral-900">{t("clients")}</h2>
+          <p className="text-neutral-500 text-sm">{clientsList.length} {t("hotel_clients_desc")}</p>
         </div>
         <Button data-testid="button-add-client" onClick={openAdd}>
-          + Add Client
+          {`+ ${t("add_client")}`}
         </Button>
       </div>
 
@@ -164,7 +166,7 @@ export default function ClientManager() {
                 onClick={() => openEdit(client)}
                 className="text-xs px-2 py-1 h-auto"
               >
-                Edit
+                {t("edit")}
               </Button>
               <Button
                 variant="destructive"
@@ -173,7 +175,7 @@ export default function ClientManager() {
                 onClick={() => setDeleteConfirm(client.id)}
                 className="text-xs px-2 py-1 h-auto"
               >
-                Delete
+                {t("delete")}
               </Button>
             </div>
           </div>
@@ -182,21 +184,21 @@ export default function ClientManager() {
 
       {clientsList.length === 0 && (
         <div className="bg-white rounded-xl border p-8 text-center">
-          <p className="text-neutral-500">No clients yet. Add your first hotel brand client.</p>
+          <p className="text-neutral-500">{t("no_clients")}</p>
         </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) resetForm(); }}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>{editingClient ? "Edit Client" : "Add Client"}</DialogTitle>
+            <DialogTitle>{editingClient ? t("edit_client") : t("add_client")}</DialogTitle>
             <DialogDescription>
-              {editingClient ? "Update client details." : "Add a hotel brand client logo."}
+              {editingClient ? t("update_client_details") : t("add_client_desc")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="client-name">Client Name</Label>
+              <Label htmlFor="client-name">{t("client_name")}</Label>
               <Input
                 id="client-name"
                 data-testid="input-client-name"
@@ -207,7 +209,7 @@ export default function ClientManager() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="client-image">Logo Image</Label>
+              <Label htmlFor="client-image">{t("logo_image")}</Label>
               <Input
                 id="client-image"
                 data-testid="input-client-image"
@@ -216,13 +218,13 @@ export default function ClientManager() {
                 onChange={(e) => setImageFile(e.target.files?.[0] || null)}
               />
               {editingClient?.imageUrl && !imageFile && (
-                <p className="text-xs text-neutral-400">Current logo will be kept if no new file is selected.</p>
+                <p className="text-xs text-neutral-400">{t("current_logo_kept")}</p>
               )}
             </div>
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" onClick={resetForm}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={resetForm}>{t("cancel")}</Button>
               <Button type="submit" data-testid="button-submit-client" disabled={isPending}>
-                {isPending ? "Saving..." : editingClient ? "Update" : "Add Client"}
+                {isPending ? t("saving") : editingClient ? t("update") : t("add_client")}
               </Button>
             </div>
           </form>
@@ -232,20 +234,20 @@ export default function ClientManager() {
       <Dialog open={deleteConfirm !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Remove Client</DialogTitle>
+            <DialogTitle>{t("remove_client")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to remove this client? This action cannot be undone.
+              {t("delete_client_confirm")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t("cancel")}</Button>
             <Button
               variant="destructive"
               data-testid="button-confirm-delete-client"
               disabled={deleteMutation.isPending}
               onClick={() => deleteConfirm !== null && deleteMutation.mutate(deleteConfirm)}
             >
-              {deleteMutation.isPending ? "Removing..." : "Remove"}
+              {deleteMutation.isPending ? t("removing") : t("remove")}
             </Button>
           </div>
         </DialogContent>

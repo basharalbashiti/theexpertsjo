@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import type { SiteContent } from "@shared/schema";
 
 const sectionLabels: Record<string, string> = {
@@ -91,11 +92,40 @@ function getSection(key: string): string {
   return "general";
 }
 
+const sectionToTranslationKey: Record<string, string> = {
+  hero: "sec_hero",
+  cat: "sec_cat",
+  stat: "sec_stat",
+  home: "sec_home",
+  about: "sec_about",
+  chairman: "sec_chairman",
+  our: "sec_our",
+  sustain: "sec_sustain",
+  ecovadis: "sec_ecovadis",
+  partner: "sec_partner",
+  footer: "sec_footer",
+  contact: "sec_contact",
+  rs: "sec_rs",
+  spa: "sec_spa",
+  amenities: "sec_amenities",
+  buffet: "sec_buffet",
+  fb: "sec_fb",
+  linens: "sec_linens",
+  general: "sec_general",
+};
+
 export default function ContentEditor() {
   const { toast } = useToast();
+  const { t } = useAdminLang();
   const [search, setSearch] = useState("");
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [editedContents, setEditedContents] = useState<Record<number, { valueEn: string; valueAr: string }>>({});
+
+  const getSectionLabel = (key: string): string => {
+    const translationKey = sectionToTranslationKey[key];
+    if (translationKey) return t(translationKey);
+    return key;
+  };
 
   const { data: contents = [], isLoading } = useQuery<SiteContent[]>({
     queryKey: ["/api/content"],
@@ -115,10 +145,10 @@ export default function ContentEditor() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/content"] });
       setEditedContents({});
-      toast({ title: "Saved", description: "Content updated successfully." });
+      toast({ title: t("saved"), description: t("content_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -165,15 +195,15 @@ export default function ContentEditor() {
   const hasChanges = Object.keys(editedContents).length > 0;
 
   if (isLoading) {
-    return <p className="text-neutral-500 p-4">Loading content...</p>;
+    return <p className="text-neutral-500 p-4">{t("loading_content")}</p>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Site Content</h2>
-          <p className="text-neutral-500 text-sm">Edit text and translations for your website</p>
+          <h2 className="text-2xl font-bold text-neutral-900">{t("site_content")}</h2>
+          <p className="text-neutral-500 text-sm">{t("edit_text_translations")}</p>
         </div>
         <Button
           data-testid="button-save-content"
@@ -181,14 +211,14 @@ export default function ContentEditor() {
           disabled={!hasChanges || saveMutation.isPending}
           className={hasChanges ? "" : "opacity-50"}
         >
-          {saveMutation.isPending ? "Saving..." : `Save Changes${hasChanges ? ` (${Object.keys(editedContents).length})` : ""}`}
+          {saveMutation.isPending ? t("saving") : `${t("save_changes")}${hasChanges ? ` (${Object.keys(editedContents).length})` : ""}`}
         </Button>
       </div>
 
       <div className="flex gap-6">
         <div className="w-56 shrink-0">
           <div className="bg-white rounded-xl border p-2">
-            <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wider px-3 py-2">Sections</p>
+            <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wider px-3 py-2">{t("sections")}</p>
             <button
               data-testid="section-all"
               onClick={() => setActiveSection(null)}
@@ -196,7 +226,7 @@ export default function ContentEditor() {
                 activeSection === null ? "bg-primary/10 text-primary font-medium" : "text-neutral-600 hover:bg-neutral-50"
               }`}
             >
-              All ({contents.length})
+              {t("all")} ({contents.length})
             </button>
             {sectionKeys.map((key) => (
               <button
@@ -207,7 +237,7 @@ export default function ContentEditor() {
                   activeSection === key ? "bg-primary/10 text-primary font-medium" : "text-neutral-600 hover:bg-neutral-50"
                 }`}
               >
-                {sectionLabels[key] || key} ({sections[key].length})
+                {getSectionLabel(key)} ({sections[key].length})
               </button>
             ))}
           </div>
@@ -216,7 +246,7 @@ export default function ContentEditor() {
         <div className="flex-1 min-w-0 space-y-4">
           <Input
             data-testid="input-content-search"
-            placeholder="Search by key or value..."
+            placeholder={t("search_placeholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="bg-white"
@@ -233,11 +263,11 @@ export default function ContentEditor() {
               >
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xs font-mono text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded">{item.key}</span>
-                  {isEdited && <span className="text-xs text-primary font-medium">Modified</span>}
+                  {isEdited && <span className="text-xs text-primary font-medium">{t("modified")}</span>}
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-medium text-neutral-500">English</Label>
+                    <Label className="text-xs font-medium text-neutral-500">{t("english")}</Label>
                     <Textarea
                       data-testid={`textarea-en-${item.id}`}
                       value={edited?.valueEn ?? item.valueEn}
@@ -247,7 +277,7 @@ export default function ContentEditor() {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-medium text-neutral-500">Arabic</Label>
+                    <Label className="text-xs font-medium text-neutral-500">{t("arabic")}</Label>
                     <Textarea
                       data-testid={`textarea-ar-${item.id}`}
                       value={edited?.valueAr ?? item.valueAr}
@@ -263,7 +293,7 @@ export default function ContentEditor() {
           })}
 
           {displayedItems.length === 0 && (
-            <p className="text-neutral-500 text-center py-8">No content items found.</p>
+            <p className="text-neutral-500 text-center py-8">{t("no_items_found")}</p>
           )}
         </div>
       </div>

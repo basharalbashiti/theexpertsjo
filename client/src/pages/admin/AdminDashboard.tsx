@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import { Button } from "@/components/ui/button";
 import ContentEditor from "./ContentEditor";
 import PartnerManager from "./PartnerManager";
@@ -21,18 +22,6 @@ interface MenuItem {
   icon: string;
   description: string;
 }
-
-const menuItems: MenuItem[] = [
-  { id: "overview", label: "Dashboard", icon: "grid", description: "Overview & sitemap" },
-  { id: "content", label: "Site Content", icon: "file-text", description: "Edit text & translations" },
-  { id: "site-images", label: "Site Images", icon: "image", description: "Manage hero banners & logo" },
-  { id: "categories", label: "Categories", icon: "folder", description: "Manage product categories" },
-  { id: "products", label: "Products", icon: "package", description: "Manage products" },
-  { id: "brands", label: "Our Brands", icon: "award", description: "Manage brand logos for homepage slider" },
-  { id: "partners", label: "Partners", icon: "handshake", description: "Manage brand partners (Abdeen, Cashmere)" },
-  { id: "clients", label: "Clients", icon: "users", description: "Manage hotel brand clients" },
-  { id: "settings", label: "Settings", icon: "settings", description: "Account settings" },
-];
 
 function MenuIcon({ name }: { name: string }) {
   const icons: Record<string, React.ReactNode> = {
@@ -73,27 +62,7 @@ interface SitemapItem {
   children?: SitemapItem[];
 }
 
-const sitemap: SitemapItem[] = [
-  { title: "Home Page", path: "/" },
-  { title: "About Us", path: "/about-us" },
-  {
-    title: "Products / Categories",
-    path: "/categories",
-    children: [
-      { title: "Room Service", path: "/room-service" },
-      { title: "Linens", path: "/linens" },
-      { title: "Spa", path: "/spa" },
-      { title: "Amenities", path: "/amenities" },
-      { title: "Food & Beverage", path: "/food-beverage" },
-      { title: "Buffet & Banqueting", path: "/buffet-banqueting" },
-    ],
-  },
-  { title: "Partners & Clients", path: "/partners" },
-  { title: "Sustainability", path: "/sustainability" },
-  { title: "Contact", path: "/contact" },
-];
-
-function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void }) {
+function OverviewPage({ onNavigate, t }: { onNavigate: (page: AdminPage) => void; t: (key: string) => string }) {
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
     queryFn: getQueryFn({ on401: "throw" }),
@@ -120,19 +89,39 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
   });
 
   const stats = [
-    { label: "Content Items", count: contents.length, page: "content" as AdminPage, color: "bg-blue-50 border-blue-200 text-blue-700", icon: "file-text" },
-    { label: "Categories", count: categories.length, page: "categories" as AdminPage, color: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "folder" },
-    { label: "Products", count: products.length, page: "products" as AdminPage, color: "bg-purple-50 border-purple-200 text-purple-700", icon: "package" },
-    { label: "Brands", count: brandsList.length, page: "brands" as AdminPage, color: "bg-orange-50 border-orange-200 text-orange-700", icon: "award" },
-    { label: "Partners", count: partners.length, page: "partners" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700", icon: "handshake" },
-    { label: "Clients", count: clientsList.length, page: "clients" as AdminPage, color: "bg-rose-50 border-rose-200 text-rose-700", icon: "users" },
+    { label: t("content_items"), count: contents.length, page: "content" as AdminPage, color: "bg-blue-50 border-blue-200 text-blue-700", icon: "file-text" },
+    { label: t("categories"), count: categories.length, page: "categories" as AdminPage, color: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "folder" },
+    { label: t("products"), count: products.length, page: "products" as AdminPage, color: "bg-purple-50 border-purple-200 text-purple-700", icon: "package" },
+    { label: t("our_brands"), count: brandsList.length, page: "brands" as AdminPage, color: "bg-orange-50 border-orange-200 text-orange-700", icon: "award" },
+    { label: t("partners"), count: partners.length, page: "partners" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700", icon: "handshake" },
+    { label: t("clients"), count: clientsList.length, page: "clients" as AdminPage, color: "bg-rose-50 border-rose-200 text-rose-700", icon: "users" },
+  ];
+
+  const sitemap: SitemapItem[] = [
+    { title: t("home_page"), path: "/" },
+    { title: t("about_us"), path: "/about-us" },
+    {
+      title: t("products_categories"),
+      path: "/categories",
+      children: [
+        { title: t("room_service"), path: "/room-service" },
+        { title: t("linens"), path: "/linens" },
+        { title: t("spa"), path: "/spa" },
+        { title: t("amenities"), path: "/amenities" },
+        { title: t("food_beverage"), path: "/food-beverage" },
+        { title: t("buffet_banqueting"), path: "/buffet-banqueting" },
+      ],
+    },
+    { title: t("partners_clients"), path: "/partners" },
+    { title: t("sustainability"), path: "/sustainability" },
+    { title: t("contact"), path: "/contact" },
   ];
 
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-neutral-900 mb-1">Welcome to Admin Dashboard</h2>
-        <p className="text-neutral-500">Manage your website content, categories, products, and partners from here.</p>
+        <h2 className="text-2xl font-bold text-neutral-900 mb-1">{t("welcome_dashboard")}</h2>
+        <p className="text-neutral-500">{t("manage_desc")}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -153,8 +142,8 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
       </div>
 
       <div className="bg-white rounded-xl border p-6">
-        <h3 className="text-lg font-bold text-neutral-900 mb-4">Website Sitemap</h3>
-        <p className="text-sm text-neutral-500 mb-6">Overview of all pages on your website. Click any section above to edit its content.</p>
+        <h3 className="text-lg font-bold text-neutral-900 mb-4">{t("website_sitemap")}</h3>
+        <p className="text-sm text-neutral-500 mb-6">{t("sitemap_desc")}</p>
         <div className="space-y-2">
           {sitemap.map((item, i) => (
             <div key={i}>
@@ -185,8 +174,21 @@ function OverviewPage({ onNavigate }: { onNavigate: (page: AdminPage) => void })
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const { user, isLoading, isAuthenticated } = useAuth();
+  const { lang, setLang, t } = useAdminLang();
   const [activePage, setActivePage] = useState<AdminPage>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const menuItems: MenuItem[] = [
+    { id: "overview", label: t("dashboard"), icon: "grid", description: t("desc_overview") },
+    { id: "content", label: t("site_content"), icon: "file-text", description: t("desc_content") },
+    { id: "site-images", label: t("site_images"), icon: "image", description: t("desc_images") },
+    { id: "categories", label: t("categories"), icon: "folder", description: t("desc_categories") },
+    { id: "products", label: t("products"), icon: "package", description: t("desc_products") },
+    { id: "brands", label: t("our_brands"), icon: "award", description: t("desc_brands") },
+    { id: "partners", label: t("partners"), icon: "handshake", description: t("desc_partners") },
+    { id: "clients", label: t("clients"), icon: "users", description: t("desc_clients") },
+    { id: "settings", label: t("settings"), icon: "settings", description: t("desc_settings") },
+  ];
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -209,7 +211,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen flex items-center justify-center bg-neutral-50">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-neutral-500">Loading...</p>
+          <p className="text-neutral-500">{t("loading")}</p>
         </div>
       </div>
     );
@@ -222,7 +224,7 @@ export default function AdminDashboard() {
   const renderContent = () => {
     switch (activePage) {
       case "overview":
-        return <OverviewPage onNavigate={setActivePage} />;
+        return <OverviewPage onNavigate={setActivePage} t={t} />;
       case "content":
         return <ContentEditor />;
       case "site-images":
@@ -240,13 +242,13 @@ export default function AdminDashboard() {
       case "settings":
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-neutral-900">Account Settings</h2>
+            <h2 className="text-2xl font-bold text-neutral-900">{t("account_settings")}</h2>
             <div className="bg-white rounded-xl border p-6 space-y-4">
               <div>
-                <label className="text-sm font-medium text-neutral-500">Username</label>
+                <label className="text-sm font-medium text-neutral-500">{t("username")}</label>
                 <p className="text-lg font-semibold text-neutral-900">{user?.username}</p>
               </div>
-              <p className="text-sm text-neutral-400">Password change feature coming soon.</p>
+              <p className="text-sm text-neutral-400">{t("password_change_soon")}</p>
             </div>
           </div>
         );
@@ -258,7 +260,7 @@ export default function AdminDashboard() {
   const activeMenuItem = menuItems.find((m) => m.id === activePage);
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex">
+    <div className="min-h-screen bg-neutral-50 flex" dir={lang === "AR" ? "rtl" : "ltr"}>
       <aside
         className={`${sidebarOpen ? "w-64" : "w-16"} bg-white border-r border-neutral-200 flex flex-col transition-all duration-200 shrink-0`}
       >
@@ -273,8 +275,8 @@ export default function AdminDashboard() {
             </button>
             {sidebarOpen && (
               <div className="min-w-0">
-                <h1 className="text-sm font-bold text-primary truncate">The Experts</h1>
-                <p className="text-xs text-neutral-400 truncate">Admin Panel</p>
+                <h1 className="text-sm font-bold text-primary truncate">{t("the_experts")}</h1>
+                <p className="text-xs text-neutral-400 truncate">{t("admin_panel")}</p>
               </div>
             )}
           </div>
@@ -309,7 +311,7 @@ export default function AdminDashboard() {
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-red-50 hover:text-red-600 transition-colors text-left"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-            {sidebarOpen && <span className="text-sm">{logoutMutation.isPending ? "Logging out..." : "Logout"}</span>}
+            {sidebarOpen && <span className="text-sm">{logoutMutation.isPending ? t("logging_out") : t("logout")}</span>}
           </button>
         </div>
       </aside>
@@ -317,12 +319,12 @@ export default function AdminDashboard() {
       <main className="flex-1 min-w-0">
         <header className="bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-neutral-900">{activeMenuItem?.label || "Dashboard"}</h2>
+            <h2 className="text-lg font-bold text-neutral-900">{activeMenuItem?.label || t("dashboard")}</h2>
             <p className="text-sm text-neutral-500">{activeMenuItem?.description}</p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-neutral-500">
-              Logged in as <span className="font-medium text-neutral-700">{user?.username}</span>
+              {t("logged_in_as")} <span className="font-medium text-neutral-700">{user?.username}</span>
             </span>
             <a
               href="/"
@@ -330,8 +332,15 @@ export default function AdminDashboard() {
               className="text-sm text-primary hover:underline"
               data-testid="link-view-site"
             >
-              View Site
+              {t("view_site")}
             </a>
+            <button
+              data-testid="button-admin-lang-toggle"
+              onClick={() => setLang(lang === "EN" ? "AR" : "EN")}
+              className="text-xs font-semibold px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-50 transition-colors"
+            >
+              {lang === "EN" ? "العربية" : "English"}
+            </button>
           </div>
         </header>
 

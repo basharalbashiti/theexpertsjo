@@ -4,6 +4,7 @@ import { getQueryFn, queryClient } from "@/lib/queryClient";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import type { SiteImage } from "@shared/schema";
 import { invalidateSiteImages } from "@/hooks/useSiteImages";
 
@@ -42,7 +43,7 @@ const defaultImages: Record<string, string> = {
 
 const imageSections = [
   {
-    title: "Homepage",
+    titleKey: "homepage",
     slots: [
       { key: "logo", label: "Site Logo", description: "Main logo displayed in the navbar and footer" },
       { key: "hero1", label: "Hero Banner 1", description: "First hero slide on the homepage" },
@@ -51,20 +52,20 @@ const imageSections = [
     ],
   },
   {
-    title: "Products Page",
+    titleKey: "products_page",
     slots: [
       { key: "products_banner", label: "Products Page Banner", description: "Hero banner on the products/categories page" },
       { key: "category_banner", label: "Category Detail Banner", description: "Default banner for category detail pages" },
     ],
   },
   {
-    title: "Contact Page",
+    titleKey: "contact_page",
     slots: [
       { key: "contact_banner", label: "Contact Page Banner", description: "Hero banner on the contact page" },
     ],
   },
   {
-    title: "About Page",
+    titleKey: "about_page",
     slots: [
       { key: "about_banner", label: "About Page Banner", description: "Hero banner on the about page" },
       { key: "about_chairman", label: "Chairman Image", description: "Photo in the chairman's message section" },
@@ -73,21 +74,21 @@ const imageSections = [
     ],
   },
   {
-    title: "Partners Page",
+    titleKey: "partners_page",
     slots: [
       { key: "partners_banner", label: "Partners Page Banner", description: "Hero banner on the partners page" },
       { key: "partners_cta", label: "Partnership CTA Image", description: "Image in the 'Become Our Partner' section" },
     ],
   },
   {
-    title: "Sustainability Page",
+    titleKey: "sustainability_page",
     slots: [
       { key: "sustainability_banner", label: "Sustainability Banner", description: "Hero banner on the sustainability page" },
       { key: "sustainability_practices", label: "Practices Image", description: "Image in the sustainability practices section" },
     ],
   },
   {
-    title: "Room Service Page",
+    titleKey: "room_service_page",
     slots: [
       { key: "room_service_banner", label: "Room Service Banner", description: "Hero banner on the room service page" },
       { key: "room_service_items", label: "Room Service Items", description: "Overview image of room service items" },
@@ -97,6 +98,7 @@ const imageSections = [
 
 export default function SiteImageManager() {
   const { toast } = useToast();
+  const { t } = useAdminLang();
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
 
   const { data: siteImages = [] } = useQuery<SiteImage[]>({
@@ -126,10 +128,10 @@ export default function SiteImageManager() {
       queryClient.invalidateQueries({ queryKey: ["/api/site-images"] });
       invalidateSiteImages();
       setUploadingKey(null);
-      toast({ title: "Updated", description: "Image updated successfully." });
+      toast({ title: t("updated"), description: t("image_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -142,13 +144,13 @@ export default function SiteImageManager() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-neutral-900">Site Images</h2>
-        <p className="text-neutral-500 text-sm">Manage hero banners and images across all pages</p>
+        <h2 className="text-2xl font-bold text-neutral-900">{t("site_images")}</h2>
+        <p className="text-neutral-500 text-sm">{t("manage_banners_logo")}</p>
       </div>
 
       {imageSections.map((section) => (
-        <div key={section.title} className="space-y-4">
-          <h3 className="text-lg font-semibold text-neutral-700 border-b pb-2">{section.title}</h3>
+        <div key={section.titleKey} className="space-y-4">
+          <h3 className="text-lg font-semibold text-neutral-700 border-b pb-2">{t(section.titleKey)}</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {section.slots.map((slot) => {
               const currentUrl = imageMap[slot.key] || defaultImages[slot.key];

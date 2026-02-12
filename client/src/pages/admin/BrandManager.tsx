@@ -12,10 +12,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminLang } from "@/hooks/useAdminLang";
 import type { Brand } from "@shared/schema";
 
 export default function BrandManager() {
   const { toast } = useToast();
+  const { t } = useAdminLang();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
@@ -43,10 +45,10 @@ export default function BrandManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/brands"] });
       resetForm();
-      toast({ title: "Brand added" });
+      toast({ title: t("brand_added") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -66,10 +68,10 @@ export default function BrandManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/brands"] });
       resetForm();
-      toast({ title: "Brand updated" });
+      toast({ title: t("brand_updated") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -84,10 +86,10 @@ export default function BrandManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/brands"] });
       setDeleteConfirm(null);
-      toast({ title: "Brand deleted" });
+      toast({ title: t("brand_deleted") });
     },
     onError: (err: Error) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
     },
   });
 
@@ -124,15 +126,15 @@ export default function BrandManager() {
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   if (isLoading) {
-    return <p className="text-muted-foreground p-4">Loading brands...</p>;
+    return <p className="text-muted-foreground p-4">{t("loading_brands")}</p>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Our Brands ({brands.length})</h3>
+        <h3 className="text-lg font-semibold">{t("our_brands")} ({brands.length})</h3>
         <Button data-testid="button-add-brand" onClick={openAdd}>
-          Add Brand
+          {t("add_brand")}
         </Button>
       </div>
 
@@ -151,7 +153,7 @@ export default function BrandManager() {
               />
             ) : (
               <div className="w-24 h-24 bg-neutral-100 border border-dashed border-neutral-300 rounded flex items-center justify-center text-neutral-400 text-xs text-center px-1">
-                No image
+                {t("no_image")}
               </div>
             )}
             <p className="text-sm font-medium text-center">{brand.name}</p>
@@ -162,7 +164,7 @@ export default function BrandManager() {
                 data-testid={`button-edit-brand-${brand.id}`}
                 onClick={() => openEdit(brand)}
               >
-                Edit
+                {t("edit")}
               </Button>
               <Button
                 variant="destructive"
@@ -170,7 +172,7 @@ export default function BrandManager() {
                 data-testid={`button-delete-brand-${brand.id}`}
                 onClick={() => setDeleteConfirm(brand.id)}
               >
-                Delete
+                {t("delete")}
               </Button>
             </div>
           </div>
@@ -178,20 +180,20 @@ export default function BrandManager() {
       </div>
 
       {brands.length === 0 && (
-        <p className="text-muted-foreground text-center py-8">No brands yet. Add your first brand to display in the logo slider.</p>
+        <p className="text-muted-foreground text-center py-8">{t("no_brands")}</p>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) resetForm(); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingBrand ? "Edit Brand" : "Add Brand"}</DialogTitle>
+            <DialogTitle>{editingBrand ? t("edit_brand") : t("add_brand")}</DialogTitle>
             <DialogDescription>
-              {editingBrand ? "Update brand details." : "Add a new brand to display on the homepage slider."}
+              {editingBrand ? t("update_brand_details") : t("add_brand_desc")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="brand-name">Name</Label>
+              <Label htmlFor="brand-name">{t("name")}</Label>
               <Input
                 id="brand-name"
                 data-testid="input-brand-name"
@@ -201,7 +203,7 @@ export default function BrandManager() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="brand-image">Logo Image</Label>
+              <Label htmlFor="brand-image">{t("logo_image")}</Label>
               <Input
                 id="brand-image"
                 data-testid="input-brand-image"
@@ -213,10 +215,10 @@ export default function BrandManager() {
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={resetForm}>
-                Cancel
+                {t("cancel")}
               </Button>
               <Button type="submit" data-testid="button-submit-brand" disabled={isPending}>
-                {isPending ? "Saving..." : editingBrand ? "Update" : "Add"}
+                {isPending ? t("saving") : editingBrand ? t("update") : t("add")}
               </Button>
             </div>
           </form>
@@ -226,14 +228,14 @@ export default function BrandManager() {
       <Dialog open={deleteConfirm !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm(null); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Brand</DialogTitle>
+            <DialogTitle>{t("delete_brand")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this brand? This action cannot be undone.
+              {t("delete_brand_confirm")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -241,7 +243,7 @@ export default function BrandManager() {
               disabled={deleteMutation.isPending}
               onClick={() => deleteConfirm !== null && deleteMutation.mutate(deleteConfirm)}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? t("deleting") : t("delete")}
             </Button>
           </div>
         </DialogContent>
