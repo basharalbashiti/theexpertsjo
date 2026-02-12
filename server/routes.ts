@@ -378,6 +378,37 @@ export async function registerRoutes(
     }
   });
 
+  // Site images routes
+  app.get("/api/site-images", async (_req, res) => {
+    const images = await storage.getAllSiteImages();
+    res.json(images);
+  });
+
+  app.put("/api/site-images/:key", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const allowedKeys = ["hero1", "hero2", "hero3", "logo"];
+      const key = req.params.key;
+      if (!allowedKeys.includes(key)) {
+        return res.status(400).json({ message: "Invalid image key. Allowed: " + allowedKeys.join(", ") });
+      }
+      let imageUrl = req.body.imageUrl || "";
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      if (!imageUrl) {
+        return res.status(400).json({ message: "Image is required" });
+      }
+      const result = await storage.upsertSiteImage({
+        key,
+        imageUrl,
+        label: req.body.label || key,
+      });
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update site image" });
+    }
+  });
+
   // Brands routes
   app.get("/api/brands", async (_req, res) => {
     const allBrands = await storage.getAllBrands();

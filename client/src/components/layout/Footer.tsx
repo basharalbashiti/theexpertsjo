@@ -1,7 +1,9 @@
 import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
-import logo from "@/assets/logo.png";
+import { getQueryFn } from "@/lib/queryClient";
+import defaultLogo from "@/assets/logo.png";
+import type { SiteImage } from "@shared/schema";
 
 interface Category {
   id: number;
@@ -12,6 +14,12 @@ interface Category {
 
 export function Footer() {
   const { lang, t } = useLanguage();
+
+  const { data: siteImages = [] } = useQuery<SiteImage[]>({
+    queryKey: ["/api/site-images"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+  });
+  const logo = siteImages.find((i) => i.key === "logo")?.imageUrl || defaultLogo;
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],

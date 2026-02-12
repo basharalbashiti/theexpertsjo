@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, brands, clients, products } from "@shared/schema";
+import { users, siteContent, partners, brands, siteImages, clients, products } from "@shared/schema";
+import fs from "fs";
+import path from "path";
 
 const defaultTranslations: Record<string, { en: string; ar: string }> = {
   home: { en: "Home", ar: "الرئيسية" },
@@ -179,6 +181,32 @@ export async function seedDatabase() {
       await storage.createPartner(partner);
     }
     console.log(`Seeded ${defaultPartners.length} partners`);
+  }
+
+  const existingSiteImages = await storage.getAllSiteImages();
+  if (existingSiteImages.length === 0) {
+    const uploadsDir = path.join(process.cwd(), "uploads");
+    const assetsToCopy = [
+      { src: "client/src/assets/hero-1.jpg", dest: "hero-1.jpg", key: "hero1", label: "Hero Banner 1" },
+      { src: "client/src/assets/hero-2.jpg", dest: "hero-2.jpg", key: "hero2", label: "Hero Banner 2" },
+      { src: "client/src/assets/hero-3.jpg", dest: "hero-3.jpg", key: "hero3", label: "Hero Banner 3" },
+      { src: "client/src/assets/logo.png", dest: "site-logo.png", key: "logo", label: "Site Logo" },
+    ];
+    for (const asset of assetsToCopy) {
+      const destPath = path.join(uploadsDir, asset.dest);
+      if (!fs.existsSync(destPath)) {
+        const srcPath = path.join(process.cwd(), asset.src);
+        if (fs.existsSync(srcPath)) {
+          fs.copyFileSync(srcPath, destPath);
+        }
+      }
+      await storage.upsertSiteImage({
+        key: asset.key,
+        imageUrl: `/uploads/${asset.dest}`,
+        label: asset.label,
+      });
+    }
+    console.log("Seeded 4 site images");
   }
 
   const existingBrands = await storage.getAllBrands();

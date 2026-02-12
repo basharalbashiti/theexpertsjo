@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, MessageCircle, ChevronDown } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
+import type { SiteImage } from "@shared/schema";
 
-import logo from "@/assets/logo.png";
+import defaultLogo from "@/assets/logo.png";
 
 interface CategoryItem {
   id: number;
@@ -21,6 +24,13 @@ export function Navbar() {
   const { lang, toggleLang, t } = useLanguage();
   const [location] = useLocation();
   const [dbCategories, setDbCategories] = useState<CategoryItem[]>([]);
+
+  const { data: siteImages = [] } = useQuery<SiteImage[]>({
+    queryKey: ["/api/site-images"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+  });
+  const logoImg = siteImages.find((i) => i.key === "logo");
+  const logo = logoImg?.imageUrl || defaultLogo;
 
   useEffect(() => {
     const handleScroll = () => {

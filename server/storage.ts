@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, brands, clients, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type Client, type InsertClient } from "@shared/schema";
+import { users, siteContent, partners, categories, products, brands, siteImages, clients, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
 
@@ -38,6 +38,10 @@ export interface IStorage {
   createBrand(brand: InsertBrand): Promise<Brand>;
   updateBrand(id: number, brand: Partial<InsertBrand>): Promise<Brand | undefined>;
   deleteBrand(id: number): Promise<boolean>;
+
+  getAllSiteImages(): Promise<SiteImage[]>;
+  getSiteImage(key: string): Promise<SiteImage | undefined>;
+  upsertSiteImage(image: InsertSiteImage): Promise<SiteImage>;
 
   getAllClients(): Promise<Client[]>;
   getClient(id: number): Promise<Client | undefined>;
@@ -197,6 +201,27 @@ export class DatabaseStorage implements IStorage {
   async deleteBrand(id: number): Promise<boolean> {
     const result = await db.delete(brands).where(eq(brands.id, id)).returning();
     return result.length > 0;
+  }
+
+  async getAllSiteImages(): Promise<SiteImage[]> {
+    return db.select().from(siteImages);
+  }
+
+  async getSiteImage(key: string): Promise<SiteImage | undefined> {
+    const [image] = await db.select().from(siteImages).where(eq(siteImages.key, key));
+    return image || undefined;
+  }
+
+  async upsertSiteImage(image: InsertSiteImage): Promise<SiteImage> {
+    const [result] = await db
+      .insert(siteImages)
+      .values(image)
+      .onConflictDoUpdate({
+        target: siteImages.key,
+        set: { imageUrl: image.imageUrl, label: image.label },
+      })
+      .returning();
+    return result;
   }
 
   async getAllClients(): Promise<Client[]> {

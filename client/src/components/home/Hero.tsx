@@ -3,34 +3,46 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
+import type { SiteImage } from "@shared/schema";
 
-// We'll use the imported images
-import hero1 from "@/assets/hero-1.jpg";
-import hero2 from "@/assets/hero-2.jpg";
-import hero3 from "@/assets/hero-3.jpg";
+import defaultHero1 from "@/assets/hero-1.jpg";
+import defaultHero2 from "@/assets/hero-2.jpg";
+import defaultHero3 from "@/assets/hero-3.jpg";
 
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { t } = useLanguage();
 
+  const { data: siteImages = [] } = useQuery<SiteImage[]>({
+    queryKey: ["/api/site-images"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+  });
+
+  const imageMap = siteImages.reduce((acc, img) => {
+    acc[img.key] = img.imageUrl;
+    return acc;
+  }, {} as Record<string, string>);
+
   const slides = [
     {
       id: 1,
-      image: hero1,
+      image: imageMap["hero1"] || defaultHero1,
       title: t("hero1_title"),
       subtitle: t("hero1_subtitle"),
       description: t("hero1_desc")
     },
     {
       id: 2,
-      image: hero2,
+      image: imageMap["hero2"] || defaultHero2,
       title: t("hero2_title"),
       subtitle: t("hero2_subtitle"),
       description: t("hero2_desc")
     },
     {
       id: 3,
-      image: hero3,
+      image: imageMap["hero3"] || defaultHero3,
       title: t("hero3_title"),
       subtitle: t("hero3_subtitle"),
       description: t("hero3_desc")

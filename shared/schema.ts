@@ -111,6 +111,22 @@ export const insertBrandSchema = createInsertSchema(brands).pick({
 export type InsertBrand = z.infer<typeof insertBrandSchema>;
 export type Brand = typeof brands.$inferSelect;
 
+export const siteImages = pgTable("site_images", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  imageUrl: text("image_url").notNull(),
+  label: text("label").notNull().default(""),
+});
+
+export const insertSiteImageSchema = createInsertSchema(siteImages).pick({
+  key: true,
+  imageUrl: true,
+  label: true,
+});
+
+export type InsertSiteImage = z.infer<typeof insertSiteImageSchema>;
+export type SiteImage = typeof siteImages.$inferSelect;
+
 export const clients = pgTable("clients", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
