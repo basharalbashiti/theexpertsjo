@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, brands, siteImages, clients, products, quickLinks } from "@shared/schema";
+import { users, siteContent, partners, brands, siteImages, clients, products, quickLinks, leadership } from "@shared/schema";
 import fs from "fs";
 import path from "path";
 
@@ -300,5 +300,19 @@ export async function seedDatabase() {
       await storage.createQuickLink(link);
     }
     console.log(`Seeded ${defaultQuickLinks.length} quick links`);
+  }
+
+  const existingLeadership = await storage.getAllLeadership();
+  if (existingLeadership.length === 0) {
+    const defaultLeaders = [
+      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", sortOrder: 1 },
+      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", sortOrder: 2 },
+      { nameEn: "Marwan Abu Sakha", nameAr: "مروان أبو سخا", roleEn: "Group Corporate Development Manager", roleAr: "مدير تطوير المجموعة", sortOrder: 3 },
+      { nameEn: "Khaled Ghunaim", nameAr: "خالد غنيم", roleEn: "General Manager - Jordan", roleAr: "مدير عام - الأردن", sortOrder: 4 },
+    ];
+    for (const leader of defaultLeaders) {
+      await storage.createLeader(leader);
+    }
+    console.log(`Seeded ${defaultLeaders.length} leadership members`);
   }
 }

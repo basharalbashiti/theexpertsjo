@@ -230,6 +230,23 @@ const translations: Record<string, { EN: string; AR: string }> = {
   link_deleted: { EN: "Link deleted", AR: "تم حذف الرابط" },
   delete_link_confirm: { EN: "Are you sure you want to delete this link? This action cannot be undone.", AR: "هل أنت متأكد من حذف هذا الرابط؟ لا يمكن التراجع عن هذا الإجراء." },
   no_quick_links: { EN: "No quick links yet. Add your first link.", AR: "لا توجد روابط سريعة بعد. أضف أول رابط." },
+
+  leadership: { EN: "Leadership", AR: "القيادة" },
+  desc_leadership: { EN: "Manage leadership team members", AR: "إدارة أعضاء فريق القيادة" },
+  add_leader: { EN: "Add Member", AR: "إضافة عضو" },
+  edit_leader: { EN: "Edit Member", AR: "تعديل العضو" },
+  delete_leader: { EN: "Delete Member", AR: "حذف العضو" },
+  add_leader_desc: { EN: "Add a new leadership team member.", AR: "إضافة عضو جديد لفريق القيادة." },
+  update_leader_details: { EN: "Update member details.", AR: "تحديث تفاصيل العضو." },
+  leader_added: { EN: "Member added", AR: "تمت إضافة العضو" },
+  leader_updated: { EN: "Member updated", AR: "تم تحديث العضو" },
+  leader_deleted: { EN: "Member deleted", AR: "تم حذف العضو" },
+  delete_leader_confirm: { EN: "Are you sure you want to delete this member? This action cannot be undone.", AR: "هل أنت متأكد من حذف هذا العضو؟ لا يمكن التراجع عن هذا الإجراء." },
+  no_leaders: { EN: "No leadership members yet. Add your first member.", AR: "لا يوجد أعضاء قيادة بعد. أضف أول عضو." },
+  leadership_desc: { EN: "Manage the leadership team displayed on the About page.", AR: "إدارة فريق القيادة المعروض في صفحة من نحن." },
+  role_en: { EN: "Role (English)", AR: "المنصب (الإنجليزية)" },
+  role_ar: { EN: "Role (Arabic)", AR: "المنصب (العربية)" },
+  role: { EN: "Role", AR: "المنصب" },
 };
 
 const STORAGE_KEY = "admin_lang";

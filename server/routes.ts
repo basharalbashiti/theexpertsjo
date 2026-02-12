@@ -583,5 +583,61 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/leadership", async (_req, res) => {
+    const leaders = await storage.getAllLeadership();
+    res.json(leaders);
+  });
+
+  app.post("/api/leadership", requireAuth, async (req, res) => {
+    try {
+      const { nameEn, nameAr, roleEn, roleAr, sortOrder } = req.body;
+      if (!nameEn) {
+        return res.status(400).json({ message: "Name is required" });
+      }
+      const leader = await storage.createLeader({
+        nameEn,
+        nameAr: nameAr || "",
+        roleEn: roleEn || "",
+        roleAr: roleAr || "",
+        sortOrder: parseInt(sortOrder) || 0,
+      });
+      res.json(leader);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create leader" });
+    }
+  });
+
+  app.put("/api/leadership/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates: any = {};
+      if (req.body.nameEn !== undefined) updates.nameEn = req.body.nameEn;
+      if (req.body.nameAr !== undefined) updates.nameAr = req.body.nameAr;
+      if (req.body.roleEn !== undefined) updates.roleEn = req.body.roleEn;
+      if (req.body.roleAr !== undefined) updates.roleAr = req.body.roleAr;
+      if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      const leader = await storage.updateLeader(id, updates);
+      if (!leader) {
+        return res.status(404).json({ message: "Leader not found" });
+      }
+      res.json(leader);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update leader" });
+    }
+  });
+
+  app.delete("/api/leadership/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteLeader(id);
+      if (!success) {
+        return res.status(404).json({ message: "Leader not found" });
+      }
+      res.json({ message: "Leader deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete leader" });
+    }
+  });
+
   return httpServer;
 }
