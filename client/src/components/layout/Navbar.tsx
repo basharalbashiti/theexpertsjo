@@ -69,18 +69,21 @@ export function Navbar() {
     window.open("https://wa.me/962790484745", "_blank");
   };
 
+  const pagesWithoutHero = ["/contact"];
+  const needsDarkNav = pagesWithoutHero.includes(location);
+
   return (
     <>
       <nav
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b border-transparent",
-          isScrolled ? "bg-white/90 backdrop-blur-md py-4 shadow-sm border-border" : "bg-transparent py-6 text-white"
+          isScrolled || needsDarkNav ? "bg-white/90 backdrop-blur-md py-4 shadow-sm border-border" : "bg-transparent py-6 text-white"
         )}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
           <Link href="/">
             <a className="flex items-center space-x-2 cursor-pointer">
-              <img src={logo} alt="The Experts Logo" className={cn("h-14 w-auto transition-all", isScrolled ? "brightness-100" : "brightness-0 invert")} />
+              <img src={logo} alt="The Experts Logo" className={cn("h-14 w-auto transition-all", isScrolled || needsDarkNav ? "brightness-100" : "brightness-0 invert")} />
             </a>
           </Link>
 
@@ -94,14 +97,14 @@ export function Navbar() {
                       <a
                         className={cn(
                           "text-sm font-medium tracking-wide transition-colors hover:text-primary relative",
-                          (isScrolled ? "text-black" : "text-white"),
+                          (isScrolled || needsDarkNav ? "text-black" : "text-white"),
                           location === link.href ? "text-primary" : ""
                         )}
                       >
                         {link.name}
                       </a>
                     </Link>
-                    <ChevronDown size={14} className={cn("transition-transform duration-300 group-hover:rotate-180", isScrolled ? "text-black" : "text-white")} />
+                    <ChevronDown size={14} className={cn("transition-transform duration-300 group-hover:rotate-180", isScrolled || needsDarkNav ? "text-black" : "text-white")} />
                     
                     {/* Dropdown Menu */}
                     <div className="absolute top-full left-0 mt-0 w-72 bg-white/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 border border-neutral-100 py-6 z-50 rounded-xl">
@@ -131,7 +134,7 @@ export function Navbar() {
                     <a
                       className={cn(
                         "text-sm font-medium tracking-wide transition-colors hover:text-primary relative py-2 block",
-                        (isScrolled ? "text-black" : "text-white"),
+                        (isScrolled || needsDarkNav ? "text-black" : "text-white"),
                         location === link.href ? "text-primary" : ""
                       )}
                     >
@@ -164,7 +167,7 @@ export function Navbar() {
               {lang === "EN" ? "AR" : "EN"}
             </button>
              <button
-              className={isScrolled ? "text-black" : "text-white"}
+              className={isScrolled || needsDarkNav ? "text-black" : "text-white"}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
