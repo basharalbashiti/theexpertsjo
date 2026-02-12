@@ -216,6 +216,20 @@ const translations: Record<string, { EN: string; AR: string }> = {
 
   account_settings: { EN: "Account Settings", AR: "إعدادات الحساب" },
   password_change_soon: { EN: "Password change feature coming soon.", AR: "ميزة تغيير كلمة المرور ستتوفر قريباً." },
+
+  quick_links: { EN: "Quick Links", AR: "روابط سريعة" },
+  quick_links_desc: { EN: "Manage footer quick links displayed on the website.", AR: "إدارة الروابط السريعة المعروضة في تذييل الموقع." },
+  desc_quick_links: { EN: "Manage footer navigation links", AR: "إدارة روابط التنقل في التذييل" },
+  add_link: { EN: "Add Link", AR: "إضافة رابط" },
+  edit_link: { EN: "Edit Link", AR: "تعديل الرابط" },
+  delete_link: { EN: "Delete Link", AR: "حذف الرابط" },
+  add_link_desc: { EN: "Add a new quick link to the footer.", AR: "إضافة رابط سريع جديد إلى التذييل." },
+  update_link_details: { EN: "Update link details.", AR: "تحديث تفاصيل الرابط." },
+  link_added: { EN: "Link added", AR: "تمت إضافة الرابط" },
+  link_updated: { EN: "Link updated", AR: "تم تحديث الرابط" },
+  link_deleted: { EN: "Link deleted", AR: "تم حذف الرابط" },
+  delete_link_confirm: { EN: "Are you sure you want to delete this link? This action cannot be undone.", AR: "هل أنت متأكد من حذف هذا الرابط؟ لا يمكن التراجع عن هذا الإجراء." },
+  no_quick_links: { EN: "No quick links yet. Add your first link.", AR: "لا توجد روابط سريعة بعد. أضف أول رابط." },
 };
 
 const STORAGE_KEY = "admin_lang";

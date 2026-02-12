@@ -141,3 +141,23 @@ export const insertClientSchema = createInsertSchema(clients).pick({
 
 export type InsertClient = z.infer<typeof insertClientSchema>;
 export type Client = typeof clients.$inferSelect;
+
+export const quickLinks = pgTable("quick_links", {
+  id: serial("id").primaryKey(),
+  labelEn: text("label_en").notNull(),
+  labelAr: text("label_ar").notNull().default(""),
+  url: text("url").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  visible: boolean("visible").notNull().default(true),
+});
+
+export const insertQuickLinkSchema = createInsertSchema(quickLinks).pick({
+  labelEn: true,
+  labelAr: true,
+  url: true,
+  sortOrder: true,
+  visible: true,
+});
+
+export type InsertQuickLink = z.infer<typeof insertQuickLinkSchema>;
+export type QuickLink = typeof quickLinks.$inferSelect;

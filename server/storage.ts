@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, brands, siteImages, clients, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient } from "@shared/schema";
+import { users, siteContent, partners, categories, products, brands, siteImages, clients, quickLinks, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type QuickLink, type InsertQuickLink } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
 
@@ -48,6 +48,13 @@ export interface IStorage {
   createClient(client: InsertClient): Promise<Client>;
   updateClient(id: number, client: Partial<InsertClient>): Promise<Client | undefined>;
   deleteClient(id: number): Promise<boolean>;
+
+  getAllQuickLinks(): Promise<QuickLink[]>;
+  getVisibleQuickLinks(): Promise<QuickLink[]>;
+  getQuickLink(id: number): Promise<QuickLink | undefined>;
+  createQuickLink(link: InsertQuickLink): Promise<QuickLink>;
+  updateQuickLink(id: number, link: Partial<InsertQuickLink>): Promise<QuickLink | undefined>;
+  deleteQuickLink(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -245,6 +252,34 @@ export class DatabaseStorage implements IStorage {
 
   async deleteClient(id: number): Promise<boolean> {
     const result = await db.delete(clients).where(eq(clients.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getAllQuickLinks(): Promise<QuickLink[]> {
+    return db.select().from(quickLinks).orderBy(asc(quickLinks.sortOrder));
+  }
+
+  async getVisibleQuickLinks(): Promise<QuickLink[]> {
+    return db.select().from(quickLinks).where(eq(quickLinks.visible, true)).orderBy(asc(quickLinks.sortOrder));
+  }
+
+  async getQuickLink(id: number): Promise<QuickLink | undefined> {
+    const [link] = await db.select().from(quickLinks).where(eq(quickLinks.id, id));
+    return link || undefined;
+  }
+
+  async createQuickLink(link: InsertQuickLink): Promise<QuickLink> {
+    const [result] = await db.insert(quickLinks).values(link).returning();
+    return result;
+  }
+
+  async updateQuickLink(id: number, link: Partial<InsertQuickLink>): Promise<QuickLink | undefined> {
+    const [result] = await db.update(quickLinks).set(link).where(eq(quickLinks.id, id)).returning();
+    return result || undefined;
+  }
+
+  async deleteQuickLink(id: number): Promise<boolean> {
+    const result = await db.delete(quickLinks).where(eq(quickLinks.id, id)).returning();
     return result.length > 0;
   }
 }

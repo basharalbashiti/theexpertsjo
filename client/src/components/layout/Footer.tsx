@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/queryClient";
 import defaultLogo from "@/assets/logo.png";
 import { MapPin, Mail, Phone, ChevronRight, ArrowUpRight } from "lucide-react";
-import type { SiteImage } from "@shared/schema";
+import type { SiteImage, QuickLink } from "@shared/schema";
 
 interface Category {
   id: number;
@@ -31,6 +31,11 @@ export function Footer() {
     },
   });
 
+  const { data: quickLinks = [] } = useQuery<QuickLink[]>({
+    queryKey: ["/api/quick-links"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+  });
+
   return (
     <footer className="bg-neutral-900 text-white">
       <div className="container mx-auto px-6 py-16">
@@ -49,38 +54,16 @@ export function Footer() {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-300 mb-6">{t("quick_links")}</h4>
             <ul className="space-y-3">
-              <li>
-                <Link href="/">
-                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
-                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
-                    {t("home")}
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/about-us">
-                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
-                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
-                    {t("about")}
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/categories">
-                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
-                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
-                    {t("products")}
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact">
-                  <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
-                    <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
-                    {t("contact")}
-                  </a>
-                </Link>
-              </li>
+              {quickLinks.map((link) => (
+                <li key={link.id}>
+                  <Link href={link.url}>
+                    <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
+                      <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
+                      {lang === "ar" ? (link.labelAr || link.labelEn) : link.labelEn}
+                    </a>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, brands, siteImages, clients, products } from "@shared/schema";
+import { users, siteContent, partners, brands, siteImages, clients, products, quickLinks } from "@shared/schema";
 import fs from "fs";
 import path from "path";
 
@@ -286,5 +286,19 @@ export async function seedDatabase() {
       }
     }
     console.log(`Seeded ${defaultProducts.length} products across all categories`);
+  }
+
+  const existingQuickLinks = await storage.getAllQuickLinks();
+  if (existingQuickLinks.length === 0) {
+    const defaultQuickLinks = [
+      { labelEn: "Home", labelAr: "الرئيسية", url: "/", sortOrder: 1 },
+      { labelEn: "About Us", labelAr: "من نحن", url: "/about-us", sortOrder: 2 },
+      { labelEn: "Products", labelAr: "المنتجات", url: "/categories", sortOrder: 3 },
+      { labelEn: "Contact", labelAr: "اتصل بنا", url: "/contact", sortOrder: 4 },
+    ];
+    for (const link of defaultQuickLinks) {
+      await storage.createQuickLink(link);
+    }
+    console.log(`Seeded ${defaultQuickLinks.length} quick links`);
   }
 }

@@ -506,5 +506,82 @@ export async function registerRoutes(
     }
   });
 
+  // Quick Links routes
+  app.get("/api/quick-links", async (req, res) => {
+    const showAll = req.query.all === "true";
+    if (showAll && req.session.userId) {
+      const links = await storage.getAllQuickLinks();
+      res.json(links);
+    } else {
+      const links = await storage.getVisibleQuickLinks();
+      res.json(links);
+    }
+  });
+
+  app.post("/api/quick-links", requireAuth, async (req, res) => {
+    try {
+      const { labelEn, labelAr, url, sortOrder, visible } = req.body;
+      if (!labelEn || !url) {
+        return res.status(400).json({ message: "Label and URL are required" });
+      }
+      const link = await storage.createQuickLink({
+        labelEn,
+        labelAr: labelAr || "",
+        url,
+        sortOrder: parseInt(sortOrder) || 0,
+        visible: visible !== false,
+      });
+      res.json(link);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create quick link" });
+    }
+  });
+
+  app.put("/api/quick-links/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates: any = {};
+      if (req.body.labelEn !== undefined) updates.labelEn = req.body.labelEn;
+      if (req.body.labelAr !== undefined) updates.labelAr = req.body.labelAr;
+      if (req.body.url !== undefined) updates.url = req.body.url;
+      if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.body.visible !== undefined) updates.visible = req.body.visible === true || req.body.visible === "true";
+      const link = await storage.updateQuickLink(id, updates);
+      if (!link) {
+        return res.status(404).json({ message: "Quick link not found" });
+      }
+      res.json(link);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update quick link" });
+    }
+  });
+
+  app.patch("/api/quick-links/:id/toggle-visibility", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const link = await storage.getQuickLink(id);
+      if (!link) {
+        return res.status(404).json({ message: "Quick link not found" });
+      }
+      const updated = await storage.updateQuickLink(id, { visible: !link.visible });
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to toggle visibility" });
+    }
+  });
+
+  app.delete("/api/quick-links/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteQuickLink(id);
+      if (!success) {
+        return res.status(404).json({ message: "Quick link not found" });
+      }
+      res.json({ message: "Quick link deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete quick link" });
+    }
+  });
+
   return httpServer;
 }
