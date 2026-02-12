@@ -225,19 +225,30 @@ export default function KeyContactManager() {
             </div>
             <div className="flex items-center gap-2 text-xs">
               <span className="text-neutral-400">{t("sort_order")}: {contact.sortOrder}</span>
-              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${contact.visible ? "bg-green-100 text-green-700" : "bg-neutral-100 text-neutral-500"}`}>
-                {contact.visible ? t("visible") : t("hidden")}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 data-testid={`button-toggle-contact-${contact.id}`}
                 onClick={() => toggleVisibility.mutate({ id: contact.id, visible: !contact.visible })}
+                disabled={toggleVisibility.isPending}
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+                  contact.visible
+                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
+                    : "bg-neutral-100 text-neutral-400 border border-neutral-200 hover:bg-neutral-200"
+                }`}
               >
-                {contact.visible ? t("hide") : t("show")}
-              </Button>
+                {contact.visible ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    {t("visible")}
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                    {t("hidden")}
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
