@@ -7,7 +7,8 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - 2026-02-12: Added Leadership Manager — dedicated admin page to manage leadership team (add/edit/delete with bilingual names/roles, photo upload, sort order); About page dynamically displays leaders from database
 - 2026-02-12: Added Quick Links manager — admin can add/edit/delete/toggle footer quick links, footer uses dynamic quick links from database
 - 2026-02-12: Added Arabic language support to admin panel — independent language toggle (EN/AR), RTL direction support, 170+ translated keys covering all admin pages, localStorage persistence under "admin_lang"
-- 2026-02-12: Expanded Site Images manager to cover all page banners (Products, Contact, About, Partners, Sustainability, Room Service, Category Detail) — 17 manageable image slots organized by page sections
+- 2026-02-12: Removed standalone category pages (RoomService, Spa, Amenities, etc.) — all categories now use dynamic CategoryDetail; cleaned up redundant Site Images and Site Content entries
+- 2026-02-12: Site Images manager covers page banners (Homepage, Products, Contact, About, Partners) — category banners managed via Categories Manager
 - 2026-02-12: Added useSiteImages hook with caching + invalidation for dynamic page images
 - 2026-02-12: Added Site Images manager — admin can upload/change hero banners and site logo from dashboard
 - 2026-02-11: Added "Our Brands" feature — new brands table, admin BrandManager, homepage logo slider uses brands

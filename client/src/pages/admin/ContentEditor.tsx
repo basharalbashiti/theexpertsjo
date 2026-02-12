@@ -16,7 +16,6 @@ const sectionLabels: Record<string, string> = {
   about: "About Page",
   chairman: "Chairman Section",
   our: "Section Titles",
-  sustain: "Sustainability",
   ecovadis: "EcoVadis",
   partner: "Partners Page",
   footer: "Footer",
@@ -25,7 +24,7 @@ const sectionLabels: Record<string, string> = {
   general: "General",
 };
 
-const hiddenPrefixes = ["cat_", "rs_", "spa_", "amenities_", "buffet_", "fb_", "linens_"];
+const hiddenPrefixes = ["cat_", "rs_", "spa_", "amenities_", "buffet_", "fb_", "linens_", "sustain", "harmony", "room_service_hero"];
 
 const keyToSection: Record<string, string> = {
   about: "hero",
@@ -41,10 +40,6 @@ const keyToSection: Record<string, string> = {
   our_products: "hero",
   explore_range: "hero",
   looking_specific: "our",
-  sustainability: "hero",
-  sustainability_hero_desc: "hero",
-  sustainability_quote: "sustain",
-  harmony: "sustain",
   contact: "hero",
   contact_us: "contact",
   contact_sales: "contact",
@@ -70,7 +65,6 @@ const keyToSection: Record<string, string> = {
   mission_desc: "our",
   vision_desc: "our",
   our_leadership: "leader",
-  room_service_hero_desc: "hero",
   category_hero_desc: "hero",
 };
 

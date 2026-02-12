@@ -17,8 +17,6 @@ import defaultContactBanner from "@/assets/contact-banner-ultra-clear.png";
 import defaultPartnersBanner from "@/assets/partners-banner-outdoor.png";
 import defaultPartnersCta from "@/assets/partnership-bespoke.png";
 import defaultCategoryBanner from "@/assets/category-generic-banner.png";
-import defaultRoomServiceBanner from "@/assets/room-service-banner.png";
-import defaultRoomServiceItems from "@/assets/room-service-items.png";
 import defaultChairman from "@/assets/cat-furniture.jpg";
 
 const defaultImages: Record<string, string> = {
@@ -34,11 +32,7 @@ const defaultImages: Record<string, string> = {
   about_chairman: defaultChairman,
   partners_banner: defaultPartnersBanner,
   partners_cta: defaultPartnersCta,
-  sustainability_banner: defaultHero3,
-  sustainability_practices: defaultHero2,
   category_banner: defaultCategoryBanner,
-  room_service_banner: defaultRoomServiceBanner,
-  room_service_items: defaultRoomServiceItems,
 };
 
 const imageSections = [
@@ -78,20 +72,6 @@ const imageSections = [
     slots: [
       { key: "partners_banner", label: "Partners Page Banner", description: "Hero banner on the partners page" },
       { key: "partners_cta", label: "Partnership CTA Image", description: "Image in the 'Become Our Partner' section" },
-    ],
-  },
-  {
-    titleKey: "sustainability_page",
-    slots: [
-      { key: "sustainability_banner", label: "Sustainability Banner", description: "Hero banner on the sustainability page" },
-      { key: "sustainability_practices", label: "Practices Image", description: "Image in the sustainability practices section" },
-    ],
-  },
-  {
-    titleKey: "room_service_page",
-    slots: [
-      { key: "room_service_banner", label: "Room Service Banner", description: "Hero banner on the room service page" },
-      { key: "room_service_items", label: "Room Service Items", description: "Overview image of room service items" },
     ],
   },
 ];

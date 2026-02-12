@@ -164,11 +164,7 @@ export async function seedDatabase() {
       { src: "client/src/assets/cat-furniture.jpg", dest: "about-chairman.jpg", key: "about_chairman", label: "About Chairman Image" },
       { src: "client/src/assets/partners-banner-outdoor.png", dest: "partners-banner.png", key: "partners_banner", label: "Partners Page Banner" },
       { src: "client/src/assets/partnership-bespoke.png", dest: "partners-cta.png", key: "partners_cta", label: "Partners CTA Image" },
-      { src: "client/src/assets/hero-3.jpg", dest: "sustainability-banner.jpg", key: "sustainability_banner", label: "Sustainability Banner" },
-      { src: "client/src/assets/hero-2.jpg", dest: "sustainability-practices.jpg", key: "sustainability_practices", label: "Sustainability Practices Image" },
       { src: "client/src/assets/category-generic-banner.png", dest: "category-banner.png", key: "category_banner", label: "Category Detail Banner" },
-      { src: "client/src/assets/room-service-banner.png", dest: "room-service-banner.png", key: "room_service_banner", label: "Room Service Banner" },
-      { src: "client/src/assets/room-service-items.png", dest: "room-service-items.png", key: "room_service_items", label: "Room Service Items Image" },
     ];
     for (const asset of assetsToCopy) {
       const destPath = path.join(uploadsDir, asset.dest);

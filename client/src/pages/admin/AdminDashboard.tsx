@@ -108,20 +108,8 @@ function OverviewPage({ onNavigate, t }: { onNavigate: (page: AdminPage) => void
   const sitemap: SitemapItem[] = [
     { title: t("home_page"), path: "/" },
     { title: t("about_us"), path: "/about-us" },
-    {
-      title: t("products_categories"),
-      path: "/categories",
-      children: [
-        { title: t("room_service"), path: "/room-service" },
-        { title: t("linens"), path: "/linens" },
-        { title: t("spa"), path: "/spa" },
-        { title: t("amenities"), path: "/amenities" },
-        { title: t("food_beverage"), path: "/food-beverage" },
-        { title: t("buffet_banqueting"), path: "/buffet-banqueting" },
-      ],
-    },
+    { title: t("products_categories"), path: "/categories" },
     { title: t("partners_clients"), path: "/partners" },
-    { title: t("sustainability"), path: "/sustainability" },
     { title: t("contact"), path: "/contact" },
   ];
 

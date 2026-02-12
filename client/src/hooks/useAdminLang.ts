@@ -119,8 +119,6 @@ const translations: Record<string, { EN: string; AR: string }> = {
   contact_page: { EN: "Contact Page", AR: "صفحة الاتصال" },
   about_page: { EN: "About Page", AR: "صفحة من نحن" },
   partners_page: { EN: "Partners Page", AR: "صفحة الشركاء" },
-  sustainability_page: { EN: "Sustainability Page", AR: "صفحة الاستدامة" },
-  room_service_page: { EN: "Room Service Page", AR: "صفحة خدمة الغرف" },
 
   add_category: { EN: "Add Category", AR: "إضافة قسم" },
   edit_category: { EN: "Edit Category", AR: "تعديل القسم" },
