@@ -2,17 +2,19 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteImages } from "@/hooks/useSiteImages";
 import imgBanner from "@/assets/contact-banner-ultra-clear.png";
 
 export default function Contact() {
   const { t } = useLanguage();
+  const { getImage } = useSiteImages();
 
   return (
     <Layout>
       <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-16">
         <div 
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${imgBanner})` }}
+          style={{ backgroundImage: `url(${getImage("contact_banner", imgBanner)})` }}
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="container mx-auto px-6 text-center relative z-10">

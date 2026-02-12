@@ -1,13 +1,20 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
-import imgBanner from "@/assets/hero-1.jpg";
-import imgMission from "@/assets/hero-2.jpg";
-import imgVision from "@/assets/hero-3.jpg";
-import imgChairman from "@/assets/cat-furniture.jpg";
+import { useSiteImages } from "@/hooks/useSiteImages";
+import imgBannerFallback from "@/assets/hero-1.jpg";
+import imgMissionFallback from "@/assets/hero-2.jpg";
+import imgVisionFallback from "@/assets/hero-3.jpg";
+import imgChairmanFallback from "@/assets/cat-furniture.jpg";
 
 export default function About() {
   const { t } = useLanguage();
+  const { getImage } = useSiteImages();
+
+  const imgBanner = getImage("about_banner", imgBannerFallback);
+  const imgMission = getImage("about_mission", imgMissionFallback);
+  const imgVision = getImage("about_vision", imgVisionFallback);
+  const imgChairman = getImage("about_chairman", imgChairmanFallback);
 
   const stats = [
     { label: t("stat_product_lines"), value: "500+" },
@@ -25,7 +32,6 @@ export default function About() {
 
   return (
     <Layout>
-      {/* Banner */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
@@ -41,7 +47,6 @@ export default function About() {
         </motion.h1>
       </div>
 
-      {/* Stats Bar */}
       <div className="bg-neutral-900 py-12">
         <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, i) => (
@@ -59,7 +64,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Story */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
@@ -74,7 +78,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Chairman Message */}
       <section className="py-24 bg-neutral-50 overflow-hidden">
         <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -103,7 +106,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Mission & Vision */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12">
           <motion.div 
@@ -131,7 +133,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Leadership */}
       <section className="py-24 bg-neutral-50">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-serif font-bold mb-16 underline decoration-primary underline-offset-8">{t("our_leadership")}</h2>

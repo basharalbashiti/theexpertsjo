@@ -386,7 +386,15 @@ export async function registerRoutes(
 
   app.put("/api/site-images/:key", requireAuth, upload.single("image"), async (req, res) => {
     try {
-      const allowedKeys = ["hero1", "hero2", "hero3", "logo"];
+      const allowedKeys = [
+        "hero1", "hero2", "hero3", "logo",
+        "products_banner", "contact_banner",
+        "about_banner", "about_mission", "about_vision", "about_chairman",
+        "partners_banner", "partners_cta",
+        "sustainability_banner", "sustainability_practices",
+        "category_banner",
+        "room_service_banner", "room_service_items",
+      ];
       const key = req.params.key;
       if (!allowedKeys.includes(key)) {
         return res.status(400).json({ message: "Invalid image key. Allowed: " + allowedKeys.join(", ") });

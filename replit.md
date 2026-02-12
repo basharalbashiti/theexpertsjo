@@ -4,6 +4,8 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-02-12: Expanded Site Images manager to cover all page banners (Products, Contact, About, Partners, Sustainability, Room Service, Category Detail) — 17 manageable image slots organized by page sections
+- 2026-02-12: Added useSiteImages hook with caching + invalidation for dynamic page images
 - 2026-02-12: Added Site Images manager — admin can upload/change hero banners and site logo from dashboard
 - 2026-02-11: Added "Our Brands" feature — new brands table, admin BrandManager, homepage logo slider uses brands
 - 2026-02-11: Improved Site Content editor section grouping (items properly sorted into sections)

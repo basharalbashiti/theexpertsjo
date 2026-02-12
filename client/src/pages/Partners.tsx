@@ -2,8 +2,9 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import { useEffect, useState } from "react";
-import imgBanner from "@/assets/partners-banner-outdoor.png";
-import imgCTA from "@/assets/partnership-bespoke.png";
+import { useSiteImages } from "@/hooks/useSiteImages";
+import imgBannerFallback from "@/assets/partners-banner-outdoor.png";
+import imgCTAFallback from "@/assets/partnership-bespoke.png";
 
 interface Partner {
   id: number;
@@ -21,6 +22,7 @@ interface Client {
 
 export default function Partners() {
   const { t, lang } = useLanguage();
+  const { getImage } = useSiteImages();
   const [partners, setPartners] = useState<Partner[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
 
@@ -28,6 +30,9 @@ export default function Partners() {
     fetch("/api/partners").then(r => r.json()).then(setPartners).catch(() => {});
     fetch("/api/clients").then(r => r.json()).then(setClients).catch(() => {});
   }, []);
+
+  const imgBanner = getImage("partners_banner", imgBannerFallback);
+  const imgCTA = getImage("partners_cta", imgCTAFallback);
 
   return (
     <Layout>

@@ -4,7 +4,8 @@ import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
 import { ArrowLeft, ArrowRight, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
-import imgBanner from "@/assets/category-generic-banner.png";
+import { useSiteImages } from "@/hooks/useSiteImages";
+import imgBannerFallback from "@/assets/category-generic-banner.png";
 
 interface Category {
   id: number;
@@ -28,6 +29,7 @@ interface Product {
 
 export default function CategoryDetail({ slug }: { slug: string }) {
   const { lang, t } = useLanguage();
+  const { getImage } = useSiteImages();
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,6 +53,8 @@ export default function CategoryDetail({ slug }: { slug: string }) {
   const title = category
     ? (lang === "AR" && category.nameAr ? category.nameAr : category.nameEn)
     : "";
+
+  const defaultBanner = getImage("category_banner", imgBannerFallback);
 
   if (loading) {
     return (
@@ -80,7 +84,7 @@ export default function CategoryDetail({ slug }: { slug: string }) {
       <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-16">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${category.imageUrl || imgBanner})` }}
+          style={{ backgroundImage: `url(${category.imageUrl || defaultBanner})` }}
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="container mx-auto px-6 text-center relative z-10">

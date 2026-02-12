@@ -1,15 +1,19 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
-import imgBanner from "@/assets/hero-3.jpg";
-import imgPractices from "@/assets/hero-2.jpg";
+import { useSiteImages } from "@/hooks/useSiteImages";
+import imgBannerFallback from "@/assets/hero-3.jpg";
+import imgPracticesFallback from "@/assets/hero-2.jpg";
 
 export default function Sustainability() {
   const { t } = useLanguage();
+  const { getImage } = useSiteImages();
+
+  const imgBanner = getImage("sustainability_banner", imgBannerFallback);
+  const imgPractices = getImage("sustainability_practices", imgPracticesFallback);
 
   return (
     <Layout>
-      {/* Banner */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"

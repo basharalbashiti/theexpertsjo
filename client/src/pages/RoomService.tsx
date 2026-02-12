@@ -2,15 +2,18 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
-import { ShoppingBag, ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
-import imgBanner from "@/assets/room-service-banner.png";
-import imgItems from "@/assets/room-service-items.png";
+import { ShoppingBag, ArrowLeft, ArrowRight } from "lucide-react";
+import { useSiteImages } from "@/hooks/useSiteImages";
+import imgBannerFallback from "@/assets/room-service-banner.png";
 import imgTrolley from "@/assets/rs-trolley.png";
 import imgCarafe from "@/assets/rs-carafe.png";
 import imgCloche from "@/assets/rs-cloche.png";
 
 export default function RoomService() {
   const { t, lang } = useLanguage();
+  const { getImage } = useSiteImages();
+
+  const imgBanner = getImage("room_service_banner", imgBannerFallback);
 
   const products = [
     { 
@@ -132,4 +135,3 @@ export default function RoomService() {
     </Layout>
   );
 }
-

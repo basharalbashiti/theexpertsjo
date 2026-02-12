@@ -191,6 +191,19 @@ export async function seedDatabase() {
       { src: "client/src/assets/hero-2.jpg", dest: "hero-2.jpg", key: "hero2", label: "Hero Banner 2" },
       { src: "client/src/assets/hero-3.jpg", dest: "hero-3.jpg", key: "hero3", label: "Hero Banner 3" },
       { src: "client/src/assets/logo.png", dest: "site-logo.png", key: "logo", label: "Site Logo" },
+      { src: "client/src/assets/products-banner-bedroom.png", dest: "products-banner.png", key: "products_banner", label: "Products Page Banner" },
+      { src: "client/src/assets/contact-banner-ultra-clear.png", dest: "contact-banner.png", key: "contact_banner", label: "Contact Page Banner" },
+      { src: "client/src/assets/hero-1.jpg", dest: "about-banner.jpg", key: "about_banner", label: "About Page Banner" },
+      { src: "client/src/assets/hero-2.jpg", dest: "about-mission.jpg", key: "about_mission", label: "About Mission Image" },
+      { src: "client/src/assets/hero-3.jpg", dest: "about-vision.jpg", key: "about_vision", label: "About Vision Image" },
+      { src: "client/src/assets/cat-furniture.jpg", dest: "about-chairman.jpg", key: "about_chairman", label: "About Chairman Image" },
+      { src: "client/src/assets/partners-banner-outdoor.png", dest: "partners-banner.png", key: "partners_banner", label: "Partners Page Banner" },
+      { src: "client/src/assets/partnership-bespoke.png", dest: "partners-cta.png", key: "partners_cta", label: "Partners CTA Image" },
+      { src: "client/src/assets/hero-3.jpg", dest: "sustainability-banner.jpg", key: "sustainability_banner", label: "Sustainability Banner" },
+      { src: "client/src/assets/hero-2.jpg", dest: "sustainability-practices.jpg", key: "sustainability_practices", label: "Sustainability Practices Image" },
+      { src: "client/src/assets/category-generic-banner.png", dest: "category-banner.png", key: "category_banner", label: "Category Detail Banner" },
+      { src: "client/src/assets/room-service-banner.png", dest: "room-service-banner.png", key: "room_service_banner", label: "Room Service Banner" },
+      { src: "client/src/assets/room-service-items.png", dest: "room-service-items.png", key: "room_service_items", label: "Room Service Items Image" },
     ];
     for (const asset of assetsToCopy) {
       const destPath = path.join(uploadsDir, asset.dest);
@@ -206,7 +219,7 @@ export async function seedDatabase() {
         label: asset.label,
       });
     }
-    console.log("Seeded 4 site images");
+    console.log(`Seeded ${assetsToCopy.length} site images`);
   }
 
   const existingBrands = await storage.getAllBrands();
