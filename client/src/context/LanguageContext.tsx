@@ -97,6 +97,10 @@ const fallbackTranslations: Record<Language, Record<string, string>> = {
     looking_specific: "Looking for something specific?",
     contact_sales: "Contact Sales Team",
     back_to_categories: "Back to All Categories",
+    about_hero_desc: "Discover our story, mission, and the values that drive us to deliver excellence in hospitality.",
+    sustainability_hero_desc: "Committed to eco-friendly practices and responsible sourcing for a better future.",
+    room_service_hero_desc: "Elevating in-room dining with premium service equipment and elegant presentation.",
+    category_hero_desc: "Browse our curated selection of premium hospitality products.",
   },
   AR: {},
 };

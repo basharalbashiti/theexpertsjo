@@ -26,6 +26,7 @@ export default function CategoryPage({ title, products }: { title: string, produ
           >
             {title}
           </motion.h1>
+          <p className="max-w-2xl mx-auto text-white/80">{t("category_hero_desc")}</p>
         </div>
       </div>
 

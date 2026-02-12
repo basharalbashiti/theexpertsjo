@@ -25,9 +25,7 @@ export default function Categories() {
           >
             {t("our_products").split(" ")[0]} <span className="text-primary">{t("our_products").split(" ").slice(1).join(" ")}</span>
           </motion.h1>
-          <p className="max-w-2xl mx-auto text-white/80">
-            {t("explore_range")}
-          </p>
+          <p className="max-w-2xl mx-auto text-white/80">{t("explore_range")}</p>
         </div>
       </div>
 

@@ -25,7 +25,7 @@ export default function Contact() {
           >
             {t("contact").split(" ")[0]} <span className="text-primary">{t("contact").split(" ").slice(1).join(" ")}</span>
           </motion.h1>
-          <p className="text-white/80 uppercase tracking-[0.2em] text-sm">{t("get_in_touch")}</p>
+          <p className="max-w-2xl mx-auto text-white/80">{t("get_in_touch")}</p>
         </div>
       </div>
 

@@ -52,7 +52,7 @@ export default function RoomService() {
           >
             {t("cat_room_service")}
           </motion.h1>
-          <p className="text-white/80 uppercase tracking-[0.2em] text-sm">Elevating In-Room Dining</p>
+          <p className="max-w-2xl mx-auto text-white/80">{t("room_service_hero_desc")}</p>
         </div>
       </div>
 

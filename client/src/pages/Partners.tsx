@@ -50,7 +50,7 @@ export default function Partners() {
           >
             {t("partners_clients").split(" ")[0]} <span className="text-primary">{t("partners_clients").split(" ").slice(1).join(" ")}</span>
           </motion.h1>
-          <p className="text-white/80 uppercase tracking-[0.2em] text-sm">{t("trusted_by")}</p>
+          <p className="max-w-2xl mx-auto text-white/80">{t("trusted_by")}</p>
         </div>
       </div>
 
