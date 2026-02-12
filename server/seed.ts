@@ -295,10 +295,10 @@ export async function seedDatabase() {
   const existingLeaders = await storage.getAllLeadership();
   if (existingLeaders.length === 0) {
     const defaultLeaders = [
-      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", sortOrder: 1 },
-      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", sortOrder: 2 },
-      { nameEn: "Marwan Abu Sakha", nameAr: "مروان أبو سخا", roleEn: "Group Corporate Development Manager", roleAr: "مدير تطوير المجموعة", sortOrder: 3 },
-      { nameEn: "Khaled Ghunaim", nameAr: "خالد غنيم", roleEn: "General Manager - Jordan", roleAr: "مدير عام - الأردن", sortOrder: 4 },
+      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", phone: "+962 79 5779345", email: "alaa@theexpertsjo.com", sortOrder: 1 },
+      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", phone: "+962 79 0484745", email: "sales@theexpertsjo.com", sortOrder: 2 },
+      { nameEn: "Marwan Abu Sakha", nameAr: "مروان أبو سخا", roleEn: "Group Corporate Development Manager", roleAr: "مدير تطوير المجموعة", phone: "", email: "", sortOrder: 3 },
+      { nameEn: "Khaled Ghunaim", nameAr: "خالد غنيم", roleEn: "General Manager - Jordan", roleAr: "مدير عام - الأردن", phone: "", email: "", sortOrder: 4 },
     ];
     for (const leader of defaultLeaders) {
       await storage.createLeader(leader);

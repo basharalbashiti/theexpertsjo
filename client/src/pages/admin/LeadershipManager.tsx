@@ -25,6 +25,8 @@ export default function LeadershipManager() {
   const [nameAr, setNameAr] = useState("");
   const [roleEn, setRoleEn] = useState("");
   const [roleAr, setRoleAr] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -40,6 +42,8 @@ export default function LeadershipManager() {
       formData.append("nameAr", nameAr);
       formData.append("roleEn", roleEn);
       formData.append("roleAr", roleAr);
+      formData.append("phone", phone);
+      formData.append("email", email);
       formData.append("sortOrder", sortOrder);
       if (imageFile) formData.append("image", imageFile);
       const res = await fetch("/api/leadership", {
@@ -67,6 +71,8 @@ export default function LeadershipManager() {
       formData.append("nameAr", nameAr);
       formData.append("roleEn", roleEn);
       formData.append("roleAr", roleAr);
+      formData.append("phone", phone);
+      formData.append("email", email);
       formData.append("sortOrder", sortOrder);
       if (imageFile) formData.append("image", imageFile);
       const res = await fetch(`/api/leadership/${id}`, {
@@ -112,6 +118,8 @@ export default function LeadershipManager() {
     setNameAr("");
     setRoleEn("");
     setRoleAr("");
+    setPhone("");
+    setEmail("");
     setSortOrder("0");
     setImageFile(null);
   };
@@ -127,6 +135,8 @@ export default function LeadershipManager() {
     setNameAr(leader.nameAr);
     setRoleEn(leader.roleEn);
     setRoleAr(leader.roleAr);
+    setPhone(leader.phone || "");
+    setEmail(leader.email || "");
     setSortOrder(String(leader.sortOrder));
     setImageFile(null);
     setDialogOpen(true);
@@ -189,6 +199,12 @@ export default function LeadershipManager() {
               {leader.nameAr && <p className="text-sm text-neutral-500" dir="rtl">{leader.nameAr}</p>}
               <p className="text-xs text-primary uppercase tracking-widest mt-1">{leader.roleEn}</p>
               {leader.roleAr && <p className="text-xs text-neutral-400 mt-0.5" dir="rtl">{leader.roleAr}</p>}
+              {(leader.phone || leader.email) && (
+                <div className="mt-2 text-xs text-neutral-500 space-y-0.5">
+                  {leader.phone && <p>Tel: {leader.phone}</p>}
+                  {leader.email && <p>{leader.email}</p>}
+                </div>
+              )}
             </div>
             <p className="text-xs text-neutral-400">{t("sort_order")}: {leader.sortOrder}</p>
             <div className="flex gap-2">
@@ -271,6 +287,29 @@ export default function LeadershipManager() {
                   onChange={(e) => setRoleAr(e.target.value)}
                   placeholder="المنصب بالعربية"
                   dir="rtl"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="leader-phone">{t("phone")}</Label>
+                <Input
+                  id="leader-phone"
+                  data-testid="input-leader-phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+962 79 1234567"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="leader-email">{t("email_address")}</Label>
+                <Input
+                  id="leader-email"
+                  data-testid="input-leader-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@theexpertsjo.com"
                 />
               </div>
             </div>

@@ -513,7 +513,7 @@ export async function registerRoutes(
 
   app.post("/api/leadership", requireAuth, upload.single("image"), async (req, res) => {
     try {
-      const { nameEn, nameAr, roleEn, roleAr, sortOrder } = req.body;
+      const { nameEn, nameAr, roleEn, roleAr, phone, email, sortOrder } = req.body;
       if (!nameEn || !roleEn) {
         return res.status(400).json({ message: "Name and role are required" });
       }
@@ -526,6 +526,8 @@ export async function registerRoutes(
         nameAr: nameAr || "",
         roleEn,
         roleAr: roleAr || "",
+        phone: phone || "",
+        email: email || "",
         imageUrl,
         sortOrder: parseInt(sortOrder) || 0,
       });
@@ -543,6 +545,8 @@ export async function registerRoutes(
       if (req.body.nameAr !== undefined) updates.nameAr = req.body.nameAr;
       if (req.body.roleEn !== undefined) updates.roleEn = req.body.roleEn;
       if (req.body.roleAr !== undefined) updates.roleAr = req.body.roleAr;
+      if (req.body.phone !== undefined) updates.phone = req.body.phone;
+      if (req.body.email !== undefined) updates.email = req.body.email;
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       const leader = await storage.updateLeader(id, updates);

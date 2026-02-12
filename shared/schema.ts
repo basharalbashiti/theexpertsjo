@@ -148,6 +148,8 @@ export const leadership = pgTable("leadership", {
   nameAr: text("name_ar").notNull().default(""),
   roleEn: text("role_en").notNull(),
   roleAr: text("role_ar").notNull().default(""),
+  phone: text("phone").notNull().default(""),
+  email: text("email").notNull().default(""),
   imageUrl: text("image_url").notNull().default(""),
   sortOrder: integer("sort_order").notNull().default(0),
 });
@@ -157,6 +159,8 @@ export const insertLeadershipSchema = createInsertSchema(leadership).pick({
   nameAr: true,
   roleEn: true,
   roleAr: true,
+  phone: true,
+  email: true,
   imageUrl: true,
   sortOrder: true,
 });

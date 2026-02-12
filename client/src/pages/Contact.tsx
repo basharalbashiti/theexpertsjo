@@ -1,9 +1,33 @@
 import { Layout } from "@/components/layout/Layout";
-import { MapPin, Send, User, Mail, FileText, MessageSquare } from "lucide-react";
+import { MapPin, Send, User, Mail, FileText, MessageSquare, Phone } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
+
+interface Leader {
+  id: number;
+  nameEn: string;
+  nameAr: string;
+  roleEn: string;
+  roleAr: string;
+  phone: string;
+  email: string;
+  imageUrl: string;
+  sortOrder: number;
+}
 
 export default function Contact() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+
+  const { data: leaders = [] } = useQuery<Leader[]>({
+    queryKey: ["/api/leadership"],
+    queryFn: async () => {
+      const res = await fetch("/api/leadership");
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const keyContacts = leaders.filter((l) => l.phone || l.email);
 
   return (
     <Layout>
@@ -19,6 +43,7 @@ export default function Contact() {
                   <User size={16} className="text-neutral-300 flex-shrink-0" />
                   <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("full_name")}</label>
                   <input
+                    data-testid="input-contact-name"
                     type="text"
                     className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
                   />
@@ -27,6 +52,7 @@ export default function Contact() {
                   <Mail size={16} className="text-neutral-300 flex-shrink-0" />
                   <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[110px]">{t("email_addr")}</label>
                   <input
+                    data-testid="input-contact-email"
                     type="email"
                     className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
                   />
@@ -37,6 +63,7 @@ export default function Contact() {
                 <FileText size={16} className="text-neutral-300 flex-shrink-0" />
                 <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("subject")}</label>
                 <input
+                  data-testid="input-contact-subject"
                   type="text"
                   className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
                 />
@@ -46,13 +73,14 @@ export default function Contact() {
                 <MessageSquare size={16} className="text-neutral-300 flex-shrink-0 mt-3" />
                 <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px] pt-3">{t("message")}</label>
                 <textarea
+                  data-testid="input-contact-message"
                   rows={5}
                   className="w-full border-2 border-neutral-200 rounded-lg py-3 px-3 focus:border-primary outline-none transition-colors bg-neutral-50/50 text-neutral-800 resize-none"
                 />
               </div>
 
               <div className="text-center pt-2">
-                <button className="inline-flex items-center gap-3 bg-primary text-white px-14 py-4 rounded-lg uppercase text-xs font-bold tracking-widest hover:bg-black transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+                <button data-testid="button-contact-submit" className="inline-flex items-center gap-3 bg-primary text-white px-14 py-4 rounded-lg uppercase text-xs font-bold tracking-widest hover:bg-black transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
                   <Send size={16} />
                   {t("submit")}
                 </button>
@@ -103,27 +131,43 @@ export default function Contact() {
               </div>
             </div>
 
-            <div>
-              <h2 className="text-3xl font-serif font-bold mb-8 text-primary">Key Contacts</h2>
-              <div className="grid gap-8">
-                <div className="space-y-2">
-                  <h4 className="font-serif font-bold text-xl text-neutral-900">Alaa Abdin</h4>
-                  <p className="text-primary text-xs uppercase tracking-widest font-bold">General Manager</p>
-                  <div className="text-sm text-neutral-600 space-y-1">
-                    <p>Tel: +962 79 5779345</p>
-                    <p>Email: alaa@theexpertsjo.com</p>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-serif font-bold text-xl text-neutral-900">Rafat Daood</h4>
-                  <p className="text-primary text-xs uppercase tracking-widest font-bold">Sales Manager</p>
-                  <div className="text-sm text-neutral-600 space-y-1">
-                    <p>Tel: +962 79 0484745</p>
-                    <p>Email: Sales@theexpertsjo.com</p>
-                  </div>
+            {keyContacts.length > 0 && (
+              <div>
+                <h2 data-testid="text-key-contacts" className="text-3xl font-serif font-bold mb-8 text-primary">
+                  {lang === "AR" ? "جهات الاتصال الرئيسية" : "Key Contacts"}
+                </h2>
+                <div className="grid gap-8">
+                  {keyContacts.map((leader) => (
+                    <div key={leader.id} data-testid={`contact-leader-${leader.id}`} className="space-y-2">
+                      <h4 className="font-serif font-bold text-xl text-neutral-900">
+                        {lang === "AR" && leader.nameAr ? leader.nameAr : leader.nameEn}
+                      </h4>
+                      <p className="text-primary text-xs uppercase tracking-widest font-bold">
+                        {lang === "AR" && leader.roleAr ? leader.roleAr : leader.roleEn}
+                      </p>
+                      <div className="text-sm text-neutral-600 space-y-1">
+                        {leader.phone && (
+                          <p className="flex items-center gap-2">
+                            <Phone size={14} className="text-neutral-400" />
+                            <a href={`tel:${leader.phone.replace(/\s/g, '')}`} className="hover:text-primary transition-colors">
+                              {leader.phone}
+                            </a>
+                          </p>
+                        )}
+                        {leader.email && (
+                          <p className="flex items-center gap-2">
+                            <Mail size={14} className="text-neutral-400" />
+                            <a href={`mailto:${leader.email}`} className="hover:text-primary transition-colors">
+                              {leader.email}
+                            </a>
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

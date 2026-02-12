@@ -45,7 +45,7 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - `clients` - Hotel brand clients like Four Seasons, Marriott (id, name, image_url, sort_order)
 - `categories` - Product categories (id, name_en, name_ar, slug, image_url, sort_order)
 - `products` - Products (id, name_en, name_ar, description_en, description_ar, image_url, category_id, sort_order)
-- `leadership` - Leadership team members (id, name_en, name_ar, role_en, role_ar, image_url, sort_order)
+- `leadership` - Leadership team members (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order)
 - `quick_links` - Footer quick links (id, label_en, label_ar, url, sort_order, visible)
 
 ### Admin Portal

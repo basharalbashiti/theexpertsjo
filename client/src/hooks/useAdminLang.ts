@@ -230,6 +230,8 @@ const translations: Record<string, { EN: string; AR: string }> = {
   no_leaders: { EN: "No leadership members yet. Add your first leader.", AR: "لا يوجد أعضاء في فريق القيادة بعد. أضف أول قائد." },
   role_en: { EN: "Role (English)", AR: "المنصب (بالإنجليزية)" },
   role_ar: { EN: "Role (Arabic)", AR: "المنصب (بالعربية)" },
+  phone: { EN: "Phone", AR: "الهاتف" },
+  email_address: { EN: "Email", AR: "البريد الإلكتروني" },
   photo: { EN: "Photo", AR: "الصورة" },
 
   quick_links: { EN: "Quick Links", AR: "روابط سريعة" },
