@@ -20,7 +20,9 @@ export function Footer() {
     queryKey: ["/api/site-images"],
     queryFn: getQueryFn({ on401: "returnNull" }),
   });
-  const logo = siteImages.find((i) => i.key === "logo")?.imageUrl || defaultLogo;
+  const logoImg = siteImages.find((i) => i.key === "logo");
+  const logoRemoved = logoImg && logoImg.imageUrl === "";
+  const logo = logoRemoved ? "" : (logoImg?.imageUrl || defaultLogo);
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -43,7 +45,11 @@ export function Footer() {
           <div className="md:col-span-1">
             <Link href="/">
               <a className="block mb-6">
-                <img src={logo} alt="The Experts Logo" className="h-14 w-auto brightness-0 invert" />
+                {logo ? (
+                  <img src={logo} alt="The Experts Logo" className="h-14 w-auto brightness-0 invert" />
+                ) : (
+                  <span className="text-xl font-serif font-bold tracking-wider text-white">THE EXPERTS</span>
+                )}
               </a>
             </Link>
             <p className="text-neutral-500 text-sm leading-relaxed">
