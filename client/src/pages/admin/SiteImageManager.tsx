@@ -43,6 +43,7 @@ const imageSections = [
       { key: "hero1", label: "Hero Banner 1", description: "First hero slide on the homepage" },
       { key: "hero2", label: "Hero Banner 2", description: "Second hero slide on the homepage" },
       { key: "hero3", label: "Hero Banner 3", description: "Third hero slide on the homepage" },
+      { key: "hero4", label: "Hero Banner 4", description: "Fourth hero slide on the homepage (optional)" },
     ],
   },
   {
