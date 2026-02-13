@@ -28,6 +28,7 @@ export default function LeadershipManager() {
   const [sortOrder, setSortOrder] = useState("0");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const leaderImageRef = useRef<HTMLInputElement>(null);
   const [avatarUploadId, setAvatarUploadId] = useState<number | null>(null);
 
   const { data: leaders = [], isLoading } = useQuery<Leadership[]>({
@@ -372,17 +373,14 @@ export default function LeadershipManager() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="leader-image">{t("photo")} <span className="text-neutral-400 font-normal">({t("optional") || "Optional"})</span></Label>
-                {editingLeader?.imageUrl && !imageFile && (
-                  <img src={editingLeader.imageUrl} alt="" className="w-12 h-12 rounded-full object-cover border" />
-                )}
-                <Input
-                  id="leader-image"
-                  data-testid="input-leader-image"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                />
+                <Label>{t("photo")} <span className="text-neutral-400 font-normal">({t("optional") || "Optional"})</span></Label>
+                <input ref={leaderImageRef} type="file" accept="image/*" className="hidden" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+                <button type="button" data-testid="input-leader-image" onClick={() => leaderImageRef.current?.click()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-neutral-300 text-sm font-medium text-primary hover:border-primary hover:bg-primary/5 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                  {imageFile ? imageFile.name : t("upload_photo")}
+                </button>
+                {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-12 h-12 rounded-full object-cover border mt-2" />}
+                {editingLeader?.imageUrl && !imageFile && <img src={editingLeader.imageUrl} alt="Current" className="w-12 h-12 rounded-full object-cover border mt-2" />}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="leader-sort">{t("sort_order")}</Label>

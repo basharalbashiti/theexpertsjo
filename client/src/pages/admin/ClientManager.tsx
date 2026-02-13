@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getQueryFn, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ export default function ClientManager() {
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [name, setName] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const { data: clientsList = [], isLoading } = useQuery<Client[]>({
     queryKey: ["/api/clients"],
@@ -209,17 +210,14 @@ export default function ClientManager() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="client-image">{t("logo_image")}</Label>
-              <Input
-                id="client-image"
-                data-testid="input-client-image"
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-              />
-              {editingClient?.imageUrl && !imageFile && (
-                <p className="text-xs text-neutral-400">{t("current_logo_kept")}</p>
-              )}
+              <Label>{t("logo_image")}</Label>
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+              <button type="button" data-testid="input-client-image" onClick={() => fileRef.current?.click()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-neutral-300 text-sm font-medium text-primary hover:border-primary hover:bg-primary/5 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                {imageFile ? imageFile.name : t("upload_photo")}
+              </button>
+              {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-16 h-16 object-cover rounded-lg border mt-2" />}
+              {editingClient?.imageUrl && !imageFile && <img src={editingClient.imageUrl} alt="Current" className="w-16 h-16 object-cover rounded-lg border mt-2" />}
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={resetForm}>{t("cancel")}</Button>

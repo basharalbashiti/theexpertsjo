@@ -113,6 +113,7 @@ const translations: Record<string, { EN: string; AR: string }> = {
 
   manage_banners_logo: { EN: "Manage hero banners and site images", AR: "إدارة صور البانر الرئيسية وصور الموقع" },
   image_updated: { EN: "Image updated successfully.", AR: "تم تحديث الصورة بنجاح." },
+  upload_photo: { EN: "Upload photo", AR: "تحميل صورة" },
   upload_failed: { EN: "Failed to upload", AR: "فشل التحميل" },
   homepage: { EN: "Homepage", AR: "الصفحة الرئيسية" },
   products_page: { EN: "Products Page", AR: "صفحة المنتجات" },

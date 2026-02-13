@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getQueryFn, queryClient } from "@/lib/queryClient";
 import { Input } from "@/components/ui/input";
@@ -170,17 +170,11 @@ export default function SiteImageManager() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <Label className="text-xs font-medium text-neutral-500">Upload New Image</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          data-testid={`input-image-${slot.key}`}
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleFileChange(slot.key, slot.label, e.target.files?.[0])}
-                          disabled={uploadMutation.isPending}
-                          className="text-sm"
-                        />
-                      </div>
+                      <input id={`file-${slot.key}`} type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(slot.key, slot.label, e.target.files?.[0])} disabled={uploadMutation.isPending} />
+                      <button type="button" data-testid={`input-image-${slot.key}`} onClick={() => document.getElementById(`file-${slot.key}`)?.click()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-neutral-300 text-sm font-medium text-primary hover:border-primary hover:bg-primary/5 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                        {t("upload_photo")}
+                      </button>
                     </div>
                   </div>
                 </div>
