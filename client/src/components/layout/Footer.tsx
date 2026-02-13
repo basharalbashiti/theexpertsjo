@@ -45,11 +45,7 @@ export function Footer() {
           <div className="md:col-span-1">
             <Link href="/">
               <a className="block mb-6">
-                {logo ? (
-                  <img src={logo} alt="The Experts Logo" className="h-14 w-auto brightness-0 invert" />
-                ) : (
-                  <span className="text-xl font-serif font-bold tracking-wider text-white">THE EXPERTS</span>
-                )}
+                {logo && <img src={logo} alt="The Experts Logo" className="h-14 w-auto brightness-0 invert" />}
               </a>
             </Link>
             <p className="text-neutral-500 text-sm leading-relaxed">

@@ -84,11 +84,7 @@ export function Navbar() {
         <div className="container mx-auto px-6 flex justify-between items-center">
           <Link href="/">
             <a className="flex items-center space-x-2 cursor-pointer">
-              {logo ? (
-                <img src={logo} alt="The Experts Logo" className={cn("h-14 w-auto transition-all", isScrolled || needsDarkNav ? "brightness-100" : "brightness-0 invert")} />
-              ) : (
-                <span className={cn("text-xl font-serif font-bold tracking-wider transition-colors", isScrolled || needsDarkNav ? "text-neutral-900" : "text-white")}>THE EXPERTS</span>
-              )}
+              {logo && <img src={logo} alt="The Experts Logo" className={cn("h-14 w-auto transition-all", isScrolled || needsDarkNav ? "brightness-100" : "brightness-0 invert")} />}
             </a>
           </Link>
 
