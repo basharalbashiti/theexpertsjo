@@ -37,6 +37,7 @@ const defaultTranslations: Record<string, { en: string; ar: string }> = {
   stat_projects: { en: "Projects", ar: "مشروع" },
   stat_clients: { en: "Clients", ar: "عميل" },
   footer_desc: { en: "Supplying comfort and quality to your guests. Premium hospitality products across the Middle East.", ar: "توريد الراحة والجودة لضيوفك. منتجات ضيافة متميزة في جميع أنحاء الشرق الأوسط." },
+  footer_text: { en: "", ar: "" },
   quick_links: { en: "Quick Links", ar: "روابط سريعة" },
   categories: { en: "Categories", ar: "الأقسام" },
   contact_us: { en: "Contact Us", ar: "اتصل بنا" },

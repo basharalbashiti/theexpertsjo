@@ -51,6 +51,11 @@ export function Footer() {
             <p className="text-neutral-500 text-sm leading-relaxed">
               {t("footer_desc")}
             </p>
+            {t("footer_text") && (
+              <p className="text-neutral-400 text-sm leading-relaxed mt-4 pt-4 border-t border-neutral-800">
+                {t("footer_text")}
+              </p>
+            )}
           </div>
           
           <div>
@@ -61,7 +66,7 @@ export function Footer() {
                   <Link href={link.url}>
                     <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
                       <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
-                      {lang === "ar" ? (link.labelAr || link.labelEn) : link.labelEn}
+                      {lang === "AR" ? (link.labelAr || link.labelEn) : link.labelEn}
                     </a>
                   </Link>
                 </li>
@@ -77,7 +82,7 @@ export function Footer() {
                   <Link href={`/${cat.slug}`}>
                     <a className="text-sm text-neutral-500 hover:text-primary transition-colors inline-flex items-center gap-1.5 group">
                       <ChevronRight size={12} className="text-primary/50 group-hover:text-primary transition-colors" />
-                      {lang === "ar" ? cat.nameAr : cat.nameEn}
+                      {lang === "AR" ? cat.nameAr : cat.nameEn}
                     </a>
                   </Link>
                 </li>
