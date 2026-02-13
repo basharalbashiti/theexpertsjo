@@ -468,6 +468,12 @@ export default function ProductManager() {
                   accept="image/*"
                   onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                 />
+                {imageFile && (
+                  <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-20 h-20 object-cover rounded-lg border mt-2" />
+                )}
+                {editingProduct?.imageUrl && !imageFile && (
+                  <img src={editingProduct.imageUrl} alt="Current" className="w-20 h-20 object-cover rounded-lg border mt-2" />
+                )}
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-2">

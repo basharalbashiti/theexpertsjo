@@ -333,8 +333,11 @@ export default function CategoryManager() {
                 accept="image/*"
                 onChange={(e) => setImageFile(e.target.files?.[0] || null)}
               />
+              {imageFile && (
+                <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-20 h-20 object-cover rounded-lg border mt-2" />
+              )}
               {editingCategory?.imageUrl && !imageFile && (
-                <p className="text-xs text-neutral-400">{t("current_image_kept")}</p>
+                <img src={editingCategory.imageUrl} alt="Current" className="w-20 h-20 object-cover rounded-lg border mt-2" />
               )}
             </div>
             <div className="flex justify-end gap-2 pt-2">
