@@ -25,44 +25,46 @@ export function Hero() {
     return acc;
   }, {} as Record<string, string>);
 
-  const allSlides = [
-    {
-      id: 1,
-      image: imageMap["hero1"] || defaultHero1,
-      title: t("hero1_title"),
-      subtitle: t("hero1_subtitle"),
-      description: t("hero1_desc")
-    },
-    {
-      id: 2,
-      image: imageMap["hero2"] || defaultHero2,
-      title: t("hero2_title"),
-      subtitle: t("hero2_subtitle"),
-      description: t("hero2_desc")
-    },
-    {
-      id: 3,
-      image: imageMap["hero3"] || defaultHero3,
-      title: t("hero3_title"),
-      subtitle: t("hero3_subtitle"),
-      description: t("hero3_desc")
-    },
-    ...(imageMap["hero4"] ? [{
-      id: 4,
-      image: imageMap["hero4"],
-      title: t("hero4_title"),
-      subtitle: t("hero4_subtitle"),
-      description: t("hero4_desc")
-    }] : [])
+  const defaults: Record<string, string> = {
+    hero1: defaultHero1,
+    hero2: defaultHero2,
+    hero3: defaultHero3,
+  };
+  const heroData = [
+    { key: "hero1", id: 1, title: t("hero1_title"), subtitle: t("hero1_subtitle"), description: t("hero1_desc") },
+    { key: "hero2", id: 2, title: t("hero2_title"), subtitle: t("hero2_subtitle"), description: t("hero2_desc") },
+    { key: "hero3", id: 3, title: t("hero3_title"), subtitle: t("hero3_subtitle"), description: t("hero3_desc") },
+    { key: "hero4", id: 4, title: t("hero4_title"), subtitle: t("hero4_subtitle"), description: t("hero4_desc") },
   ];
-  const slides = allSlides;
+
+  const slides = heroData.filter((h) => {
+    const dbEntry = siteImages.find(si => si.key === h.key);
+    if (dbEntry) return dbEntry.imageUrl !== "";
+    return !!defaults[h.key];
+  }).map((h) => {
+    const dbEntry = siteImages.find(si => si.key === h.key);
+    return {
+      id: h.id,
+      image: (dbEntry && dbEntry.imageUrl) ? dbEntry.imageUrl : (defaults[h.key] || ""),
+      title: h.title,
+      subtitle: h.subtitle,
+      description: h.description,
+    };
+  });
 
   useEffect(() => {
+    if (currentSlide >= slides.length) setCurrentSlide(0);
+  }, [slides.length, currentSlide]);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
   }, [slides.length]);
+
+  if (slides.length === 0) return null;
 
   return (
     <section className="relative h-screen w-full overflow-hidden">

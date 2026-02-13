@@ -153,7 +153,10 @@ export default function SiteImageManager() {
           <h3 className="text-lg font-semibold text-neutral-700 border-b pb-2">{t(section.titleKey)}</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {section.slots.map((slot) => {
-              const currentUrl = imageMap[slot.key] || defaultImages[slot.key];
+              const dbEntry = siteImages.find(si => si.key === slot.key);
+              const isRemoved = dbEntry && dbEntry.imageUrl === "";
+              const currentUrl = isRemoved ? "" : (imageMap[slot.key] || defaultImages[slot.key]);
+              const hasCustomImage = dbEntry && dbEntry.imageUrl !== "";
               const isLogo = slot.key === "logo";
 
               return (
@@ -163,7 +166,14 @@ export default function SiteImageManager() {
                   className="bg-white rounded-xl border overflow-hidden"
                 >
                   <div className={`relative ${isLogo ? "h-40 bg-neutral-800 flex items-center justify-center" : "h-48"}`}>
-                    {isLogo ? (
+                    {isRemoved ? (
+                      <div className="w-full h-full bg-neutral-100 flex items-center justify-center">
+                        <div className="text-center text-neutral-400">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                          <p className="text-xs">{t("no_image") || "No image"}</p>
+                        </div>
+                      </div>
+                    ) : isLogo ? (
                       <img
                         src={currentUrl}
                         alt={slot.label}
@@ -196,7 +206,7 @@ export default function SiteImageManager() {
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
                           {t("upload_photo")}
                         </button>
-                        {imageMap[slot.key] && (
+                        {hasCustomImage && (
                           <button type="button" onClick={() => removeMutation.mutate(slot.key)} disabled={removeMutation.isPending} className="px-3 py-2.5 rounded-lg border border-red-200 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors" title={t("remove_image") || "Remove"}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                           </button>
