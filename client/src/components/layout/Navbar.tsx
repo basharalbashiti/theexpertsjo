@@ -109,9 +109,11 @@ export function Navbar() {
                     {/* Dropdown Menu */}
                     <div className="absolute top-full left-0 mt-0 w-72 bg-white/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 border border-neutral-100 py-6 z-50 rounded-xl">
                       <div className="flex flex-col px-2">
-                        <span className="px-6 py-2 text-[10px] uppercase tracking-widest font-bold text-neutral-400 block border-b border-neutral-100 mb-2">
-                          {t("categories")}
-                        </span>
+                        <Link href="/categories">
+                          <a className="px-6 py-2 text-[10px] uppercase tracking-widest font-bold text-neutral-400 block border-b border-neutral-100 mb-2 hover:text-neutral-600 transition-colors">
+                            {t("categories")}
+                          </a>
+                        </Link>
                         {link.subLinks?.map((sub) => (
                           <Link key={sub.href} href={sub.href}>
                             <a className="px-6 py-3 text-[13px] text-neutral-600 hover:text-primary hover:bg-neutral-50/80 transition-all duration-300 font-semibold tracking-wide flex items-center justify-between group/item rounded-lg mb-1">
