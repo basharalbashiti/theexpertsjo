@@ -37,6 +37,7 @@ export default function ProductManager() {
   const [categoryId, setCategoryId] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [removeImage, setRemoveImage] = useState(false);
   const prodImageRef = useRef<HTMLInputElement>(null);
   const [sortField, setSortField] = useState<SortField>("sortOrder");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
@@ -145,6 +146,7 @@ export default function ProductManager() {
       formData.append("categoryId", categoryId);
       formData.append("sortOrder", sortOrder);
       if (imageFile) formData.append("image", imageFile);
+      if (removeImage) formData.append("removeImage", "true");
       const res = await fetch(`/api/products/${id}`, {
         method: "PUT",
         body: formData,
@@ -192,6 +194,7 @@ export default function ProductManager() {
     setCategoryId("");
     setSortOrder("0");
     setImageFile(null);
+    setRemoveImage(false);
   };
 
   const openAdd = () => {
@@ -479,10 +482,16 @@ export default function ProductManager() {
                   {imageFile ? imageFile.name : t("upload_photo") || "Upload photo"}
                 </button>
                 {imageFile && (
-                  <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-20 h-20 object-cover rounded-lg border mt-2" />
+                  <div className="relative inline-block mt-2">
+                    <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-20 h-20 object-cover rounded-lg border" />
+                    <button type="button" onClick={() => { setImageFile(null); if (prodImageRef.current) prodImageRef.current.value = ""; }} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors">×</button>
+                  </div>
                 )}
-                {editingProduct?.imageUrl && !imageFile && (
-                  <img src={editingProduct.imageUrl} alt="Current" className="w-20 h-20 object-cover rounded-lg border mt-2" />
+                {editingProduct?.imageUrl && !imageFile && !removeImage && (
+                  <div className="relative inline-block mt-2">
+                    <img src={editingProduct.imageUrl} alt="Current" className="w-20 h-20 object-cover rounded-lg border" />
+                    <button type="button" onClick={() => setRemoveImage(true)} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors">×</button>
+                  </div>
                 )}
               </div>
             </div>

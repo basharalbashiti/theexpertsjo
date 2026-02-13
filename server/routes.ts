@@ -165,6 +165,7 @@ export async function registerRoutes(
       const updates: any = {};
       if (req.body.name) updates.name = req.body.name;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      else if (req.body.removeImage === "true") updates.imageUrl = "";
       const partner = await storage.updatePartner(id, updates);
       if (!partner) {
         return res.status(404).json({ message: "Partner not found" });
@@ -243,6 +244,7 @@ export async function registerRoutes(
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
       if (req.body.visible !== undefined) updates.visible = req.body.visible === "true" || req.body.visible === true;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      else if (req.body.removeImage === "true") updates.imageUrl = "";
       const category = await storage.updateCategory(id, updates);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
@@ -341,6 +343,7 @@ export async function registerRoutes(
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
       if (req.body.brand !== undefined) updates.brand = req.body.brand;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      else if (req.body.removeImage === "true") updates.imageUrl = "";
       const product = await storage.updateProduct(id, updates);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
@@ -373,7 +376,7 @@ export async function registerRoutes(
   app.put("/api/site-images/:key", requireAuth, upload.single("image"), async (req, res) => {
     try {
       const allowedKeys = [
-        "hero1", "hero2", "hero3", "logo",
+        "hero1", "hero2", "hero3", "hero4", "logo",
         "products_banner", "contact_banner",
         "about_banner", "about_mission", "about_vision", "about_chairman",
         "partners_banner", "partners_cta",
@@ -400,6 +403,16 @@ export async function registerRoutes(
       res.json(result);
     } catch (error) {
       res.status(500).json({ message: "Failed to update site image" });
+    }
+  });
+
+  app.delete("/api/site-images/:key", requireAuth, async (req, res) => {
+    try {
+      const key = req.params.key;
+      await storage.upsertSiteImage({ key, imageUrl: "", label: "" });
+      res.json({ message: "Image removed" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to remove image" });
     }
   });
 
@@ -432,6 +445,7 @@ export async function registerRoutes(
       const updates: any = {};
       if (req.body.name) updates.name = req.body.name;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      else if (req.body.removeImage === "true") updates.imageUrl = "";
       const brand = await storage.updateBrand(id, updates);
       if (!brand) {
         return res.status(404).json({ message: "Brand not found" });
@@ -483,6 +497,7 @@ export async function registerRoutes(
       const updates: any = {};
       if (req.body.name) updates.name = req.body.name;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      else if (req.body.removeImage === "true") updates.imageUrl = "";
       const client = await storage.updateClient(id, updates);
       if (!client) {
         return res.status(404).json({ message: "Client not found" });
@@ -556,6 +571,7 @@ export async function registerRoutes(
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
       if (req.body.visible !== undefined) updates.visible = req.body.visible === "true" || req.body.visible === true;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      else if (req.body.removeImage === "true") updates.imageUrl = "";
       const leader = await storage.updateLeader(id, updates);
       if (!leader) {
         return res.status(404).json({ message: "Leader not found" });
@@ -630,6 +646,7 @@ export async function registerRoutes(
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
       if (req.body.visible !== undefined) updates.visible = req.body.visible === "true" || req.body.visible === true;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
+      else if (req.body.removeImage === "true") updates.imageUrl = "";
       const contact = await storage.updateKeyContact(id, updates);
       if (!contact) {
         return res.status(404).json({ message: "Key contact not found" });

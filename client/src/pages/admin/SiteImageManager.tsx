@@ -116,6 +116,25 @@ export default function SiteImageManager() {
     },
   });
 
+  const removeMutation = useMutation({
+    mutationFn: async (key: string) => {
+      const res = await fetch(`/api/site-images/${key}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to remove");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/site-images"] });
+      invalidateSiteImages();
+      toast({ title: t("updated"), description: t("image_removed") || "Image removed" });
+    },
+    onError: (err: Error) => {
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
+    },
+  });
+
   const handleFileChange = (key: string, label: string, file: File | undefined) => {
     if (!file) return;
     setUploadingKey(key);
@@ -172,10 +191,17 @@ export default function SiteImageManager() {
 
                     <div className="space-y-1.5">
                       <input id={`file-${slot.key}`} type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(slot.key, slot.label, e.target.files?.[0])} disabled={uploadMutation.isPending} />
-                      <button type="button" data-testid={`input-image-${slot.key}`} onClick={() => document.getElementById(`file-${slot.key}`)?.click()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-neutral-300 text-sm font-medium text-primary hover:border-primary hover:bg-primary/5 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-                        {t("upload_photo")}
-                      </button>
+                      <div className="flex gap-2">
+                        <button type="button" data-testid={`input-image-${slot.key}`} onClick={() => document.getElementById(`file-${slot.key}`)?.click()} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-neutral-300 text-sm font-medium text-primary hover:border-primary hover:bg-primary/5 transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                          {t("upload_photo")}
+                        </button>
+                        {imageMap[slot.key] && (
+                          <button type="button" onClick={() => removeMutation.mutate(slot.key)} disabled={removeMutation.isPending} className="px-3 py-2.5 rounded-lg border border-red-200 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors" title={t("remove_image") || "Remove"}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

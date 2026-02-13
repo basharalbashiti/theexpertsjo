@@ -23,6 +23,7 @@ export default function PartnerManager() {
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [name, setName] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [removeImage, setRemoveImage] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const { data: partners = [], isLoading } = useQuery<Partner[]>({
@@ -58,6 +59,7 @@ export default function PartnerManager() {
       const formData = new FormData();
       formData.append("name", name);
       if (imageFile) formData.append("image", imageFile);
+      if (removeImage) formData.append("removeImage", "true");
       const res = await fetch(`/api/partners/${id}`, {
         method: "PUT",
         body: formData,
@@ -99,6 +101,7 @@ export default function PartnerManager() {
     setEditingPartner(null);
     setName("");
     setImageFile(null);
+    setRemoveImage(false);
   };
 
   const openAdd = () => {
@@ -210,8 +213,18 @@ export default function PartnerManager() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
                 {imageFile ? imageFile.name : t("upload_photo")}
               </button>
-              {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-16 h-16 object-cover rounded-lg border mt-2" />}
-              {editingPartner?.imageUrl && !imageFile && <img src={editingPartner.imageUrl} alt="Current" className="w-16 h-16 object-cover rounded-lg border mt-2" />}
+              {imageFile && (
+                <div className="relative inline-block mt-2">
+                  <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-16 h-16 object-cover rounded-lg border" />
+                  <button type="button" onClick={() => { setImageFile(null); if (fileRef.current) fileRef.current.value = ""; }} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors">×</button>
+                </div>
+              )}
+              {editingPartner?.imageUrl && !imageFile && !removeImage && (
+                <div className="relative inline-block mt-2">
+                  <img src={editingPartner.imageUrl} alt="Current" className="w-16 h-16 object-cover rounded-lg border" />
+                  <button type="button" onClick={() => setRemoveImage(true)} className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors">×</button>
+                </div>
+              )}
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={resetForm}>
