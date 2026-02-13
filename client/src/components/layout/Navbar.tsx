@@ -111,7 +111,7 @@ export function Navbar() {
                       <div className="flex flex-col px-2">
                         <Link href="/categories">
                           <a className="px-6 py-2 text-[10px] uppercase tracking-widest font-bold text-neutral-400 block border-b border-neutral-100 mb-2 hover:text-neutral-600 transition-colors">
-                            {t("categories")}
+                            {t("categories")}:
                           </a>
                         </Link>
                         {link.subLinks?.map((sub) => (
