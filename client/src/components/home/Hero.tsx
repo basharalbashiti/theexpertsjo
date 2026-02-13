@@ -25,7 +25,7 @@ export function Hero() {
     return acc;
   }, {} as Record<string, string>);
 
-  const slides = [
+  const allSlides = [
     {
       id: 1,
       image: imageMap["hero1"] || defaultHero1,
@@ -46,8 +46,16 @@ export function Hero() {
       title: t("hero3_title"),
       subtitle: t("hero3_subtitle"),
       description: t("hero3_desc")
-    }
+    },
+    ...(imageMap["hero4"] ? [{
+      id: 4,
+      image: imageMap["hero4"],
+      title: t("hero4_title"),
+      subtitle: t("hero4_subtitle"),
+      description: t("hero4_desc")
+    }] : [])
   ];
+  const slides = allSlides;
 
   useEffect(() => {
     const timer = setInterval(() => {
