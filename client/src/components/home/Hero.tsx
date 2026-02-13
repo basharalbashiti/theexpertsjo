@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/queryClient";
 import type { SiteImage } from "@shared/schema";
 
-import defaultHero1 from "@/assets/cat-spa-far.png";
+import defaultHero1 from "@/assets/hero-hotel-room.png";
 import defaultHero2 from "@/assets/hero-2.jpg";
 import defaultHero3 from "@/assets/hero-3.jpg";
 
