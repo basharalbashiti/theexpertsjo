@@ -62,7 +62,6 @@ export function Navbar() {
       isDropdown: true,
       subLinks: categorySubLinks,
     },
-    { name: t("info"), href: "/info" },
     { name: t("partners"), href: "/partners" },
     { name: t("contact"), href: "/contact" },
   ];
