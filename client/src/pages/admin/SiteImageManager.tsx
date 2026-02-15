@@ -33,6 +33,7 @@ const defaultImages: Record<string, string> = {
   partners_banner: defaultPartnersBanner,
   partners_cta: defaultPartnersCta,
   category_banner: defaultCategoryBanner,
+  home_section: defaultHero2,
 };
 
 const imageSections = [
@@ -44,6 +45,7 @@ const imageSections = [
       { key: "hero2", label: "Hero Banner 2", description: "Second hero slide on the homepage" },
       { key: "hero3", label: "Hero Banner 3", description: "Third hero slide on the homepage" },
       { key: "hero4", label: "Hero Banner 4", description: "Fourth hero slide on the homepage (optional)" },
+      { key: "home_section", label: "Home Section Image", description: "Image beside the 'All in One Place' text" },
     ],
   },
   {
