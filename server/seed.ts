@@ -258,7 +258,7 @@ export async function seedDatabase() {
   const defaultSiteImages = [
     { key: "hero1", imageUrl: "/uploads/hero-custom-1.png", label: "Hero Banner 1" },
     { key: "hero2", imageUrl: "/uploads/hero-custom-2.png", label: "Hero Banner 2" },
-    { key: "hero3", imageUrl: "/uploads/hero-custom-3.png", label: "Hero Banner 3" },
+    { key: "hero3", imageUrl: "/uploads/hero-banner-3-new.png", label: "Hero Banner 3" },
     { key: "hero4", imageUrl: "", label: "Hero Banner 4" },
     { key: "logo", imageUrl: "/uploads/site-logo-custom.png", label: "Site Logo" },
     { key: "products_banner", imageUrl: "/uploads/products-banner.png", label: "Products Page Banner" },
