@@ -11,6 +11,7 @@ import Categories from "@/pages/Categories";
 import Contact from "@/pages/Contact";
 import Partners from "@/pages/Partners";
 import CategoryDetail from "@/pages/CategoryDetail";
+import Info from "@/pages/Info";
 import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/about-us" component={About} />
       <Route path="/categories" component={Categories} />
+      <Route path="/info" component={Info} />
       <Route path="/partners" component={Partners} />
       <Route path="/contact" component={Contact} />
       <Route path="/admin/login">{() => <AdminWrapper component={AdminLogin} />}</Route>
