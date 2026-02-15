@@ -3,10 +3,6 @@ import { storage } from "./storage";
 import { db } from "./db";
 import { users, siteContent, partners, brands, siteImages, clients, products, leadership, keyContacts, quickLinks, categories } from "@shared/schema";
 import { eq } from "drizzle-orm";
-import fs from "fs";
-import path from "path";
-
-const SEED_VERSION = "2";
 
 const defaultTranslations: Record<string, { en: string; ar: string }> = {
   home: { en: "Home", ar: "الرئيسية" },
@@ -179,10 +175,6 @@ const defaultTranslations: Record<string, { en: string; ar: string }> = {
 };
 
 export async function seedDatabase() {
-  const [versionRecord] = await db.select().from(siteContent).where(eq(siteContent.key, "_seed_version"));
-  const currentVersion = versionRecord?.valueEn || "0";
-  const needsMigration = currentVersion !== SEED_VERSION;
-
   const existingAdmin = await storage.getUserByUsername("admin");
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash("admin123", 10);
@@ -205,8 +197,9 @@ export async function seedDatabase() {
     console.log(`Seeded ${missingEntries.length} missing content entries`);
   }
 
+  const [categoriesSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_categories"));
   const existingCategories = await storage.getAllCategories();
-  if (existingCategories.length === 0) {
+  if (!categoriesSeeded && existingCategories.length === 0) {
     const defaultCategories = [
       { nameEn: "Room Service", nameAr: "خدمة الغرف", slug: "room-service", imageUrl: "/uploads/cat-room-service.png", sortOrder: 1 },
       { nameEn: "Linens", nameAr: "البياضات", slug: "linens", imageUrl: "", sortOrder: 2 },
@@ -224,7 +217,9 @@ export async function seedDatabase() {
       await storage.createCategory(cat);
     }
     console.log(`Seeded ${defaultCategories.length} categories`);
-  } else {
+    await db.insert(siteContent).values({ key: "_seeded_categories", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
+  } else if (existingCategories.length > 0) {
+    await db.insert(siteContent).values({ key: "_seeded_categories", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
     const categoryImageMap: Record<string, string> = {
       "room-service": "/uploads/cat-room-service.png",
     };
@@ -241,18 +236,16 @@ export async function seedDatabase() {
     { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png", sortOrder: 1 },
     { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png", sortOrder: 2 },
   ];
-  const existingPartners = await storage.getAllPartners();
-  if (existingPartners.length === 0) {
-    for (const partner of defaultPartnerData) {
-      await storage.createPartner(partner);
+  const [partnersSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_partners"));
+  if (!partnersSeeded) {
+    const existingPartners = await storage.getAllPartners();
+    if (existingPartners.length === 0) {
+      for (const partner of defaultPartnerData) {
+        await storage.createPartner(partner);
+      }
+      console.log(`Seeded ${defaultPartnerData.length} partners`);
     }
-    console.log(`Seeded ${defaultPartnerData.length} partners`);
-  } else if (needsMigration) {
-    await db.delete(partners);
-    for (const partner of defaultPartnerData) {
-      await storage.createPartner(partner);
-    }
-    console.log(`Migrated ${defaultPartnerData.length} partners`);
+    await db.insert(siteContent).values({ key: "_seeded_partners", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
   const defaultSiteImages = [
@@ -281,18 +274,16 @@ export async function seedDatabase() {
     { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png" },
     { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png" },
   ];
-  const existingBrands = await storage.getAllBrands();
-  if (existingBrands.length === 0) {
-    for (const brand of defaultBrandData) {
-      await storage.createBrand(brand);
+  const [brandsSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_brands"));
+  if (!brandsSeeded) {
+    const existingBrands = await storage.getAllBrands();
+    if (existingBrands.length === 0) {
+      for (const brand of defaultBrandData) {
+        await storage.createBrand(brand);
+      }
+      console.log(`Seeded ${defaultBrandData.length} brands`);
     }
-    console.log(`Seeded ${defaultBrandData.length} brands`);
-  } else if (needsMigration) {
-    await db.delete(brands);
-    for (const brand of defaultBrandData) {
-      await storage.createBrand(brand);
-    }
-    console.log(`Migrated ${defaultBrandData.length} brands`);
+    await db.insert(siteContent).values({ key: "_seeded_brands", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
   const defaultClientData = [
@@ -324,20 +315,20 @@ export async function seedDatabase() {
     { name: "Kempinski", imageUrl: "/uploads/client-kempinski.jpg", sortOrder: 27 },
     { name: "RADISSON Collection", imageUrl: "/uploads/client-radisson.jpg", sortOrder: 28 },
   ];
-  const existingClients = await storage.getAllClients();
-  if (existingClients.length === 0) {
-    for (const client of defaultClientData) {
-      await storage.createClient(client);
+  const [clientsSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_clients"));
+  if (!clientsSeeded) {
+    const existingClients = await storage.getAllClients();
+    if (existingClients.length === 0) {
+      for (const client of defaultClientData) {
+        await storage.createClient(client);
+      }
+      console.log(`Seeded ${defaultClientData.length} clients`);
     }
-    console.log(`Seeded ${defaultClientData.length} clients`);
-  } else if (needsMigration) {
-    await db.delete(clients);
-    for (const client of defaultClientData) {
-      await storage.createClient(client);
-    }
-    console.log(`Migrated ${defaultClientData.length} clients`);
+    await db.insert(siteContent).values({ key: "_seeded_clients", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
+  const [productsSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_products"));
+  if (!productsSeeded) {
   const existingProducts = await storage.getAllProducts();
   if (existingProducts.length === 0) {
     const allCategories = await storage.getAllCategories();
@@ -407,51 +398,59 @@ export async function seedDatabase() {
     }
     console.log(`Seeded ${defaultProducts.length} products across all categories`);
   }
-
-  const existingLeaders = await storage.getAllLeadership();
-  if (existingLeaders.length === 0) {
-    const defaultLeaders = [
-      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", phone: "+962 79 5779345", email: "alaa@theexpertsjo.com", sortOrder: 1 },
-      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", phone: "+962 79 0484745", email: "sales@theexpertsjo.com", sortOrder: 2 },
-      { nameEn: "Marwan Abu Sakha", nameAr: "مروان أبو سخا", roleEn: "Group Corporate Development Manager", roleAr: "مدير تطوير المجموعة", sortOrder: 3 },
-      { nameEn: "Khaled Ghunaim", nameAr: "خالد غنيم", roleEn: "General Manager - Jordan", roleAr: "مدير عام - الأردن", sortOrder: 4 },
-    ];
-    for (const leader of defaultLeaders) {
-      await storage.createLeader(leader);
-    }
-    console.log(`Seeded ${defaultLeaders.length} leadership members`);
+  await db.insert(siteContent).values({ key: "_seeded_products", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
-  const existingKeyContacts = await storage.getAllKeyContacts();
-  if (existingKeyContacts.length === 0) {
-    const defaultKeyContacts = [
-      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", phone: "+962 79 5779345", email: "alaa@theexpertsjo.com", sortOrder: 1 },
-      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", phone: "+962 79 0484745", email: "sales@theexpertsjo.com", sortOrder: 2 },
-    ];
-    for (const contact of defaultKeyContacts) {
-      await storage.createKeyContact(contact);
+  const [leadersSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_leadership"));
+  if (!leadersSeeded) {
+    const existingLeaders = await storage.getAllLeadership();
+    if (existingLeaders.length === 0) {
+      const defaultLeaders = [
+        { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", phone: "+962 79 5779345", email: "alaa@theexpertsjo.com", sortOrder: 1 },
+        { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", phone: "+962 79 0484745", email: "sales@theexpertsjo.com", sortOrder: 2 },
+        { nameEn: "Marwan Abu Sakha", nameAr: "مروان أبو سخا", roleEn: "Group Corporate Development Manager", roleAr: "مدير تطوير المجموعة", sortOrder: 3 },
+        { nameEn: "Khaled Ghunaim", nameAr: "خالد غنيم", roleEn: "General Manager - Jordan", roleAr: "مدير عام - الأردن", sortOrder: 4 },
+      ];
+      for (const leader of defaultLeaders) {
+        await storage.createLeader(leader);
+      }
+      console.log(`Seeded ${defaultLeaders.length} leadership members`);
     }
-    console.log(`Seeded ${defaultKeyContacts.length} key contacts`);
+    await db.insert(siteContent).values({ key: "_seeded_leadership", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
-  const existingQuickLinks = await storage.getAllQuickLinks();
-  if (existingQuickLinks.length === 0) {
-    const defaultQuickLinks = [
-      { labelEn: "Home", labelAr: "الرئيسية", url: "/", sortOrder: 1 },
-      { labelEn: "About Us", labelAr: "من نحن", url: "/about-us", sortOrder: 2 },
-      { labelEn: "Products", labelAr: "المنتجات", url: "/categories", sortOrder: 3 },
-      { labelEn: "Contact", labelAr: "اتصل بنا", url: "/contact", sortOrder: 4 },
-    ];
-    for (const link of defaultQuickLinks) {
-      await storage.createQuickLink(link);
+  const [keyContactsSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_key_contacts"));
+  if (!keyContactsSeeded) {
+    const existingKeyContacts = await storage.getAllKeyContacts();
+    if (existingKeyContacts.length === 0) {
+      const defaultKeyContacts = [
+        { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", phone: "+962 79 5779345", email: "alaa@theexpertsjo.com", sortOrder: 1 },
+        { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", phone: "+962 79 0484745", email: "sales@theexpertsjo.com", sortOrder: 2 },
+      ];
+      for (const contact of defaultKeyContacts) {
+        await storage.createKeyContact(contact);
+      }
+      console.log(`Seeded ${defaultKeyContacts.length} key contacts`);
     }
-    console.log(`Seeded ${defaultQuickLinks.length} quick links`);
+    await db.insert(siteContent).values({ key: "_seeded_key_contacts", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
-  if (needsMigration) {
-    await db.insert(siteContent).values({ key: "_seed_version", valueEn: SEED_VERSION, valueAr: SEED_VERSION })
-      .onConflictDoUpdate({ target: siteContent.key, set: { valueEn: SEED_VERSION, valueAr: SEED_VERSION } });
-    console.log(`Seed version updated to ${SEED_VERSION}`);
+  const [quickLinksSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_quick_links"));
+  if (!quickLinksSeeded) {
+    const existingQuickLinks = await storage.getAllQuickLinks();
+    if (existingQuickLinks.length === 0) {
+      const defaultQuickLinks = [
+        { labelEn: "Home", labelAr: "الرئيسية", url: "/", sortOrder: 1 },
+        { labelEn: "About Us", labelAr: "من نحن", url: "/about-us", sortOrder: 2 },
+        { labelEn: "Products", labelAr: "المنتجات", url: "/categories", sortOrder: 3 },
+        { labelEn: "Contact", labelAr: "اتصل بنا", url: "/contact", sortOrder: 4 },
+      ];
+      for (const link of defaultQuickLinks) {
+        await storage.createQuickLink(link);
+      }
+      console.log(`Seeded ${defaultQuickLinks.length} quick links`);
+    }
+    await db.insert(siteContent).values({ key: "_seeded_quick_links", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
 }
