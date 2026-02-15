@@ -22,6 +22,9 @@ const defaultTranslations: Record<string, { en: string; ar: string }> = {
   hero3_title: { en: "Enhancing Every Stay", ar: "تحسين كل إقامة" },
   hero3_subtitle: { en: "Style and Comfort", ar: "الأسلوب والراحة" },
   hero3_desc: { en: "Transforming ordinary stays into extraordinary memories.", ar: "تحويل الإقامات العادية إلى ذكريات استثنائية." },
+  hero4_title: { en: "", ar: "" },
+  hero4_subtitle: { en: "", ar: "" },
+  hero4_desc: { en: "", ar: "" },
   discover_more: { en: "Discover More", ar: "اكتشف المزيد" },
   all_in_one: { en: "All in One Place", ar: "الكل في مكان واحد" },
   hospitality_solution: { en: "Your All-in-one Hospitality Solution", ar: "حلك المتكامل للضيافة" },
@@ -37,7 +40,7 @@ const defaultTranslations: Record<string, { en: string; ar: string }> = {
   stat_projects: { en: "Projects", ar: "مشروع" },
   stat_clients: { en: "Clients", ar: "عميل" },
   footer_desc: { en: "Supplying comfort and quality to your guests. Premium hospitality products across the Middle East.", ar: "توريد الراحة والجودة لضيوفك. منتجات ضيافة متميزة في جميع أنحاء الشرق الأوسط." },
-  footer_text: { en: "", ar: "" },
+  footer_text: { en: "The Experts For Hotels Supplies Company ", ar: "شركة الخبراء لتوريد مستلزمات الفنادق" },
   info: { en: "Info", ar: "معلومات" },
   info_title: { en: "Info", ar: "معلومات" },
   info_subtitle: { en: "Learn more about our services and offerings", ar: "تعرف على المزيد حول خدماتنا وعروضنا" },
@@ -99,6 +102,81 @@ const defaultTranslations: Record<string, { en: string; ar: string }> = {
   sustainability_hero_desc: { en: "Committed to eco-friendly practices and responsible sourcing for a better future.", ar: "ملتزمون بالممارسات الصديقة للبيئة والتوريد المسؤول من أجل مستقبل أفضل." },
   room_service_hero_desc: { en: "Elevating in-room dining with premium service equipment and elegant presentation.", ar: "الارتقاء بتجربة تناول الطعام داخل الغرف مع معدات خدمة متميزة وتقديم أنيق." },
   category_hero_desc: { en: "Browse our curated selection of premium hospitality products.", ar: "تصفح مجموعتنا المختارة من منتجات الضيافة المتميزة." },
+  cat_amenities: { en: "Amenities", ar: "المرافق" },
+  cat_banqueting: { en: "Banqueting", ar: "قاعات الاحتفالات" },
+  cat_buffet_banqueting: { en: "Buffet & Banqueting", ar: "أستاندات البوفيه والمآدب" },
+  cat_food_beverage: { en: "Food & Beverage", ar: "الأغذية والمشروبات" },
+  cat_furniture: { en: "Furniture", ar: "الأثاث" },
+  cat_housekeeping: { en: "Housekeeping", ar: "التدبير الفندقي" },
+  cat_linens: { en: "Linens", ar: "البياضات" },
+  cat_minibar: { en: "Mini Bar & Safes", ar: "الميني بار والخزن" },
+  cat_room_service: { en: "Room Service", ar: "خدمة الغرف" },
+  cat_spa: { en: "Spa", ar: "السبا" },
+  cat_towels: { en: "Towels", ar: "المناشف" },
+  amenities_sig: { en: "Signature Collection", ar: "مجموعة التوقيع" },
+  amenities_sig_desc: { en: "Eco-friendly bathroom amenities with botanical extracts.", ar: "مرافق حمام صديقة للبيئة مع خلاصات نباتية." },
+  amenities_kits: { en: "Personal Care Kits", ar: "أطقم العناية الشخصية" },
+  amenities_kits_desc: { en: "Thoughtfully curated kits for the modern traveler.", ar: "أطقم منسقة بعناية للمسافر العصري." },
+  amenities_custom: { en: "Custom Branded Sets", ar: "مجموعات مخصصة" },
+  amenities_custom_desc: { en: "High-quality products tailored to your hotel's identity.", ar: "منتجات عالية الجودة مصممة لتناسب هوية فندقك." },
+  buffet_modular: { en: "Modular Buffet Systems", ar: "أنظمة بوفيه modular" },
+  buffet_modular_desc: { en: "Sleek, versatile buffet stands that adapt to any space and style.", ar: "أستاندات بوفيه أنيقة ومتعددة الاستخدامات تتكيف مع أي مساحة وأسلوب." },
+  buffet_tables: { en: "Premium Banquet Tables", ar: "طاولات حفلات عالية الجودة" },
+  buffet_tables_desc: { en: "Durable and elegant tables designed for high-capacity events.", ar: "طاولات متينة وأنيقة مصممة للفعاليات ذات السعة العالية." },
+  buffet_present: { en: "Elegant Food Presentation", ar: "تقديم طعام أنيق" },
+  buffet_present_desc: { en: "Elevated risers and platters to showcase culinary excellence.", ar: "رافعات وأطباق مرتفعة لعرض التميز في الطهي." },
+  fb_cocktail: { en: "Cocktail Accessories", ar: "إكسسوارات الكوكتيل" },
+  fb_cocktail_desc: { en: "Colorful and stylish stirrers, skewers, and picks for premium bar service.", ar: "أدوات تقليب وأسياخ ملونة وأنيقة لخدمة بار متميزة." },
+  fb_glass: { en: "Glassware Collection", ar: "مجموعة الأواني الزجاجية" },
+  fb_glass_desc: { en: "Elegant, high-clarity glassware for every beverage type.", ar: "أواني زجاجية أنيقة وعالية الوضوح لكل نوع من المشروبات." },
+  fb_bar: { en: "Bar Equipment", ar: "معدات البار" },
+  fb_bar_desc: { en: "Professional-grade tools for precision mixology.", ar: "أدوات احترافية لدقة خلط المشروبات." },
+  linens_bed: { en: "Premium Bed Linens", ar: "بياضات أسرّة عالية الجودة" },
+  linens_bed_desc: { en: "High-thread-count cotton sheets for ultimate guest comfort.", ar: "ملاءات قطنية بعدد خيوط عالٍ لراحة الضيوف القصوى." },
+  linens_towels: { en: "Premium Towel Sets", ar: "أطقم مناشف عالية الجودة" },
+  linens_towels_desc: { en: "Plush, absorbent towels in various weights and sizes.", ar: "مناشف ناعمة وماصة بأوزان وأحجام مختلفة." },
+  linens_housekeeping: { en: "Housekeeping Essentials", ar: "أساسيات التدبير المنزلي" },
+  linens_housekeeping_desc: { en: "Efficient solutions for maintaining pristine guest rooms.", ar: "حلول فعالة للحفاظ على غرف الضيوف في حالة مثالية." },
+  rs_trolley: { en: "Elite Service Trolley", ar: "عربة خدمة النخبة" },
+  rs_trolley_desc: { en: "Handcrafted from solid walnut with whisper-quiet, non-marking wheels. Featuring integrated heating compartments and foldable side wings for space efficiency.", ar: "مصنوعة يدوياً من الجوز الصلب مع عجلات هادئة وغير ملوثة. تتميز بحجرات تسخين مدمجة وأجنحة جانبية قابلة للطي لكفاءة المساحة." },
+  rs_carafe: { en: "Signature Thermal Carafe", ar: "إبريق حراري مميز" },
+  rs_carafe_desc: { en: "Double-walled vacuum insulation keeps beverages at the perfect temperature for up to 12 hours. Ergonomic handle and drip-free pouring spout for effortless service.", ar: "عزل مزدوج الجدار يحافظ على المشروبات في درجة حرارة مثالية لمدة تصل إلى 12 ساعة. مقبض مريح وفوهة صب بدون تنقيط لخدمة سهلة." },
+  rs_cloche: { en: "Mirror-Finish Cloche", ar: "غطاء طعام بلمسة مرآة" },
+  rs_cloche_desc: { en: "Precision-engineered from 18/10 stainless steel. High-mirror polish adds a touch of theater to the dining experience while maintaining optimal food temperature.", ar: "مصمم بدقة من الفولاذ المقاوم للصدأ 18/10. يضيف التلميع العالي لمسة من الأناقة لتجربة الطعام مع الحفاظ على درجة حرارة الطعام المثالية." },
+  spa_robes: { en: "Premium Bathrobes", ar: "أرواب حمام مريحة" },
+  spa_robes_desc: { en: "Ultra-soft organic cotton robes with custom embroidery options.", ar: "أرواب من القطن العضوي فائق النعومة مع خيارات تطريز مخصصة." },
+  spa_essentials: { en: "Aromatherapy Essentials", ar: "أساسيات العلاج العطري" },
+  spa_essentials_desc: { en: "Curated selection of essential oils and candles for relaxation.", ar: "مجموعة مختارة من الزيوت العطرية والشموع للاسترخاء." },
+  spa_stones: { en: "Hot Stone Sets", ar: "أطقم الأحجار الساخنة" },
+  spa_stones_desc: { en: "Professional basalt stones for premium spa treatments.", ar: "أحجار بازلت احترافية لعلاجات السبا المتميزة." },
+  towels_bath: { en: "Luxury Bath Towels", ar: "مناشف حمام فاخرة" },
+  towels_bath_desc: { en: "Zero-twist cotton towels with superior absorption.", ar: "مناشف قطنية زيرو تويست بامتصاص فائق." },
+  towels_hand: { en: "Jacquard Hand Towels", ar: "مناشف يد جاكار" },
+  towels_hand_desc: { en: "Elegant patterned towels with custom monogramming.", ar: "مناشف بأنماط أنيقة مع إمكانية نقش الشعار." },
+  towels_pool: { en: "Pool & Beach Towels", ar: "مناشف المسبح والشاطئ" },
+  towels_pool_desc: { en: "Oversized cabana-stripe towels in vibrant resort colors.", ar: "مناشف كابانا كبيرة بألوان المنتجعات النابضة بالحياة." },
+  minibar_silent: { en: "Silent Absorption Minibars", ar: "ميني بار صامت" },
+  minibar_silent_desc: { en: "Zero-decibel thermoelectric cooling with A++ energy rating.", ar: "تبريد كهروحراري بدون صوت مع تصنيف طاقة A++." },
+  minibar_safe: { en: "Digital In-Room Safes", ar: "خزائن رقمية للغرف" },
+  minibar_safe_desc: { en: "Motorized safes with audit trail and emergency override.", ar: "خزائن بمحرك مع سجل مراجعة وتجاوز طوارئ." },
+  housekeeping_cart: { en: "Professional Carts", ar: "عربات احترافية" },
+  housekeeping_cart_desc: { en: "Heavy-duty carts with lockable storage and ergonomic design.", ar: "عربات متينة بتخزين قابل للقفل وتصميم مريح." },
+  housekeeping_vacuum: { en: "Cordless Vacuums", ar: "مكانس لاسلكية" },
+  housekeeping_vacuum_desc: { en: "Ultra-quiet HEPA filtration for occupied-room cleaning.", ar: "تصفية HEPA هادئة للغاية لتنظيف الغرف المشغولة." },
+  housekeeping_eco: { en: "Eco-Friendly Kits", ar: "أطقم صديقة للبيئة" },
+  housekeeping_eco_desc: { en: "Biodegradable cleaning solutions certified for hospitality.", ar: "حلول تنظيف قابلة للتحلل معتمدة للضيافة." },
+  furniture_desk: { en: "Executive Desks", ar: "مكاتب تنفيذية" },
+  furniture_desk_desc: { en: "Solid walnut desks with wireless charging and cable management.", ar: "مكاتب من خشب الجوز الصلب مع شحن لاسلكي وإدارة كابلات." },
+  furniture_chair: { en: "Lounge Chairs", ar: "كراسي استرخاء" },
+  furniture_chair_desc: { en: "Italian-designed chairs with fire-retardant premium upholstery.", ar: "كراسي بتصميم إيطالي بتنجيد فاخر مقاوم للحريق." },
+  furniture_table: { en: "Bedside Tables", ar: "طاولات جانبية" },
+  furniture_table_desc: { en: "Minimalist tables with touch lighting and USB-C charging.", ar: "طاولات بتصميم بسيط مع إضاءة لمسية وشحن USB-C." },
+  banquet_chair: { en: "Stackable Chairs", ar: "كراسي قابلة للتكديس" },
+  banquet_chair_desc: { en: "Commercial-grade chairs with lumbar support, stack 10 high.", ar: "كراسي بدرجة تجارية مع دعم قطني، تتكدس 10 كراسي." },
+  banquet_table: { en: "Folding Tables", ar: "طاولات قابلة للطي" },
+  banquet_table_desc: { en: "Heavy-duty ABS tables with powder-coated steel frames.", ar: "طاولات ABS متينة بإطارات فولاذ مطلية." },
+  banquet_stage: { en: "Stage Platforms", ar: "منصات مسرح" },
+  banquet_stage_desc: { en: "Modular interlocking platforms for events of any size.", ar: "منصات معيارية متشابكة لفعاليات بأي حجم." },
 };
 
 export async function seedDatabase() {
@@ -123,7 +201,7 @@ export async function seedDatabase() {
   const existingCategories = await storage.getAllCategories();
   if (existingCategories.length === 0) {
     const defaultCategories = [
-      { nameEn: "Room Service", nameAr: "خدمة الغرف", slug: "room-service", imageUrl: "", sortOrder: 1 },
+      { nameEn: "Room Service", nameAr: "خدمة الغرف", slug: "room-service", imageUrl: "/uploads/cat-room-service.png", sortOrder: 1 },
       { nameEn: "Linens", nameAr: "البياضات", slug: "linens", imageUrl: "", sortOrder: 2 },
       { nameEn: "Spa", nameAr: "السبا", slug: "spa", imageUrl: "", sortOrder: 3 },
       { nameEn: "Amenities", nameAr: "المرافق", slug: "amenities", imageUrl: "", sortOrder: 4 },
@@ -144,8 +222,8 @@ export async function seedDatabase() {
   const existingPartners = await storage.getAllPartners();
   if (existingPartners.length === 0) {
     const defaultPartners = [
-      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen.png", sortOrder: 1 },
-      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere.png", sortOrder: 2 },
+      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png", sortOrder: 1 },
+      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png", sortOrder: 2 },
     ];
     for (const partner of defaultPartners) {
       await storage.createPartner(partner);
@@ -156,43 +234,33 @@ export async function seedDatabase() {
   const existingSiteImages = await storage.getAllSiteImages();
   if (existingSiteImages.length === 0) {
     const uploadsDir = path.join(process.cwd(), "uploads");
-    const assetsToCopy = [
-      { src: "client/src/assets/hero-1.jpg", dest: "hero-1.jpg", key: "hero1", label: "Hero Banner 1" },
-      { src: "client/src/assets/hero-2.jpg", dest: "hero-2.jpg", key: "hero2", label: "Hero Banner 2" },
-      { src: "client/src/assets/hero-3.jpg", dest: "hero-3.jpg", key: "hero3", label: "Hero Banner 3" },
-      { src: "client/src/assets/logo.png", dest: "site-logo.png", key: "logo", label: "Site Logo" },
-      { src: "client/src/assets/products-banner-bedroom.png", dest: "products-banner.png", key: "products_banner", label: "Products Page Banner" },
-      { src: "client/src/assets/contact-banner-ultra-clear.png", dest: "contact-banner.png", key: "contact_banner", label: "Contact Page Banner" },
-      { src: "client/src/assets/hero-1.jpg", dest: "about-banner.jpg", key: "about_banner", label: "About Page Banner" },
-      { src: "client/src/assets/hero-2.jpg", dest: "about-mission.jpg", key: "about_mission", label: "About Mission Image" },
-      { src: "client/src/assets/hero-3.jpg", dest: "about-vision.jpg", key: "about_vision", label: "About Vision Image" },
-      { src: "client/src/assets/cat-furniture.jpg", dest: "about-chairman.jpg", key: "about_chairman", label: "About Chairman Image" },
-      { src: "client/src/assets/partners-banner-outdoor.png", dest: "partners-banner.png", key: "partners_banner", label: "Partners Page Banner" },
-      { src: "client/src/assets/partnership-bespoke.png", dest: "partners-cta.png", key: "partners_cta", label: "Partners CTA Image" },
-      { src: "client/src/assets/category-generic-banner.png", dest: "category-banner.png", key: "category_banner", label: "Category Detail Banner" },
+    const defaultSiteImages = [
+      { key: "hero1", imageUrl: "/uploads/hero-custom-1.png", label: "Hero Banner 1" },
+      { key: "hero2", imageUrl: "/uploads/hero-custom-2.png", label: "Hero Banner 2" },
+      { key: "hero3", imageUrl: "/uploads/hero-custom-3.png", label: "Hero Banner 3" },
+      { key: "hero4", imageUrl: "", label: "Hero Banner 4" },
+      { key: "logo", imageUrl: "/uploads/site-logo-custom.png", label: "Site Logo" },
+      { key: "products_banner", imageUrl: "/uploads/products-banner.png", label: "Products Page Banner" },
+      { key: "contact_banner", imageUrl: "/uploads/contact-banner.png", label: "Contact Page Banner" },
+      { key: "about_banner", imageUrl: "/uploads/about-banner.jpg", label: "About Page Banner" },
+      { key: "about_mission", imageUrl: "/uploads/about-mission.jpg", label: "About Mission Image" },
+      { key: "about_vision", imageUrl: "/uploads/about-vision.jpg", label: "About Vision Image" },
+      { key: "about_chairman", imageUrl: "/uploads/about-chairman.jpg", label: "About Chairman Image" },
+      { key: "partners_banner", imageUrl: "/uploads/partners-banner.png", label: "Partners Page Banner" },
+      { key: "partners_cta", imageUrl: "/uploads/partners-cta.png", label: "Partners CTA Image" },
+      { key: "category_banner", imageUrl: "/uploads/category-banner.png", label: "Category Detail Banner" },
     ];
-    for (const asset of assetsToCopy) {
-      const destPath = path.join(uploadsDir, asset.dest);
-      if (!fs.existsSync(destPath)) {
-        const srcPath = path.join(process.cwd(), asset.src);
-        if (fs.existsSync(srcPath)) {
-          fs.copyFileSync(srcPath, destPath);
-        }
-      }
-      await storage.upsertSiteImage({
-        key: asset.key,
-        imageUrl: `/uploads/${asset.dest}`,
-        label: asset.label,
-      });
+    for (const img of defaultSiteImages) {
+      await storage.upsertSiteImage(img);
     }
-    console.log(`Seeded ${assetsToCopy.length} site images`);
+    console.log(`Seeded ${defaultSiteImages.length} site images`);
   }
 
   const existingBrands = await storage.getAllBrands();
   if (existingBrands.length === 0) {
     const defaultBrands = [
-      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen.png" },
-      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere.png" },
+      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png" },
+      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png" },
     ];
     for (const brand of defaultBrands) {
       await storage.createBrand(brand);
@@ -203,23 +271,33 @@ export async function seedDatabase() {
   const existingClients = await storage.getAllClients();
   if (existingClients.length === 0) {
     const defaultClients = [
-      { name: "Four Seasons", imageUrl: "/uploads/four-seasons-new.png" },
-      { name: "Grand Hyatt", imageUrl: "/uploads/grand-hyatt.jpg" },
-      { name: "W Hotel", imageUrl: "/uploads/w-hotel.jpg" },
-      { name: "Landmark", imageUrl: "/uploads/landmark.jpg" },
-      { name: "Coral Baghdad", imageUrl: "/uploads/coral-baghdad.jpg" },
-      { name: "The House Hotels", imageUrl: "/uploads/the-house-hotels-logo.webp" },
-      { name: "Banyan Tree", imageUrl: "/uploads/banyan-tree.png" },
-      { name: "Rosewood", imageUrl: "/uploads/rosewood.jpg" },
-      { name: "Wyndham", imageUrl: "/uploads/wyndham.png" },
-      { name: "Mandarin Oriental", imageUrl: "/uploads/mandarin-oriental.png" },
-      { name: "Accor", imageUrl: "/uploads/accor.png" },
-      { name: "Le Meridien", imageUrl: "/uploads/le-meridien.png" },
-      { name: "Crowne Plaza", imageUrl: "/uploads/crowne-plaza.png" },
-      { name: "IHG", imageUrl: "/uploads/ihg.jpg" },
-      { name: "Marriott", imageUrl: "/uploads/marriott.png" },
-      { name: "Millennium", imageUrl: "/uploads/millennium.png" },
-      { name: "Hyatt", imageUrl: "/uploads/hyatt.jpg" },
+      { name: "Four Seasons", imageUrl: "/uploads/four-seasons-new.png", sortOrder: 1 },
+      { name: "Grand Hyatt", imageUrl: "/uploads/grand-hyatt.jpg", sortOrder: 2 },
+      { name: "W Hotel", imageUrl: "/uploads/w-hotel.jpg", sortOrder: 3 },
+      { name: "Landmark", imageUrl: "/uploads/landmark.jpg", sortOrder: 4 },
+      { name: "Coral Baghdad", imageUrl: "/uploads/coral-baghdad.jpg", sortOrder: 5 },
+      { name: "The House Hotels", imageUrl: "/uploads/the-house-hotels-logo.webp", sortOrder: 6 },
+      { name: "Banyan Tree", imageUrl: "/uploads/banyan-tree.png", sortOrder: 7 },
+      { name: "Rosewood", imageUrl: "/uploads/rosewood.jpg", sortOrder: 8 },
+      { name: "Mandarin Oriental", imageUrl: "/uploads/mandarin-oriental.png", sortOrder: 10 },
+      { name: "Accor", imageUrl: "/uploads/accor.png", sortOrder: 11 },
+      { name: "Le Meridien", imageUrl: "/uploads/le-meridien.png", sortOrder: 12 },
+      { name: "Crowne Plaza", imageUrl: "/uploads/crowne-plaza.png", sortOrder: 13 },
+      { name: "IHG", imageUrl: "/uploads/ihg.jpg", sortOrder: 14 },
+      { name: "Marriott", imageUrl: "/uploads/marriott.png", sortOrder: 15 },
+      { name: "Millennium", imageUrl: "/uploads/millennium.png", sortOrder: 16 },
+      { name: "Hyatt", imageUrl: "/uploads/hyatt.jpg", sortOrder: 17 },
+      { name: "WYNDHAM", imageUrl: "/uploads/client-wyndham.webp", sortOrder: 18 },
+      { name: "Estate Georgia", imageUrl: "/uploads/client-estate-georgia.png", sortOrder: 19 },
+      { name: "FIVE", imageUrl: "/uploads/client-five.jpg", sortOrder: 20 },
+      { name: "RAMADA", imageUrl: "/uploads/client-ramada.jpg", sortOrder: 21 },
+      { name: "IBIS", imageUrl: "/uploads/client-ibis.jpeg", sortOrder: 22 },
+      { name: "Bristol HOTEL", imageUrl: "/uploads/client-bristol.png", sortOrder: 23 },
+      { name: "HILTON", imageUrl: "/uploads/client-hilton.svg", sortOrder: 24 },
+      { name: "JIN JIANG", imageUrl: "/uploads/client-jin-jiang.jpg", sortOrder: 25 },
+      { name: "IL PALAZSO", imageUrl: "/uploads/client-il-palazzo.jpg", sortOrder: 26 },
+      { name: "Kempinski", imageUrl: "/uploads/client-kempinski.jpg", sortOrder: 27 },
+      { name: "RADISSON Collection", imageUrl: "/uploads/client-radisson.jpg", sortOrder: 28 },
     ];
     for (const client of defaultClients) {
       await storage.createClient(client);
@@ -248,7 +326,7 @@ export async function seedDatabase() {
       { nameEn: "Heated Massage Stone Set", nameAr: "طقم أحجار تدليك ساخنة", descriptionEn: "Professional-grade basalt hot stones in a premium wooden presentation box. Retains heat for extended therapy sessions with uniform temperature distribution.", descriptionAr: "أحجار بازلت ساخنة بدرجة احترافية في صندوق خشبي فاخر. تحتفظ بالحرارة لجلسات علاج ممتدة.", imageUrl: "/uploads/prod-massage-stones.png", slug: "spa", sortOrder: 2 },
       { nameEn: "Plush Spa Robe", nameAr: "روب سبا فاخر", descriptionEn: "Ultra-soft Turkish cotton spa robe with shawl collar and double-loop terry construction. Embroidery-ready for custom hotel branding.", descriptionAr: "روب سبا من القطن التركي فائق النعومة بياقة شال وبناء تيري مزدوج الحلقات. جاهز للتطريز بشعار الفندق.", imageUrl: "/uploads/prod-spa-robe.png", slug: "spa", sortOrder: 3 },
 
-      { nameEn: "Premium Guest Amenity Kit", nameAr: "طقم مستلزمات الضيوف الفاخر", descriptionEn: "Complete guest amenity set featuring shampoo, conditioner, body wash, and lotion in elegant refillable dispensers. Paraben-free botanical formulations.", descriptionAr: "طقم مستلزمات ضيوف كامل يضم شامبو وبلسم وغسول جسم ولوشن في موزعات أنيقة قابلة لإعادة التعبئة.", imageUrl: "/uploads/prod-amenity-kit.png", slug: "amenities", sortOrder: 1 },
+      { nameEn: "Premium Guest Amenity Kit", nameAr: "طقم مستلزمات الضيوف الفاخر", descriptionEn: "Complete guest amenity set featuring shampoo, conditioner, body wash, and lotion in elegant refillable dispensers. Paraben-free botanical formulations.", descriptionAr: "طقم مستلزمات ضيوف كامل يضم شامبو وبلسم وغسول جسم ولوشن في موزعات أنيقة قابلة لإعادة التعبئة.", imageUrl: "/uploads/prod-amenity-kit.png", slug: "amenities", sortOrder: 1, brand: "ABDEEN" },
       { nameEn: "Vanity Mirror with LED Ring", nameAr: "مرآة تجميل بإضاءة LED", descriptionEn: "Double-sided vanity mirror with 10x magnification and daylight LED ring. Touch-sensitive dimmer with memory function and USB charging port.", descriptionAr: "مرآة تجميل مزدوجة الجوانب بتكبير 10 أضعاف وإضاءة LED نهارية. مفتاح تعتيم لمسي مع ذاكرة ومنفذ شحن USB.", imageUrl: "/uploads/prod-vanity-mirror.png", slug: "amenities", sortOrder: 2 },
       { nameEn: "Leather Guest Directory", nameAr: "دليل الضيوف الجلدي", descriptionEn: "Hand-stitched genuine leather guest directory with gold-foil hotel logo debossing. Includes room service menu, spa guide, and local attractions inserts.", descriptionAr: "دليل ضيوف من الجلد الطبيعي مخيط يدوياً مع شعار الفندق بالذهب. يتضمن قائمة خدمة الغرف ودليل السبا.", imageUrl: "/uploads/prod-guest-directory.png", slug: "amenities", sortOrder: 3 },
 
@@ -300,8 +378,8 @@ export async function seedDatabase() {
   const existingLeaders = await storage.getAllLeadership();
   if (existingLeaders.length === 0) {
     const defaultLeaders = [
-      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", sortOrder: 1 },
-      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", sortOrder: 2 },
+      { nameEn: "Alaa Abdin", nameAr: "علاء عابدين", roleEn: "General Manager", roleAr: "مدير عام", phone: "+962 79 5779345", email: "alaa@theexpertsjo.com", sortOrder: 1 },
+      { nameEn: "Rafat Daood", nameAr: "رأفت داود", roleEn: "Sales Manager", roleAr: "مدير المبيعات", phone: "+962 79 0484745", email: "sales@theexpertsjo.com", sortOrder: 2 },
       { nameEn: "Marwan Abu Sakha", nameAr: "مروان أبو سخا", roleEn: "Group Corporate Development Manager", roleAr: "مدير تطوير المجموعة", sortOrder: 3 },
       { nameEn: "Khaled Ghunaim", nameAr: "خالد غنيم", roleEn: "General Manager - Jordan", roleAr: "مدير عام - الأردن", sortOrder: 4 },
     ];
