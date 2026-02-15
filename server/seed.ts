@@ -1,9 +1,12 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, brands, siteImages, clients, products, leadership, keyContacts, quickLinks } from "@shared/schema";
+import { users, siteContent, partners, brands, siteImages, clients, products, leadership, keyContacts, quickLinks, categories } from "@shared/schema";
+import { eq } from "drizzle-orm";
 import fs from "fs";
 import path from "path";
+
+const SEED_VERSION = "2";
 
 const defaultTranslations: Record<string, { en: string; ar: string }> = {
   home: { en: "Home", ar: "الرئيسية" },
@@ -180,6 +183,10 @@ const defaultTranslations: Record<string, { en: string; ar: string }> = {
 };
 
 export async function seedDatabase() {
+  const [versionRecord] = await db.select().from(siteContent).where(eq(siteContent.key, "_seed_version"));
+  const currentVersion = versionRecord?.valueEn || "0";
+  const needsMigration = currentVersion !== SEED_VERSION;
+
   const existingAdmin = await storage.getUserByUsername("admin");
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash("admin123", 10);
@@ -217,6 +224,17 @@ export async function seedDatabase() {
       await storage.createCategory(cat);
     }
     console.log(`Seeded ${defaultCategories.length} categories`);
+  } else {
+    const categoryImageMap: Record<string, string> = {
+      "room-service": "/uploads/cat-room-service.png",
+    };
+    for (const cat of existingCategories) {
+      const expectedImage = categoryImageMap[cat.slug];
+      if (expectedImage && cat.imageUrl !== expectedImage) {
+        await storage.updateCategory(cat.id, { imageUrl: expectedImage });
+      }
+    }
+    console.log("Updated existing category image URLs");
   }
 
   const defaultPartnerData = [
@@ -229,14 +247,12 @@ export async function seedDatabase() {
       await storage.createPartner(partner);
     }
     console.log(`Seeded ${defaultPartnerData.length} partners`);
-  } else {
-    for (const partner of existingPartners) {
-      const match = defaultPartnerData.find(p => p.name === partner.name);
-      if (match && partner.imageUrl !== match.imageUrl) {
-        await storage.updatePartner(partner.id, { imageUrl: match.imageUrl });
-      }
+  } else if (needsMigration) {
+    await db.delete(partners);
+    for (const partner of defaultPartnerData) {
+      await storage.createPartner(partner);
     }
-    console.log("Updated existing partner image URLs");
+    console.log(`Migrated ${defaultPartnerData.length} partners`);
   }
 
   const defaultSiteImages = [
@@ -270,14 +286,12 @@ export async function seedDatabase() {
       await storage.createBrand(brand);
     }
     console.log(`Seeded ${defaultBrandData.length} brands`);
-  } else {
-    for (const brand of existingBrands) {
-      const match = defaultBrandData.find(b => b.name === brand.name);
-      if (match && brand.imageUrl !== match.imageUrl) {
-        await storage.updateBrand(brand.id, { imageUrl: match.imageUrl });
-      }
+  } else if (needsMigration) {
+    await db.delete(brands);
+    for (const brand of defaultBrandData) {
+      await storage.createBrand(brand);
     }
-    console.log("Updated existing brand image URLs");
+    console.log(`Migrated ${defaultBrandData.length} brands`);
   }
 
   const defaultClientData = [
@@ -315,14 +329,12 @@ export async function seedDatabase() {
       await storage.createClient(client);
     }
     console.log(`Seeded ${defaultClientData.length} clients`);
-  } else {
-    for (const client of existingClients) {
-      const match = defaultClientData.find(c => c.name === client.name);
-      if (match && client.imageUrl !== match.imageUrl) {
-        await storage.updateClient(client.id, { imageUrl: match.imageUrl });
-      }
+  } else if (needsMigration) {
+    await db.delete(clients);
+    for (const client of defaultClientData) {
+      await storage.createClient(client);
     }
-    console.log("Updated existing client image URLs");
+    console.log(`Migrated ${defaultClientData.length} clients`);
   }
 
   const existingProducts = await storage.getAllProducts();
@@ -433,6 +445,12 @@ export async function seedDatabase() {
       await storage.createQuickLink(link);
     }
     console.log(`Seeded ${defaultQuickLinks.length} quick links`);
+  }
+
+  if (needsMigration) {
+    await db.insert(siteContent).values({ key: "_seed_version", valueEn: SEED_VERSION, valueAr: SEED_VERSION })
+      .onConflictDoUpdate({ target: siteContent.key, set: { valueEn: SEED_VERSION, valueAr: SEED_VERSION } });
+    console.log(`Seed version updated to ${SEED_VERSION}`);
   }
 
 }
