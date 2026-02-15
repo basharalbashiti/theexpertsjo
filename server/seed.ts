@@ -219,90 +219,110 @@ export async function seedDatabase() {
     console.log(`Seeded ${defaultCategories.length} categories`);
   }
 
+  const defaultPartnerData = [
+    { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png", sortOrder: 1 },
+    { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png", sortOrder: 2 },
+  ];
   const existingPartners = await storage.getAllPartners();
   if (existingPartners.length === 0) {
-    const defaultPartners = [
-      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png", sortOrder: 1 },
-      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png", sortOrder: 2 },
-    ];
-    for (const partner of defaultPartners) {
+    for (const partner of defaultPartnerData) {
       await storage.createPartner(partner);
     }
-    console.log(`Seeded ${defaultPartners.length} partners`);
-  }
-
-  const existingSiteImages = await storage.getAllSiteImages();
-  if (existingSiteImages.length === 0) {
-    const uploadsDir = path.join(process.cwd(), "uploads");
-    const defaultSiteImages = [
-      { key: "hero1", imageUrl: "/uploads/hero-custom-1.png", label: "Hero Banner 1" },
-      { key: "hero2", imageUrl: "/uploads/hero-custom-2.png", label: "Hero Banner 2" },
-      { key: "hero3", imageUrl: "/uploads/hero-custom-3.png", label: "Hero Banner 3" },
-      { key: "hero4", imageUrl: "", label: "Hero Banner 4" },
-      { key: "logo", imageUrl: "/uploads/site-logo-custom.png", label: "Site Logo" },
-      { key: "products_banner", imageUrl: "/uploads/products-banner.png", label: "Products Page Banner" },
-      { key: "contact_banner", imageUrl: "/uploads/contact-banner.png", label: "Contact Page Banner" },
-      { key: "about_banner", imageUrl: "/uploads/about-banner.jpg", label: "About Page Banner" },
-      { key: "about_mission", imageUrl: "/uploads/about-mission.jpg", label: "About Mission Image" },
-      { key: "about_vision", imageUrl: "/uploads/about-vision.jpg", label: "About Vision Image" },
-      { key: "about_chairman", imageUrl: "/uploads/about-chairman.jpg", label: "About Chairman Image" },
-      { key: "partners_banner", imageUrl: "/uploads/partners-banner.png", label: "Partners Page Banner" },
-      { key: "partners_cta", imageUrl: "/uploads/partners-cta.png", label: "Partners CTA Image" },
-      { key: "category_banner", imageUrl: "/uploads/category-banner.png", label: "Category Detail Banner" },
-    ];
-    for (const img of defaultSiteImages) {
-      await storage.upsertSiteImage(img);
+    console.log(`Seeded ${defaultPartnerData.length} partners`);
+  } else {
+    for (const partner of existingPartners) {
+      const match = defaultPartnerData.find(p => p.name === partner.name);
+      if (match && partner.imageUrl !== match.imageUrl) {
+        await storage.updatePartner(partner.id, { imageUrl: match.imageUrl });
+      }
     }
-    console.log(`Seeded ${defaultSiteImages.length} site images`);
+    console.log("Updated existing partner image URLs");
   }
 
+  const defaultSiteImages = [
+    { key: "hero1", imageUrl: "/uploads/hero-custom-1.png", label: "Hero Banner 1" },
+    { key: "hero2", imageUrl: "/uploads/hero-custom-2.png", label: "Hero Banner 2" },
+    { key: "hero3", imageUrl: "/uploads/hero-custom-3.png", label: "Hero Banner 3" },
+    { key: "hero4", imageUrl: "", label: "Hero Banner 4" },
+    { key: "logo", imageUrl: "/uploads/site-logo-custom.png", label: "Site Logo" },
+    { key: "products_banner", imageUrl: "/uploads/products-banner.png", label: "Products Page Banner" },
+    { key: "contact_banner", imageUrl: "/uploads/contact-banner.png", label: "Contact Page Banner" },
+    { key: "about_banner", imageUrl: "/uploads/about-banner.jpg", label: "About Page Banner" },
+    { key: "about_mission", imageUrl: "/uploads/about-mission.jpg", label: "About Mission Image" },
+    { key: "about_vision", imageUrl: "/uploads/about-vision.jpg", label: "About Vision Image" },
+    { key: "about_chairman", imageUrl: "/uploads/about-chairman.jpg", label: "About Chairman Image" },
+    { key: "partners_banner", imageUrl: "/uploads/partners-banner.png", label: "Partners Page Banner" },
+    { key: "partners_cta", imageUrl: "/uploads/partners-cta.png", label: "Partners CTA Image" },
+    { key: "category_banner", imageUrl: "/uploads/category-banner.png", label: "Category Detail Banner" },
+  ];
+  for (const img of defaultSiteImages) {
+    await storage.upsertSiteImage(img);
+  }
+  console.log(`Upserted ${defaultSiteImages.length} site images`);
+
+  const defaultBrandData = [
+    { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png" },
+    { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png" },
+  ];
   const existingBrands = await storage.getAllBrands();
   if (existingBrands.length === 0) {
-    const defaultBrands = [
-      { name: "ABDEEN", imageUrl: "/uploads/partner-abdeen-custom.png" },
-      { name: "Cashmere", imageUrl: "/uploads/partner-cashmere-custom.png" },
-    ];
-    for (const brand of defaultBrands) {
+    for (const brand of defaultBrandData) {
       await storage.createBrand(brand);
     }
-    console.log(`Seeded ${defaultBrands.length} brands`);
+    console.log(`Seeded ${defaultBrandData.length} brands`);
+  } else {
+    for (const brand of existingBrands) {
+      const match = defaultBrandData.find(b => b.name === brand.name);
+      if (match && brand.imageUrl !== match.imageUrl) {
+        await storage.updateBrand(brand.id, { imageUrl: match.imageUrl });
+      }
+    }
+    console.log("Updated existing brand image URLs");
   }
 
+  const defaultClientData = [
+    { name: "Four Seasons", imageUrl: "/uploads/four-seasons-new.png", sortOrder: 1 },
+    { name: "Grand Hyatt", imageUrl: "/uploads/grand-hyatt.jpg", sortOrder: 2 },
+    { name: "W Hotel", imageUrl: "/uploads/w-hotel.jpg", sortOrder: 3 },
+    { name: "Landmark", imageUrl: "/uploads/landmark.jpg", sortOrder: 4 },
+    { name: "Coral Baghdad", imageUrl: "/uploads/coral-baghdad.jpg", sortOrder: 5 },
+    { name: "The House Hotels", imageUrl: "/uploads/the-house-hotels-logo.webp", sortOrder: 6 },
+    { name: "Banyan Tree", imageUrl: "/uploads/banyan-tree.png", sortOrder: 7 },
+    { name: "Rosewood", imageUrl: "/uploads/rosewood.jpg", sortOrder: 8 },
+    { name: "Mandarin Oriental", imageUrl: "/uploads/mandarin-oriental.png", sortOrder: 10 },
+    { name: "Accor", imageUrl: "/uploads/accor.png", sortOrder: 11 },
+    { name: "Le Meridien", imageUrl: "/uploads/le-meridien.png", sortOrder: 12 },
+    { name: "Crowne Plaza", imageUrl: "/uploads/crowne-plaza.png", sortOrder: 13 },
+    { name: "IHG", imageUrl: "/uploads/ihg.jpg", sortOrder: 14 },
+    { name: "Marriott", imageUrl: "/uploads/marriott.png", sortOrder: 15 },
+    { name: "Millennium", imageUrl: "/uploads/millennium.png", sortOrder: 16 },
+    { name: "Hyatt", imageUrl: "/uploads/hyatt.jpg", sortOrder: 17 },
+    { name: "WYNDHAM", imageUrl: "/uploads/client-wyndham.webp", sortOrder: 18 },
+    { name: "Estate Georgia", imageUrl: "/uploads/client-estate-georgia.png", sortOrder: 19 },
+    { name: "FIVE", imageUrl: "/uploads/client-five.jpg", sortOrder: 20 },
+    { name: "RAMADA", imageUrl: "/uploads/client-ramada.jpg", sortOrder: 21 },
+    { name: "IBIS", imageUrl: "/uploads/client-ibis.jpeg", sortOrder: 22 },
+    { name: "Bristol HOTEL", imageUrl: "/uploads/client-bristol.png", sortOrder: 23 },
+    { name: "HILTON", imageUrl: "/uploads/client-hilton.svg", sortOrder: 24 },
+    { name: "JIN JIANG", imageUrl: "/uploads/client-jin-jiang.jpg", sortOrder: 25 },
+    { name: "IL PALAZSO", imageUrl: "/uploads/client-il-palazzo.jpg", sortOrder: 26 },
+    { name: "Kempinski", imageUrl: "/uploads/client-kempinski.jpg", sortOrder: 27 },
+    { name: "RADISSON Collection", imageUrl: "/uploads/client-radisson.jpg", sortOrder: 28 },
+  ];
   const existingClients = await storage.getAllClients();
   if (existingClients.length === 0) {
-    const defaultClients = [
-      { name: "Four Seasons", imageUrl: "/uploads/four-seasons-new.png", sortOrder: 1 },
-      { name: "Grand Hyatt", imageUrl: "/uploads/grand-hyatt.jpg", sortOrder: 2 },
-      { name: "W Hotel", imageUrl: "/uploads/w-hotel.jpg", sortOrder: 3 },
-      { name: "Landmark", imageUrl: "/uploads/landmark.jpg", sortOrder: 4 },
-      { name: "Coral Baghdad", imageUrl: "/uploads/coral-baghdad.jpg", sortOrder: 5 },
-      { name: "The House Hotels", imageUrl: "/uploads/the-house-hotels-logo.webp", sortOrder: 6 },
-      { name: "Banyan Tree", imageUrl: "/uploads/banyan-tree.png", sortOrder: 7 },
-      { name: "Rosewood", imageUrl: "/uploads/rosewood.jpg", sortOrder: 8 },
-      { name: "Mandarin Oriental", imageUrl: "/uploads/mandarin-oriental.png", sortOrder: 10 },
-      { name: "Accor", imageUrl: "/uploads/accor.png", sortOrder: 11 },
-      { name: "Le Meridien", imageUrl: "/uploads/le-meridien.png", sortOrder: 12 },
-      { name: "Crowne Plaza", imageUrl: "/uploads/crowne-plaza.png", sortOrder: 13 },
-      { name: "IHG", imageUrl: "/uploads/ihg.jpg", sortOrder: 14 },
-      { name: "Marriott", imageUrl: "/uploads/marriott.png", sortOrder: 15 },
-      { name: "Millennium", imageUrl: "/uploads/millennium.png", sortOrder: 16 },
-      { name: "Hyatt", imageUrl: "/uploads/hyatt.jpg", sortOrder: 17 },
-      { name: "WYNDHAM", imageUrl: "/uploads/client-wyndham.webp", sortOrder: 18 },
-      { name: "Estate Georgia", imageUrl: "/uploads/client-estate-georgia.png", sortOrder: 19 },
-      { name: "FIVE", imageUrl: "/uploads/client-five.jpg", sortOrder: 20 },
-      { name: "RAMADA", imageUrl: "/uploads/client-ramada.jpg", sortOrder: 21 },
-      { name: "IBIS", imageUrl: "/uploads/client-ibis.jpeg", sortOrder: 22 },
-      { name: "Bristol HOTEL", imageUrl: "/uploads/client-bristol.png", sortOrder: 23 },
-      { name: "HILTON", imageUrl: "/uploads/client-hilton.svg", sortOrder: 24 },
-      { name: "JIN JIANG", imageUrl: "/uploads/client-jin-jiang.jpg", sortOrder: 25 },
-      { name: "IL PALAZSO", imageUrl: "/uploads/client-il-palazzo.jpg", sortOrder: 26 },
-      { name: "Kempinski", imageUrl: "/uploads/client-kempinski.jpg", sortOrder: 27 },
-      { name: "RADISSON Collection", imageUrl: "/uploads/client-radisson.jpg", sortOrder: 28 },
-    ];
-    for (const client of defaultClients) {
+    for (const client of defaultClientData) {
       await storage.createClient(client);
     }
-    console.log(`Seeded ${defaultClients.length} clients`);
+    console.log(`Seeded ${defaultClientData.length} clients`);
+  } else {
+    for (const client of existingClients) {
+      const match = defaultClientData.find(c => c.name === client.name);
+      if (match && client.imageUrl !== match.imageUrl) {
+        await storage.updateClient(client.id, { imageUrl: match.imageUrl });
+      }
+    }
+    console.log("Updated existing client image URLs");
   }
 
   const existingProducts = await storage.getAllProducts();
