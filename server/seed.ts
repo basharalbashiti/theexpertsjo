@@ -270,6 +270,7 @@ export async function seedDatabase() {
     { key: "partners_banner", imageUrl: "/uploads/partners-banner.png", label: "Partners Page Banner" },
     { key: "partners_cta", imageUrl: "/uploads/partners-cta.png", label: "Partners CTA Image" },
     { key: "category_banner", imageUrl: "/uploads/category-banner.png", label: "Category Detail Banner" },
+    { key: "home_section", imageUrl: "/uploads/home-section-image.jpg", label: "Home Section Image" },
   ];
   for (const img of defaultSiteImages) {
     await storage.upsertSiteImage(img);

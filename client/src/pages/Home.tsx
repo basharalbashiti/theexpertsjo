@@ -4,9 +4,11 @@ import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { Stats } from "@/components/home/Stats";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteImages } from "@/hooks/useSiteImages";
 
 export default function Home() {
   const { t } = useLanguage();
+  const { getImage } = useSiteImages();
 
   return (
     <Layout>
@@ -48,7 +50,7 @@ export default function Home() {
                <div className="absolute top-0 right-0 w-3/4 h-3/4 bg-neutral-200 rtl:right-auto rtl:left-0" />
                <div className="absolute bottom-0 left-0 w-3/4 h-3/4 border-2 border-primary z-10 rtl:left-auto rtl:right-0" />
                <div className="absolute inset-8 bg-neutral-300 overflow-hidden">
-                  <div className="w-full h-full bg-[url('@/assets/hero-2.jpg')] bg-cover bg-center opacity-80" />
+                  <img src={getImage("home_section", "/uploads/home-section-image.jpg")} alt="" className="w-full h-full object-cover opacity-80" />
                </div>
             </div>
           </motion.div>
