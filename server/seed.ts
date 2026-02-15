@@ -190,15 +190,19 @@ export async function seedDatabase() {
     console.log("Default admin user created (username: admin, password: admin123)");
   }
 
+  const deprecatedKeys = ["info", "info_title", "info_subtitle", "info_content"];
+  for (const key of deprecatedKeys) {
+    await db.delete(siteContent).where(eq(siteContent.key, key));
+  }
+
   const existingContent = await storage.getAllContent();
-  if (existingContent.length === 0) {
-    const contents = Object.entries(defaultTranslations).map(([key, val]) => ({
-      key,
-      valueEn: val.en,
-      valueAr: val.ar,
-    }));
-    await storage.bulkUpsertContent(contents);
-    console.log(`Seeded ${contents.length} content entries`);
+  const existingKeys = new Set(existingContent.map(c => c.key));
+  const missingEntries = Object.entries(defaultTranslations)
+    .filter(([key]) => !existingKeys.has(key))
+    .map(([key, val]) => ({ key, valueEn: val.en, valueAr: val.ar }));
+  if (missingEntries.length > 0) {
+    await storage.bulkUpsertContent(missingEntries);
+    console.log(`Seeded ${missingEntries.length} missing content entries`);
   }
 
   const existingCategories = await storage.getAllCategories();
