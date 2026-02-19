@@ -241,6 +241,45 @@ export default function ContentEditor() {
           {displayedItems.map((item) => {
             const edited = editedContents[item.id];
             const isEdited = !!edited;
+            const isBooleanToggle = item.key.endsWith("_visible");
+            const currentValue = edited?.valueEn ?? item.valueEn;
+            const isOn = currentValue === "true";
+
+            if (isBooleanToggle) {
+              return (
+                <div
+                  key={item.id}
+                  data-testid={`content-item-${item.id}`}
+                  className={`rounded-xl border bg-white p-4 transition-colors ${isEdited ? "border-primary/30 bg-primary/5" : ""}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded">{item.key}</span>
+                      {isEdited && <span className="text-xs text-primary font-medium">{t("modified")}</span>}
+                    </div>
+                    <button
+                      data-testid={`toggle-${item.key}`}
+                      onClick={() => {
+                        const newVal = isOn ? "false" : "true";
+                        handleChange(item.id, "valueEn", newVal);
+                        handleChange(item.id, "valueAr", newVal);
+                      }}
+                      className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+                        isOn ? "bg-green-500" : "bg-neutral-300"
+                      }`}
+                    >
+                      <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+                        isOn ? "translate-x-6" : "translate-x-1"
+                      }`} />
+                    </button>
+                  </div>
+                  <p className="text-sm text-neutral-500 mt-2">
+                    {isOn ? t("visible") : t("hidden")}
+                  </p>
+                </div>
+              );
+            }
+
             return (
               <div
                 key={item.id}
