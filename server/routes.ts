@@ -1,6 +1,7 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { insertContactMessageSchema } from "@shared/schema";
 import bcrypt from "bcryptjs";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
@@ -744,6 +745,61 @@ export async function registerRoutes(
       res.json({ message: "Quick link deleted" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete quick link" });
+    }
+  });
+
+  // Contact Messages (public: create only; admin: read/delete)
+  app.post("/api/contact", async (req: Request, res: Response) => {
+    try {
+      const parsed = insertContactMessageSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: "Name, email, and message are required" });
+      }
+      const msg = await storage.createContactMessage(parsed.data);
+      res.status(201).json(msg);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to send message" });
+    }
+  });
+
+  app.get("/api/contact-messages", requireAuth, async (_req: Request, res: Response) => {
+    try {
+      const messages = await storage.getAllContactMessages();
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch messages" });
+    }
+  });
+
+  app.get("/api/contact-messages/unread-count", requireAuth, async (_req: Request, res: Response) => {
+    try {
+      const count = await storage.getUnreadMessageCount();
+      res.json({ count });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch unread count" });
+    }
+  });
+
+  app.patch("/api/contact-messages/:id/read", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { read } = req.body;
+      const msg = await storage.markContactMessageRead(id, read !== false);
+      if (!msg) return res.status(404).json({ message: "Message not found" });
+      res.json(msg);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update message" });
+    }
+  });
+
+  app.delete("/api/contact-messages/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteContactMessage(id);
+      if (!success) return res.status(404).json({ message: "Message not found" });
+      res.json({ message: "Message deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete message" });
     }
   });
 

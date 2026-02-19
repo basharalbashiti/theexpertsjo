@@ -233,6 +233,10 @@ export const insertContactMessageSchema = createInsertSchema(contactMessages).pi
   email: true,
   subject: true,
   message: true,
+}).extend({
+  name: z.string().min(1),
+  email: z.string().email(),
+  message: z.string().min(1),
 });
 
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;

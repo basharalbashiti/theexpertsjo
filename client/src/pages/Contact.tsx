@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { MapPin, Send, User, Mail, FileText, MessageSquare, Phone } from "lucide-react";
+import { MapPin, Send, User, Mail, FileText, MessageSquare, Phone, CheckCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 
@@ -18,6 +19,9 @@ interface KeyContact {
 
 export default function Contact() {
   const { t, lang } = useLanguage();
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const { data: keyContacts = [] } = useQuery<KeyContact[]>({
     queryKey: ["/api/key-contacts"],
@@ -28,6 +32,30 @@ export default function Contact() {
     },
   });
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      setErrorMsg(lang === "AR" ? "يرجى ملء جميع الحقول المطلوبة" : "Please fill in all required fields");
+      setStatus("error");
+      return;
+    }
+    setStatus("sending");
+    setErrorMsg("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setStatus("success");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setErrorMsg(lang === "AR" ? "فشل في إرسال الرسالة. حاول مرة أخرى." : "Failed to send message. Please try again.");
+      setStatus("error");
+    }
+  };
+
   return (
     <Layout>
       <section className="pt-32 pb-20 bg-neutral-50">
@@ -36,55 +64,101 @@ export default function Contact() {
           <p className="text-neutral-500 text-sm mb-10">{t("get_in_touch")}</p>
 
           <div className="bg-white rounded-2xl shadow-lg shadow-neutral-200/50 border border-neutral-100 p-6 md:p-8">
-            <form className="space-y-6 text-left">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="flex items-center gap-3">
-                  <User size={16} className="text-neutral-300 flex-shrink-0" />
-                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("full_name")}</label>
-                  <input
-                    data-testid="input-contact-name"
-                    type="text"
-                    className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
-                  />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail size={16} className="text-neutral-300 flex-shrink-0" />
-                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[110px]">{t("email_addr")}</label>
-                  <input
-                    data-testid="input-contact-email"
-                    type="email"
-                    className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <FileText size={16} className="text-neutral-300 flex-shrink-0" />
-                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("subject")}</label>
-                <input
-                  data-testid="input-contact-subject"
-                  type="text"
-                  className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
-                />
-              </div>
-
-              <div className="flex gap-3">
-                <MessageSquare size={16} className="text-neutral-300 flex-shrink-0 mt-3" />
-                <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px] pt-3">{t("message")}</label>
-                <textarea
-                  data-testid="input-contact-message"
-                  rows={5}
-                  className="w-full border-2 border-neutral-200 rounded-lg py-3 px-3 focus:border-primary outline-none transition-colors bg-neutral-50/50 text-neutral-800 resize-none"
-                />
-              </div>
-
-              <div className="text-center pt-2">
-                <button data-testid="button-contact-submit" className="inline-flex items-center gap-3 bg-primary text-white px-14 py-4 rounded-lg uppercase text-xs font-bold tracking-widest hover:bg-black transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
-                  <Send size={16} />
-                  {t("submit")}
+            {status === "success" ? (
+              <div className="py-12 text-center" data-testid="contact-success">
+                <CheckCircle size={48} className="mx-auto text-green-500 mb-4" />
+                <h3 className="text-xl font-serif font-bold text-neutral-900 mb-2">
+                  {lang === "AR" ? "تم إرسال رسالتك بنجاح!" : "Message Sent Successfully!"}
+                </h3>
+                <p className="text-neutral-500 text-sm mb-6">
+                  {lang === "AR" ? "سنتواصل معك في أقرب وقت ممكن." : "We'll get back to you as soon as possible."}
+                </p>
+                <button
+                  data-testid="button-send-another"
+                  onClick={() => setStatus("idle")}
+                  className="text-primary text-sm font-semibold hover:underline"
+                >
+                  {lang === "AR" ? "إرسال رسالة أخرى" : "Send another message"}
                 </button>
               </div>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6 text-left">
+                {status === "error" && errorMsg && (
+                  <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg" data-testid="contact-error">
+                    {errorMsg}
+                  </div>
+                )}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="flex items-center gap-3">
+                    <User size={16} className="text-neutral-300 flex-shrink-0" />
+                    <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("full_name")} *</label>
+                    <input
+                      data-testid="input-contact-name"
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
+                      className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
+                    />
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Mail size={16} className="text-neutral-300 flex-shrink-0" />
+                    <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[110px]">{t("email_addr")} *</label>
+                    <input
+                      data-testid="input-contact-email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                      className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <FileText size={16} className="text-neutral-300 flex-shrink-0" />
+                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px]">{t("subject")}</label>
+                  <input
+                    data-testid="input-contact-subject"
+                    type="text"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    className="w-full border-b-2 border-neutral-200 py-3 focus:border-primary outline-none transition-colors bg-transparent text-neutral-800"
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <MessageSquare size={16} className="text-neutral-300 flex-shrink-0 mt-3" />
+                  <label className="text-sm font-semibold text-neutral-500 whitespace-nowrap min-w-[90px] pt-3">{t("message")} *</label>
+                  <textarea
+                    data-testid="input-contact-message"
+                    rows={5}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    className="w-full border-2 border-neutral-200 rounded-lg py-3 px-3 focus:border-primary outline-none transition-colors bg-neutral-50/50 text-neutral-800 resize-none"
+                  />
+                </div>
+
+                <div className="text-center pt-2">
+                  <button
+                    data-testid="button-contact-submit"
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="inline-flex items-center gap-3 bg-primary text-white px-14 py-4 rounded-lg uppercase text-xs font-bold tracking-widest hover:bg-black transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {status === "sending" ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Send size={16} />
+                    )}
+                    {status === "sending"
+                      ? (lang === "AR" ? "جاري الإرسال..." : "Sending...")
+                      : t("submit")}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>

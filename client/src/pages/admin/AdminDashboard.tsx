@@ -15,9 +15,10 @@ import SiteImageManager from "./SiteImageManager";
 import QuickLinksManager from "./QuickLinksManager";
 import LeadershipManager from "./LeadershipManager";
 import KeyContactManager from "./KeyContactManager";
+import MessageManager from "./MessageManager";
 import type { Category, Product, Partner, Brand, Client, SiteContent, Leadership } from "@shared/schema";
 
-type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners" | "clients" | "leadership" | "key-contacts" | "quick-links" | "settings";
+type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners" | "clients" | "leadership" | "key-contacts" | "quick-links" | "messages" | "settings";
 
 interface MenuItem {
   id: AdminPage;
@@ -63,6 +64,9 @@ function MenuIcon({ name }: { name: string }) {
     ),
     link: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    ),
+    mail: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
     ),
   };
   return icons[name] || null;
@@ -190,6 +194,7 @@ export default function AdminDashboard() {
     { id: "leadership", label: t("leadership"), icon: "crown", description: t("desc_leadership") },
     { id: "key-contacts", label: t("key_contacts"), icon: "phone", description: t("desc_key_contacts") },
     { id: "quick-links", label: t("quick_links"), icon: "link", description: t("desc_quick_links") },
+    { id: "messages", label: "Messages", icon: "mail", description: "View contact form submissions" },
     { id: "settings", label: t("settings"), icon: "settings", description: t("desc_settings") },
   ];
 
@@ -248,6 +253,8 @@ export default function AdminDashboard() {
         return <KeyContactManager />;
       case "quick-links":
         return <QuickLinksManager />;
+      case "messages":
+        return <MessageManager />;
       case "settings":
         return (
           <div className="space-y-6">
