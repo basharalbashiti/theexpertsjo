@@ -118,7 +118,7 @@ export default function About() {
       <section className="py-24 bg-neutral-50">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-serif font-bold mb-16 underline decoration-primary underline-offset-8">{t("our_leadership")}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="flex flex-wrap justify-center gap-12">
             {leaders.map((person, i) => {
               const name = lang === "AR" && person.nameAr ? person.nameAr : person.nameEn;
               const role = lang === "AR" && person.roleAr ? person.roleAr : person.roleEn;
