@@ -1,6 +1,6 @@
-import { users, siteContent, partners, categories, products, brands, siteImages, clients, leadership, keyContacts, quickLinks, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink } from "@shared/schema";
+import { users, siteContent, partners, categories, products, brands, siteImages, clients, leadership, keyContacts, quickLinks, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type ContactMessage, type InsertContactMessage } from "@shared/schema";
 import { db } from "./db";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, desc } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -70,6 +70,12 @@ export interface IStorage {
   updateQuickLink(id: number, link: Partial<InsertQuickLink>): Promise<QuickLink | undefined>;
   deleteQuickLink(id: number): Promise<boolean>;
 
+  getAllContactMessages(): Promise<ContactMessage[]>;
+  getContactMessage(id: number): Promise<ContactMessage | undefined>;
+  createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
+  markContactMessageRead(id: number, read: boolean): Promise<ContactMessage | undefined>;
+  deleteContactMessage(id: number): Promise<boolean>;
+  getUnreadMessageCount(): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -354,6 +360,34 @@ export class DatabaseStorage implements IStorage {
     return result.length > 0;
   }
 
+  async getAllContactMessages(): Promise<ContactMessage[]> {
+    return db.select().from(contactMessages).orderBy(desc(contactMessages.createdAt));
+  }
+
+  async getContactMessage(id: number): Promise<ContactMessage | undefined> {
+    const [msg] = await db.select().from(contactMessages).where(eq(contactMessages.id, id));
+    return msg || undefined;
+  }
+
+  async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
+    const [result] = await db.insert(contactMessages).values(message).returning();
+    return result;
+  }
+
+  async markContactMessageRead(id: number, read: boolean): Promise<ContactMessage | undefined> {
+    const [result] = await db.update(contactMessages).set({ read }).where(eq(contactMessages.id, id)).returning();
+    return result || undefined;
+  }
+
+  async deleteContactMessage(id: number): Promise<boolean> {
+    const result = await db.delete(contactMessages).where(eq(contactMessages.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getUnreadMessageCount(): Promise<number> {
+    const result = await db.select().from(contactMessages).where(eq(contactMessages.read, false));
+    return result.length;
+  }
 }
 
 export const storage = new DatabaseStorage();
