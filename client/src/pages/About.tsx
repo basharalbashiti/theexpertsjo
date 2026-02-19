@@ -6,8 +6,8 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useSiteImages } from "@/hooks/useSiteImages";
 import type { Leadership } from "@shared/schema";
 import imgBannerFallback from "@/assets/hero-1.jpg";
-import imgMissionFallback from "@/assets/hero-2.jpg";
-import imgVisionFallback from "@/assets/hero-3.jpg";
+import imgMissionFallback from "@/assets/mission-bg.png";
+import imgVisionFallback from "@/assets/vision-bg.png";
 import imgChairmanFallback from "@/assets/cat-furniture.jpg";
 
 export default function About() {
