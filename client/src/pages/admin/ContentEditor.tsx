@@ -24,7 +24,7 @@ const sectionLabels: Record<string, string> = {
   general: "General",
 };
 
-const hiddenPrefixes = ["cat_", "rs_", "spa_", "amenities_", "buffet_", "fb_", "linens_", "sustain", "harmony", "room_service_hero"];
+const hiddenPrefixes = ["cat_", "rs_", "spa_", "amenities_", "buffet_", "fb_", "linens_", "sustain", "harmony", "room_service_hero", "stat_", "stats_"];
 
 const keyToSection: Record<string, string> = {
   about: "about",
