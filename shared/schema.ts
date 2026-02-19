@@ -226,6 +226,7 @@ export const contactMessages = pgTable("contact_messages", {
   message: text("message").notNull(),
   read: boolean("read").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at"),
 });
 
 export const insertContactMessageSchema = createInsertSchema(contactMessages).pick({

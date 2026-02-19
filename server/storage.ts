@@ -1,6 +1,6 @@
 import { users, siteContent, partners, categories, products, brands, siteImages, clients, leadership, keyContacts, quickLinks, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type ContactMessage, type InsertContactMessage } from "@shared/schema";
 import { db } from "./db";
-import { eq, asc, desc } from "drizzle-orm";
+import { eq, asc, desc, isNull, isNotNull, lt, and } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -71,10 +71,14 @@ export interface IStorage {
   deleteQuickLink(id: number): Promise<boolean>;
 
   getAllContactMessages(): Promise<ContactMessage[]>;
+  getDeletedContactMessages(): Promise<ContactMessage[]>;
   getContactMessage(id: number): Promise<ContactMessage | undefined>;
   createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
   markContactMessageRead(id: number, read: boolean): Promise<ContactMessage | undefined>;
-  deleteContactMessage(id: number): Promise<boolean>;
+  softDeleteContactMessage(id: number): Promise<ContactMessage | undefined>;
+  restoreContactMessage(id: number): Promise<ContactMessage | undefined>;
+  permanentDeleteContactMessage(id: number): Promise<boolean>;
+  purgeExpiredMessages(daysOld: number): Promise<number>;
   getUnreadMessageCount(): Promise<number>;
 }
 
@@ -361,7 +365,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllContactMessages(): Promise<ContactMessage[]> {
-    return db.select().from(contactMessages).orderBy(desc(contactMessages.createdAt));
+    return db.select().from(contactMessages).where(isNull(contactMessages.deletedAt)).orderBy(desc(contactMessages.createdAt));
+  }
+
+  async getDeletedContactMessages(): Promise<ContactMessage[]> {
+    return db.select().from(contactMessages).where(isNotNull(contactMessages.deletedAt)).orderBy(desc(contactMessages.deletedAt));
   }
 
   async getContactMessage(id: number): Promise<ContactMessage | undefined> {
@@ -379,13 +387,32 @@ export class DatabaseStorage implements IStorage {
     return result || undefined;
   }
 
-  async deleteContactMessage(id: number): Promise<boolean> {
+  async softDeleteContactMessage(id: number): Promise<ContactMessage | undefined> {
+    const [result] = await db.update(contactMessages).set({ deletedAt: new Date() }).where(eq(contactMessages.id, id)).returning();
+    return result || undefined;
+  }
+
+  async restoreContactMessage(id: number): Promise<ContactMessage | undefined> {
+    const [result] = await db.update(contactMessages).set({ deletedAt: null }).where(eq(contactMessages.id, id)).returning();
+    return result || undefined;
+  }
+
+  async permanentDeleteContactMessage(id: number): Promise<boolean> {
     const result = await db.delete(contactMessages).where(eq(contactMessages.id, id)).returning();
     return result.length > 0;
   }
 
+  async purgeExpiredMessages(daysOld: number): Promise<number> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - daysOld);
+    const result = await db.delete(contactMessages).where(
+      and(isNotNull(contactMessages.deletedAt), lt(contactMessages.deletedAt, cutoff))
+    ).returning();
+    return result.length;
+  }
+
   async getUnreadMessageCount(): Promise<number> {
-    const result = await db.select().from(contactMessages).where(eq(contactMessages.read, false));
+    const result = await db.select().from(contactMessages).where(and(eq(contactMessages.read, false), isNull(contactMessages.deletedAt)));
     return result.length;
   }
 }

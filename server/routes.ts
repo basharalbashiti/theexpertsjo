@@ -780,6 +780,16 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/contact-messages/trash", requireAuth, async (_req: Request, res: Response) => {
+    try {
+      await storage.purgeExpiredMessages(30);
+      const messages = await storage.getDeletedContactMessages();
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch trash" });
+    }
+  });
+
   app.patch("/api/contact-messages/:id/read", requireAuth, async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
@@ -795,11 +805,33 @@ export async function registerRoutes(
   app.delete("/api/contact-messages/:id", requireAuth, async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
-      const success = await storage.deleteContactMessage(id);
-      if (!success) return res.status(404).json({ message: "Message not found" });
-      res.json({ message: "Message deleted" });
+      const msg = await storage.softDeleteContactMessage(id);
+      if (!msg) return res.status(404).json({ message: "Message not found" });
+      res.json({ message: "Message moved to trash" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete message" });
+    }
+  });
+
+  app.patch("/api/contact-messages/:id/restore", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const msg = await storage.restoreContactMessage(id);
+      if (!msg) return res.status(404).json({ message: "Message not found" });
+      res.json(msg);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to restore message" });
+    }
+  });
+
+  app.delete("/api/contact-messages/:id/permanent", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.permanentDeleteContactMessage(id);
+      if (!success) return res.status(404).json({ message: "Message not found" });
+      res.json({ message: "Message permanently deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to permanently delete message" });
     }
   });
 
