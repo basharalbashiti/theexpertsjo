@@ -24,13 +24,6 @@ export default function About() {
   const imgVision = getImage("about_vision", imgVisionFallback);
   const imgChairman = getImage("about_chairman", imgChairmanFallback);
 
-  const statsVisible = t("stats_visible") !== "false";
-  const stats = [
-    { label: t("stat_product_lines"), value: t("stat_product_lines_value") },
-    { label: t("stat_brands"), value: t("stat_brands_value") },
-    { label: t("stat_projects"), value: t("stat_projects_value") },
-    { label: t("stat_clients"), value: t("stat_clients_value") },
-  ];
 
   return (
     <Layout>
@@ -52,24 +45,6 @@ export default function About() {
         </div>
       </div>
 
-      {statsVisible && (
-        <div className="bg-neutral-900 py-12">
-          <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <div className="text-3xl font-serif text-primary font-bold">{stat.value}</div>
-                <div className="text-neutral-400 text-xs uppercase tracking-widest mt-2">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
 
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
