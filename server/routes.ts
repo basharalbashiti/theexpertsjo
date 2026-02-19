@@ -747,5 +747,59 @@ export async function registerRoutes(
     }
   });
 
+  const SITE_URL = "https://theexpertsjo.com";
+
+  app.get("/sitemap.xml", async (_req: Request, res: Response) => {
+    try {
+      const categories = await storage.getAllCategories();
+      const visibleCategories = categories.filter((c: any) => c.visible !== false);
+
+      const staticPages = [
+        { url: "/", priority: "1.0", changefreq: "weekly" },
+        { url: "/about-us", priority: "0.8", changefreq: "monthly" },
+        { url: "/categories", priority: "0.9", changefreq: "weekly" },
+        { url: "/contact", priority: "0.7", changefreq: "monthly" },
+        { url: "/partners", priority: "0.7", changefreq: "monthly" },
+        { url: "/sustainability", priority: "0.6", changefreq: "monthly" },
+      ];
+
+      const today = new Date().toISOString().split("T")[0];
+
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+      xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+      for (const page of staticPages) {
+        xml += `  <url>\n`;
+        xml += `    <loc>${SITE_URL}${page.url}</loc>\n`;
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
+        xml += `    <priority>${page.priority}</priority>\n`;
+        xml += `  </url>\n`;
+      }
+
+      for (const cat of visibleCategories) {
+        xml += `  <url>\n`;
+        xml += `    <loc>${SITE_URL}/categories/${cat.slug}</loc>\n`;
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+        xml += `  </url>\n`;
+      }
+
+      xml += `</urlset>`;
+
+      res.set("Content-Type", "application/xml");
+      res.send(xml);
+    } catch (error) {
+      res.status(500).send("Error generating sitemap");
+    }
+  });
+
+  app.get("/robots.txt", (_req: Request, res: Response) => {
+    const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+    res.set("Content-Type", "text/plain");
+    res.send(robots);
+  });
+
   return httpServer;
 }
