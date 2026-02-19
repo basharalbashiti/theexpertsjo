@@ -52,8 +52,12 @@ export default function ProductManager() {
   });
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products"],
-    queryFn: getQueryFn({ on401: "throw" }),
+    queryKey: ["/api/products", { all: true }],
+    queryFn: async () => {
+      const res = await fetch("/api/products?all=true", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch products");
+      return res.json();
+    },
   });
 
   const getCategoryName = (catId: number) => {
@@ -159,6 +163,24 @@ export default function ProductManager() {
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
       resetForm();
       toast({ title: t("product_updated") });
+    },
+    onError: (err: Error) => {
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
+    },
+  });
+
+  const toggleVisibilityMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/products/${id}/toggle-visibility`, {
+        method: "PATCH",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      toast({ title: t("visibility_updated") });
     },
     onError: (err: Error) => {
       toast({ title: t("error"), description: err.message, variant: "destructive" });
@@ -306,6 +328,7 @@ export default function ProductManager() {
               >
                 {t("category")}<SortIcon field="category" />
               </th>
+              <th className="text-center px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("visible")}</th>
               <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("actions")}</th>
             </tr>
           </thead>
@@ -340,6 +363,24 @@ export default function ProductManager() {
                   <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-1 rounded-full">
                     {getCategoryName(product.categoryId)}
                   </span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <button
+                    data-testid={`button-toggle-visibility-product-${product.id}`}
+                    onClick={() => toggleVisibilityMutation.mutate(product.id)}
+                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+                      product.visible
+                        ? "bg-green-50 text-green-700 hover:bg-green-100"
+                        : "bg-neutral-100 text-neutral-400 hover:bg-neutral-200"
+                    }`}
+                  >
+                    {product.visible ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                    )}
+                    {product.visible ? t("visible") : t("hidden")}
+                  </button>
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">

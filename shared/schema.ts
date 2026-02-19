@@ -80,6 +80,7 @@ export const products = pgTable("products", {
   brand: text("brand").notNull().default(""),
   categoryId: integer("category_id").notNull(),
   sortOrder: integer("sort_order").notNull().default(0),
+  visible: boolean("visible").notNull().default(true),
 });
 
 export const insertProductSchema = createInsertSchema(products).pick({
@@ -91,6 +92,7 @@ export const insertProductSchema = createInsertSchema(products).pick({
   brand: true,
   categoryId: true,
   sortOrder: true,
+  visible: true,
 });
 
 export type InsertProduct = z.infer<typeof insertProductSchema>;

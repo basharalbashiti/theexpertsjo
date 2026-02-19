@@ -27,7 +27,9 @@ export interface IStorage {
   deleteCategory(id: number): Promise<boolean>;
 
   getAllProducts(): Promise<Product[]>;
+  getVisibleProducts(): Promise<Product[]>;
   getProductsByCategory(categoryId: number): Promise<Product[]>;
+  getVisibleProductsByCategory(categoryId: number): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
@@ -187,8 +189,16 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(products).orderBy(asc(products.sortOrder));
   }
 
+  async getVisibleProducts(): Promise<Product[]> {
+    return db.select().from(products).where(eq(products.visible, true)).orderBy(asc(products.sortOrder));
+  }
+
   async getProductsByCategory(categoryId: number): Promise<Product[]> {
     return db.select().from(products).where(eq(products.categoryId, categoryId)).orderBy(asc(products.sortOrder));
+  }
+
+  async getVisibleProductsByCategory(categoryId: number): Promise<Product[]> {
+    return db.select().from(products).where(and(eq(products.categoryId, categoryId), eq(products.visible, true))).orderBy(asc(products.sortOrder));
   }
 
   async getProduct(id: number): Promise<Product | undefined> {

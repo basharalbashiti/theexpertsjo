@@ -297,11 +297,12 @@ export async function registerRoutes(
 
   app.get("/api/products", async (req, res) => {
     const categoryId = req.query.categoryId ? parseInt(req.query.categoryId as string) : null;
+    const all = req.query.all === "true";
     if (categoryId) {
-      const prods = await storage.getProductsByCategory(categoryId);
+      const prods = all ? await storage.getProductsByCategory(categoryId) : await storage.getVisibleProductsByCategory(categoryId);
       res.json(prods);
     } else {
-      const prods = await storage.getAllProducts();
+      const prods = all ? await storage.getAllProducts() : await storage.getVisibleProducts();
       res.json(prods);
     }
   });
@@ -365,6 +366,20 @@ export async function registerRoutes(
       res.json({ message: "Product deleted" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete product" });
+    }
+  });
+
+  app.patch("/api/products/:id/toggle-visibility", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const product = await storage.getProduct(id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      const updated = await storage.updateProduct(id, { visible: !product.visible });
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to toggle visibility" });
     }
   });
 
