@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
+import { useAdminLang } from "@/hooks/useAdminLang";
 
 interface ContactMessage {
   id: number;
@@ -15,6 +16,8 @@ interface ContactMessage {
 }
 
 export default function MessageManager() {
+  const { t, lang } = useAdminLang();
+  const dir = lang === "AR" ? "rtl" : "ltr";
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [filter, setFilter] = useState<"all" | "unread" | "read">("all");
   const [view, setView] = useState<"inbox" | "trash">("inbox");
@@ -87,7 +90,7 @@ export default function MessageManager() {
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
-    return d.toLocaleDateString("en-US", {
+    return d.toLocaleDateString(lang === "AR" ? "ar-SA" : "en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -108,7 +111,7 @@ export default function MessageManager() {
   if (selectedMessage) {
     const isTrash = !!selectedMessage.deletedAt;
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" dir={dir}>
         <div className="flex items-center gap-4">
           <Button
             data-testid="button-back-to-messages"
@@ -116,10 +119,10 @@ export default function MessageManager() {
             size="sm"
             onClick={() => setSelectedMessage(null)}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-            Back to {isTrash ? "Trash" : "Messages"}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={lang === "AR" ? "rotate-180" : ""}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            {isTrash ? t("back_to_trash") : t("back_to_messages")}
           </Button>
-          <div className="ml-auto flex gap-2">
+          <div className={`${lang === "AR" ? "mr-auto" : "ml-auto"} flex gap-2`}>
             {isTrash ? (
               <>
                 <Button
@@ -129,19 +132,19 @@ export default function MessageManager() {
                   onClick={() => restoreMutation.mutate(selectedMessage.id)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                  Restore
+                  {t("restore")}
                 </Button>
                 <Button
                   data-testid="button-permanent-delete"
                   variant="destructive"
                   size="sm"
                   onClick={() => {
-                    if (confirm("Permanently delete this message? This cannot be undone.")) {
+                    if (confirm(t("permanent_delete_confirm"))) {
                       permanentDeleteMutation.mutate(selectedMessage.id);
                     }
                   }}
                 >
-                  Delete Forever
+                  {t("delete_forever")}
                 </Button>
               </>
             ) : (
@@ -155,7 +158,7 @@ export default function MessageManager() {
                     setSelectedMessage({ ...selectedMessage, read: !selectedMessage.read });
                   }}
                 >
-                  {selectedMessage.read ? "Mark Unread" : "Mark Read"}
+                  {selectedMessage.read ? t("mark_unread") : t("mark_read")}
                 </Button>
                 <Button
                   data-testid="button-delete-message"
@@ -163,7 +166,7 @@ export default function MessageManager() {
                   size="sm"
                   onClick={() => deleteMutation.mutate(selectedMessage.id)}
                 >
-                  Delete
+                  {t("delete")}
                 </Button>
               </>
             )}
@@ -173,7 +176,7 @@ export default function MessageManager() {
         {isTrash && selectedMessage.deletedAt && (
           <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm px-4 py-3 rounded-lg flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-            This message will be permanently deleted in {getDaysUntilPurge(selectedMessage.deletedAt)} days. You can restore it or delete it now.
+            {t("trash_warning")} {getDaysUntilPurge(selectedMessage.deletedAt)} {t("trash_warning_suffix")}
           </div>
         )}
 
@@ -181,7 +184,7 @@ export default function MessageManager() {
           <div className="flex items-start justify-between">
             <div>
               <h3 className="text-xl font-bold text-neutral-900" data-testid="text-message-subject">
-                {selectedMessage.subject || "(No Subject)"}
+                {selectedMessage.subject || t("no_subject")}
               </h3>
               <p className="text-sm text-neutral-500 mt-1" data-testid="text-message-date">
                 {formatDate(selectedMessage.createdAt)}
@@ -192,14 +195,14 @@ export default function MessageManager() {
           <div className="border-t pt-4 space-y-3">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-neutral-400 font-medium">From:</span>
-                <span className="ml-2 text-neutral-800 font-semibold" data-testid="text-message-name">{selectedMessage.name}</span>
+                <span className="text-neutral-400 font-medium">{t("from")}</span>
+                <span className={`${lang === "AR" ? "mr-2" : "ml-2"} text-neutral-800 font-semibold`} data-testid="text-message-name">{selectedMessage.name}</span>
               </div>
               <div>
-                <span className="text-neutral-400 font-medium">Email:</span>
+                <span className="text-neutral-400 font-medium">{t("email_label")}</span>
                 <a
                   href={`mailto:${selectedMessage.email}`}
-                  className="ml-2 text-primary hover:underline"
+                  className={`${lang === "AR" ? "mr-2" : "ml-2"} text-primary hover:underline`}
                   data-testid="text-message-email"
                 >
                   {selectedMessage.email}
@@ -221,8 +224,8 @@ export default function MessageManager() {
                 className="inline-flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
                 data-testid="button-reply-email"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
-                Reply via Email
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={lang === "AR" ? "rotate-180" : ""}><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+                {t("reply_via_email")}
               </a>
             </div>
           )}
@@ -234,14 +237,14 @@ export default function MessageManager() {
   const displayMessages = view === "inbox" ? filteredMessages : trashedMessages;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={dir}>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Messages</h2>
+          <h2 className="text-2xl font-bold text-neutral-900">{t("messages")}</h2>
           <p className="text-neutral-500 text-sm">
             {view === "inbox"
-              ? `${messages.length} total${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`
-              : `${trashedMessages.length} in trash`}
+              ? `${messages.length} ${t("total")}${unreadCount > 0 ? `, ${unreadCount} ${t("unread")}` : ""}`
+              : `${trashedMessages.length} ${t("in_trash")}`}
           </p>
         </div>
         <div className="flex gap-2">
@@ -254,9 +257,9 @@ export default function MessageManager() {
                 : "bg-white border text-neutral-600 hover:bg-neutral-50"
             }`}
           >
-            Inbox
+            {t("inbox")}
             {unreadCount > 0 && (
-              <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${view === "inbox" ? "bg-white/20" : "bg-primary/10 text-primary"}`}>
+              <span className={`${lang === "AR" ? "mr-1.5" : "ml-1.5"} px-1.5 py-0.5 rounded-full text-xs ${view === "inbox" ? "bg-white/20" : "bg-primary/10 text-primary"}`}>
                 {unreadCount}
               </span>
             )}
@@ -270,9 +273,9 @@ export default function MessageManager() {
                 : "bg-white border text-neutral-600 hover:bg-neutral-50"
             }`}
           >
-            Trash
+            {t("trash")}
             {trashedMessages.length > 0 && (
-              <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${view === "trash" ? "bg-white/20" : "bg-neutral-200 text-neutral-600"}`}>
+              <span className={`${lang === "AR" ? "mr-1.5" : "ml-1.5"} px-1.5 py-0.5 rounded-full text-xs ${view === "trash" ? "bg-white/20" : "bg-neutral-200 text-neutral-600"}`}>
                 {trashedMessages.length}
               </span>
             )}
@@ -293,7 +296,7 @@ export default function MessageManager() {
                   : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
               }`}
             >
-              {f === "all" ? "All" : f === "unread" ? "Unread" : "Read"}
+              {f === "all" ? t("all") : f === "unread" ? t("unread_filter") : t("read_filter")}
             </button>
           ))}
         </div>
@@ -301,7 +304,7 @@ export default function MessageManager() {
 
       {view === "trash" && trashedMessages.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm px-4 py-3 rounded-lg">
-          Messages in trash are automatically deleted after 30 days.
+          {t("trash_auto_delete")}
         </div>
       )}
 
@@ -310,17 +313,17 @@ export default function MessageManager() {
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-neutral-300 mb-4"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z"/><polyline points="22,6 12,13 2,6"/></svg>
           <p className="text-neutral-400 font-medium">
             {view === "trash"
-              ? "Trash is empty"
+              ? t("trash_empty")
               : filter === "unread"
-                ? "No unread messages"
+                ? t("no_unread")
                 : filter === "read"
-                  ? "No read messages"
-                  : "No messages yet"}
+                  ? t("no_read")
+                  : t("no_messages")}
           </p>
           <p className="text-neutral-300 text-sm mt-1">
             {view === "trash"
-              ? "Deleted messages will appear here for 30 days"
-              : "Messages from the contact form will appear here"}
+              ? t("deleted_appear_here")
+              : t("messages_appear_here")}
           </p>
         </div>
       ) : (
@@ -330,7 +333,7 @@ export default function MessageManager() {
               key={msg.id}
               data-testid={`message-row-${msg.id}`}
               onClick={() => openMessage(msg)}
-              className={`w-full text-left px-6 py-4 hover:bg-neutral-50 transition-colors flex items-start gap-4 ${
+              className={`w-full text-${lang === "AR" ? "right" : "left"} px-6 py-4 hover:bg-neutral-50 transition-colors flex items-start gap-4 ${
                 !msg.read && !msg.deletedAt ? "bg-blue-50/30" : ""
               }`}
             >
@@ -343,12 +346,12 @@ export default function MessageManager() {
                   <span className="text-xs text-neutral-400 shrink-0">{formatDate(msg.createdAt)}</span>
                 </div>
                 <p className={`text-sm truncate ${!msg.read && !msg.deletedAt ? "font-semibold text-neutral-800" : "text-neutral-600"}`}>
-                  {msg.subject || "(No Subject)"}
+                  {msg.subject || t("no_subject")}
                 </p>
                 <p className="text-xs text-neutral-400 truncate mt-0.5">{msg.message}</p>
                 {msg.deletedAt && (
                   <p className="text-xs text-amber-500 mt-1">
-                    Permanently deletes in {getDaysUntilPurge(msg.deletedAt)} days
+                    {t("permanently_deletes_in")} {getDaysUntilPurge(msg.deletedAt)} {t("days")}
                   </p>
                 )}
               </div>
@@ -361,7 +364,7 @@ export default function MessageManager() {
                         restoreMutation.mutate(msg.id);
                       }}
                       className="p-2 text-neutral-300 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                      title="Restore"
+                      title={t("restore")}
                       data-testid={`button-restore-msg-${msg.id}`}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -369,12 +372,12 @@ export default function MessageManager() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (confirm("Permanently delete this message? This cannot be undone.")) {
+                        if (confirm(t("permanent_delete_confirm"))) {
                           permanentDeleteMutation.mutate(msg.id);
                         }
                       }}
                       className="p-2 text-neutral-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Delete forever"
+                      title={t("delete_forever")}
                       data-testid={`button-perma-delete-msg-${msg.id}`}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
@@ -387,7 +390,7 @@ export default function MessageManager() {
                       deleteMutation.mutate(msg.id);
                     }}
                     className="p-2 text-neutral-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Move to trash"
+                    title={t("move_to_trash")}
                     data-testid={`button-delete-msg-${msg.id}`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>

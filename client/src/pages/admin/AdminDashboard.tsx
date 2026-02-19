@@ -194,7 +194,7 @@ export default function AdminDashboard() {
     { id: "leadership", label: t("leadership"), icon: "crown", description: t("desc_leadership") },
     { id: "key-contacts", label: t("key_contacts"), icon: "phone", description: t("desc_key_contacts") },
     { id: "quick-links", label: t("quick_links"), icon: "link", description: t("desc_quick_links") },
-    { id: "messages", label: "Messages", icon: "mail", description: "View contact form submissions" },
+    { id: "messages", label: t("messages"), icon: "mail", description: t("desc_messages") },
     { id: "settings", label: t("settings"), icon: "settings", description: t("desc_settings") },
   ];
 
