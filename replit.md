@@ -4,6 +4,7 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-02-21: Added multi-image gallery for products — each product supports up to 4 additional images via product_images table, admin ProductManager shows gallery editor when editing, CategoryDetail page shows image carousel with navigation arrows and dots
 - 2026-02-19: Added contact form message system — messages saved to database, admin Messages page to view/read/delete submissions, contact form wired with success/error feedback
 - 2026-02-19: Added dynamic /sitemap.xml and /robots.txt for SEO — auto-generates from static pages + database categories
 - 2026-02-12: Separated Key Contacts from Leadership — new key_contacts table and KeyContactManager admin page; Contact page now uses key contacts API; visibility toggle on both Leadership and Key Contacts
@@ -48,6 +49,7 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - `clients` - Hotel brand clients like Four Seasons, Marriott (id, name, image_url, sort_order)
 - `categories` - Product categories (id, name_en, name_ar, slug, image_url, sort_order)
 - `products` - Products (id, name_en, name_ar, description_en, description_ar, image_url, category_id, sort_order)
+- `product_images` - Additional product images, up to 4 per product (id, product_id, image_url, sort_order)
 - `leadership` - Leadership team members (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order, visible)
 - `key_contacts` - Key contact persons for contact page (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order, visible)
 - `quick_links` - Footer quick links (id, label_en, label_ar, url, sort_order, visible)

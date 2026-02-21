@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, brands, siteImages, clients, leadership, keyContacts, quickLinks, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type ContactMessage, type InsertContactMessage } from "@shared/schema";
+import { users, siteContent, partners, categories, products, productImages, brands, siteImages, clients, leadership, keyContacts, quickLinks, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type ProductImage, type InsertProductImage, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type ContactMessage, type InsertContactMessage } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc, desc, isNull, isNotNull, lt, and } from "drizzle-orm";
 
@@ -34,6 +34,11 @@ export interface IStorage {
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
   deleteProduct(id: number): Promise<boolean>;
+
+  getProductImages(productId: number): Promise<ProductImage[]>;
+  addProductImage(image: InsertProductImage): Promise<ProductImage>;
+  deleteProductImage(id: number): Promise<boolean>;
+  deleteProductImagesByProduct(productId: number): Promise<void>;
 
   getAllBrands(): Promise<Brand[]>;
   getBrand(id: number): Promise<Brand | undefined>;
@@ -217,8 +222,27 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteProduct(id: number): Promise<boolean> {
+    await db.delete(productImages).where(eq(productImages.productId, id));
     const result = await db.delete(products).where(eq(products.id, id)).returning();
     return result.length > 0;
+  }
+
+  async getProductImages(productId: number): Promise<ProductImage[]> {
+    return db.select().from(productImages).where(eq(productImages.productId, productId)).orderBy(asc(productImages.sortOrder));
+  }
+
+  async addProductImage(image: InsertProductImage): Promise<ProductImage> {
+    const [result] = await db.insert(productImages).values(image).returning();
+    return result;
+  }
+
+  async deleteProductImage(id: number): Promise<boolean> {
+    const result = await db.delete(productImages).where(eq(productImages.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async deleteProductImagesByProduct(productId: number): Promise<void> {
+    await db.delete(productImages).where(eq(productImages.productId, productId));
   }
 
   async getAllBrands(): Promise<Brand[]> {

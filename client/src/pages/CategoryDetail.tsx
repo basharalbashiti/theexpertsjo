@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
-import { ArrowLeft, ArrowRight, ShoppingBag } from "lucide-react";
+import { ArrowLeft, ArrowRight, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSiteImages } from "@/hooks/useSiteImages";
 import imgBannerFallback from "@/assets/category-generic-banner.png";
@@ -25,6 +25,84 @@ interface Product {
   brand: string;
   categoryId: number;
   sortOrder: number;
+}
+
+interface ProductImage {
+  id: number;
+  productId: number;
+  imageUrl: string;
+  sortOrder: number;
+}
+
+function ProductGallery({ product, name }: { product: Product; name: string }) {
+  const [images, setImages] = useState<string[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const allImages: string[] = [];
+    if (product.imageUrl) allImages.push(product.imageUrl);
+    fetch(`/api/products/${product.id}/images`)
+      .then(r => r.json())
+      .then((extra: ProductImage[]) => {
+        extra.forEach(img => allImages.push(img.imageUrl));
+        setImages([...allImages]);
+      })
+      .catch(() => setImages([...allImages]));
+  }, [product.id, product.imageUrl]);
+
+  if (images.length === 0) {
+    return (
+      <div className="w-full h-full bg-neutral-100 flex items-center justify-center">
+        <span className="text-neutral-300 text-6xl font-serif">{name.charAt(0)}</span>
+      </div>
+    );
+  }
+
+  if (images.length === 1) {
+    return (
+      <img
+        src={images[0]}
+        alt={name}
+        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+      />
+    );
+  }
+
+  return (
+    <div className="relative w-full h-full group">
+      <img
+        src={images[activeIndex]}
+        alt={`${name} ${activeIndex + 1}`}
+        className="w-full h-full object-cover transition-all duration-500"
+      />
+      <button
+        data-testid={`button-gallery-prev-${product.id}`}
+        onClick={() => setActiveIndex((activeIndex - 1 + images.length) % images.length)}
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
+      >
+        <ChevronLeft size={18} />
+      </button>
+      <button
+        data-testid={`button-gallery-next-${product.id}`}
+        onClick={() => setActiveIndex((activeIndex + 1) % images.length)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
+      >
+        <ChevronRight size={18} />
+      </button>
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            data-testid={`button-gallery-dot-${product.id}-${i}`}
+            onClick={() => setActiveIndex(i)}
+            className={`w-2.5 h-2.5 rounded-full transition-all ${
+              i === activeIndex ? "bg-white scale-110" : "bg-white/50 hover:bg-white/70"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default function CategoryDetail({ slug }: { slug: string }) {
@@ -150,17 +228,7 @@ export default function CategoryDetail({ slug }: { slug: string }) {
 
                     <div className="flex-1 w-full">
                       <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl">
-                        {product.imageUrl ? (
-                          <img
-                            src={product.imageUrl}
-                            alt={name}
-                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-neutral-100 flex items-center justify-center">
-                            <span className="text-neutral-300 text-6xl font-serif">{name.charAt(0)}</span>
-                          </div>
-                        )}
+                        <ProductGallery product={product} name={name} />
                       </div>
                     </div>
                   </motion.div>

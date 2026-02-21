@@ -383,6 +383,53 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/products/:id/images", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const images = await storage.getProductImages(id);
+      res.json(images);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch product images" });
+    }
+  });
+
+  app.post("/api/products/:id/images", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      const existing = await storage.getProductImages(productId);
+      if (existing.length >= 4) {
+        return res.status(400).json({ message: "Maximum 4 images per product" });
+      }
+      let imageUrl = "";
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      } else if (req.body.imageUrl) {
+        imageUrl = req.body.imageUrl;
+      }
+      if (!imageUrl) {
+        return res.status(400).json({ message: "Image is required" });
+      }
+      const sortOrder = req.body.sortOrder ? parseInt(req.body.sortOrder) : existing.length;
+      const image = await storage.addProductImage({ productId, imageUrl, sortOrder });
+      res.json(image);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to add product image" });
+    }
+  });
+
+  app.delete("/api/product-images/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteProductImage(id);
+      if (!success) {
+        return res.status(404).json({ message: "Image not found" });
+      }
+      res.json({ message: "Image deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete image" });
+    }
+  });
+
   // Site images routes
   app.get("/api/site-images", async (_req, res) => {
     const images = await storage.getAllSiteImages();

@@ -14,11 +14,128 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAdminLang } from "@/hooks/useAdminLang";
-import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
-import type { Product, Category } from "@shared/schema";
+import { ArrowUp, ArrowDown, ArrowUpDown, ImagePlus, X, Images } from "lucide-react";
+import type { Product, Category, ProductImage } from "@shared/schema";
 
 type SortField = "nameEn" | "brand" | "category" | "sortOrder";
 type SortDir = "asc" | "desc";
+
+function ProductImageGallery({ productId }: { productId: number }) {
+  const { toast } = useToast();
+  const { t } = useAdminLang();
+  const galleryRef = useRef<HTMLInputElement>(null);
+
+  const { data: images = [], isLoading } = useQuery<ProductImage[]>({
+    queryKey: [`/api/products/${productId}/images`],
+    queryFn: async () => {
+      const res = await fetch(`/api/products/${productId}/images`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch images");
+      return res.json();
+    },
+  });
+
+  const uploadMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("sortOrder", String(images.length));
+      const res = await fetch(`/api/products/${productId}/images`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Failed to upload");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}/images`] });
+      toast({ title: t("image_added") || "Image added" });
+    },
+    onError: (err: Error) => {
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (imageId: number) => {
+      const res = await fetch(`/api/product-images/${imageId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to delete");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}/images`] });
+      toast({ title: t("image_deleted") || "Image deleted" });
+    },
+    onError: (err: Error) => {
+      toast({ title: t("error"), description: err.message, variant: "destructive" });
+    },
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      uploadMutation.mutate(file);
+      if (galleryRef.current) galleryRef.current.value = "";
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <Label className="flex items-center gap-2">
+          <Images size={16} />
+          {t("product_gallery") || "Product Gallery"} ({images.length}/4)
+        </Label>
+      </div>
+      <div className="grid grid-cols-4 gap-3">
+        {images.map((img) => (
+          <div key={img.id} className="relative group">
+            <img
+              src={img.imageUrl}
+              alt=""
+              className="w-full aspect-square object-cover rounded-lg border"
+              data-testid={`img-product-gallery-${img.id}`}
+            />
+            <button
+              type="button"
+              data-testid={`button-delete-gallery-image-${img.id}`}
+              onClick={() => deleteMutation.mutate(img.id)}
+              className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ))}
+        {images.length < 4 && (
+          <div>
+            <input
+              ref={galleryRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <button
+              type="button"
+              data-testid="button-add-gallery-image"
+              onClick={() => galleryRef.current?.click()}
+              disabled={uploadMutation.isPending}
+              className="w-full aspect-square rounded-lg border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center gap-1 text-neutral-400 hover:border-primary hover:text-primary transition-colors disabled:opacity-50"
+            >
+              <ImagePlus size={20} />
+              <span className="text-xs">{uploadMutation.isPending ? (t("uploading") || "Uploading...") : (t("add_image") || "Add")}</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function ProductManager() {
   const { toast } = useToast();
@@ -129,9 +246,11 @@ export default function ProductManager() {
       if (!res.ok) throw new Error(await res.text());
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (data: Product) => {
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
-      resetForm();
+      setEditingProduct(data);
+      setImageFile(null);
+      setRemoveImage(false);
       toast({ title: t("product_added") });
     },
     onError: (err: Error) => {
@@ -505,7 +624,7 @@ export default function ProductManager() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>{t("image")}</Label>
+                <Label>{t("main_image") || "Main Image"}</Label>
                 <input
                   ref={prodImageRef}
                   type="file"
@@ -536,6 +655,13 @@ export default function ProductManager() {
                 )}
               </div>
             </div>
+
+            {editingProduct && (
+              <div className="border-t pt-4">
+                <ProductImageGallery productId={editingProduct.id} />
+              </div>
+            )}
+
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={resetForm}>
                 {t("cancel")}
