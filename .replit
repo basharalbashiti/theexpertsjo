@@ -47,3 +47,8 @@ waitForPort = 5000
 [agent]
 stack = "MOCKUP_JS"
 mockupState = "FULLSTACK"
+
+[userenv]
+
+[userenv.shared]
+RESEND_API_KEY = "re_JmRV5tF4_MQL1x7T5B7nC3it5Zmcnrk7S"

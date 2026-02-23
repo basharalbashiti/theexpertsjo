@@ -2,6 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
+import { sendContactNotification } from "./email";
 import bcrypt from "bcryptjs";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
@@ -818,6 +819,12 @@ export async function registerRoutes(
         return res.status(400).json({ message: "Name, email, and message are required" });
       }
       const msg = await storage.createContactMessage(parsed.data);
+      sendContactNotification({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        subject: parsed.data.subject || "",
+        message: parsed.data.message,
+      }).catch(() => {});
       res.status(201).json(msg);
     } catch (error) {
       res.status(500).json({ message: "Failed to send message" });

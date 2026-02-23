@@ -4,6 +4,7 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-02-23: Added email notifications for contact form — when a visitor submits the contact form, an email is sent to alaa@theexpertsjo.com via Resend API with visitor name, email, subject, and message; fire-and-forget (doesn't block form submission); server/email.ts module with HTML template
 - 2026-02-23: Added SEO Management admin page — manage page title, meta description, Open Graph/Twitter cards, JSON-LD structured data, sitemap base URL, and robots.txt allow/disallow from admin panel; seo_settings table stores all settings; server-side meta tag injection in production builds; dynamic sitemap.xml and robots.txt use admin-configured base URL
 - 2026-02-21: Added multi-image gallery for products — each product supports up to 4 additional images via product_images table, admin ProductManager shows gallery editor when editing, CategoryDetail page shows image carousel with navigation arrows and dots
 - 2026-02-19: Added contact form message system — messages saved to database, admin Messages page to view/read/delete submissions, contact form wired with success/error feedback
