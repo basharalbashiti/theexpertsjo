@@ -4,6 +4,7 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-02-23: Added SEO Management admin page — manage page title, meta description, Open Graph/Twitter cards, JSON-LD structured data, sitemap base URL, and robots.txt allow/disallow from admin panel; seo_settings table stores all settings; server-side meta tag injection in production builds; dynamic sitemap.xml and robots.txt use admin-configured base URL
 - 2026-02-21: Added multi-image gallery for products — each product supports up to 4 additional images via product_images table, admin ProductManager shows gallery editor when editing, CategoryDetail page shows image carousel with navigation arrows and dots
 - 2026-02-19: Added contact form message system — messages saved to database, admin Messages page to view/read/delete submissions, contact form wired with success/error feedback
 - 2026-02-19: Added dynamic /sitemap.xml and /robots.txt for SEO — auto-generates from static pages + database categories
@@ -35,7 +36,7 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - `client/src/pages/admin/` - Admin portal pages (English-only)
 - `client/src/components/` - Shared components (Layout, Navbar, Footer, Hero, etc.)
 - `client/src/context/LanguageContext.tsx` - Bilingual translation system (loads from DB)
-- `server/routes.ts` - API routes (auth, content, site-images, partners, brands, clients, categories, products, quick-links, uploads)
+- `server/routes.ts` - API routes (auth, content, site-images, partners, brands, clients, categories, products, quick-links, seo, uploads)
 - `server/storage.ts` - Database storage interface
 - `server/seed.ts` - Database seeding (admin user + default translations + categories + partners + brands + clients + site images)
 - `shared/schema.ts` - Drizzle schema (users, siteContent, siteImages, partners, brands, clients, categories, products, quickLinks)
@@ -53,12 +54,13 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - `leadership` - Leadership team members (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order, visible)
 - `key_contacts` - Key contact persons for contact page (id, name_en, name_ar, role_en, role_ar, phone, email, image_url, sort_order, visible)
 - `quick_links` - Footer quick links (id, label_en, label_ar, url, sort_order, visible)
+- `seo_settings` - SEO configuration key-value pairs (id, key, value) — keys include site_title, site_description, og_title, og_description, twitter_title, twitter_description, org_name, org_url, org_description, org_phone, sitemap_base_url, robots_allow_all
 - `contact_messages` - Contact form submissions (id, name, email, subject, message, read, created_at)
 
 ### Admin Portal
 - URL: `/admin/login` (login page), `/admin` (dashboard)
 - Default credentials: username `admin`, password `admin123`
-- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners, Clients, Leadership, Key Contacts, Quick Links, Messages, Settings
+- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners, Clients, Leadership, Key Contacts, Quick Links, Messages, SEO, Settings
 - Brands = logos displayed on homepage slider
 - Partners = brand partners (Abdeen, Cashmere)
 - Clients = hotel brand clients (Four Seasons, Grand Hyatt, Marriott, etc.)

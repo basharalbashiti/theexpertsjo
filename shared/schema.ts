@@ -236,6 +236,20 @@ export const insertQuickLinkSchema = createInsertSchema(quickLinks).pick({
 export type InsertQuickLink = z.infer<typeof insertQuickLinkSchema>;
 export type QuickLink = typeof quickLinks.$inferSelect;
 
+export const seoSettings = pgTable("seo_settings", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  value: text("value").notNull().default(""),
+});
+
+export const insertSeoSettingSchema = createInsertSchema(seoSettings).pick({
+  key: true,
+  value: true,
+});
+
+export type InsertSeoSetting = z.infer<typeof insertSeoSettingSchema>;
+export type SeoSetting = typeof seoSettings.$inferSelect;
+
 export const contactMessages = pgTable("contact_messages", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),

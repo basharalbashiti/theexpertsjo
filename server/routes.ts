@@ -897,10 +897,65 @@ export async function registerRoutes(
     }
   });
 
-  const SITE_URL = "https://theexpertsjo.com";
+  app.get("/api/seo", async (_req: Request, res: Response) => {
+    try {
+      const settings = await storage.getAllSeoSettings();
+      const map: Record<string, string> = {};
+      for (const s of settings) {
+        map[s.key] = s.value;
+      }
+      res.json(map);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch SEO settings" });
+    }
+  });
+
+  app.put("/api/seo", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const { key, value } = req.body;
+      if (!key || typeof key !== "string") {
+        return res.status(400).json({ message: "Key is required" });
+      }
+      const result = await storage.upsertSeoSetting({ key, value: value || "" });
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update SEO setting" });
+    }
+  });
+
+  app.put("/api/seo/bulk", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const { settings } = req.body;
+      if (!Array.isArray(settings)) {
+        return res.status(400).json({ message: "Settings array is required" });
+      }
+      await storage.bulkUpsertSeoSettings(settings);
+      const all = await storage.getAllSeoSettings();
+      const map: Record<string, string> = {};
+      for (const s of all) {
+        map[s.key] = s.value;
+      }
+      res.json(map);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update SEO settings" });
+    }
+  });
+
+  const DEFAULT_SITE_URL = "https://theexpertsjo.com";
+
+  async function getSeoMap(): Promise<Record<string, string>> {
+    const settings = await storage.getAllSeoSettings();
+    const map: Record<string, string> = {};
+    for (const s of settings) {
+      map[s.key] = s.value;
+    }
+    return map;
+  }
 
   app.get("/sitemap.xml", async (_req: Request, res: Response) => {
     try {
+      const seo = await getSeoMap();
+      const siteUrl = seo.sitemap_base_url || DEFAULT_SITE_URL;
       const categories = await storage.getAllCategories();
       const visibleCategories = categories.filter((c: any) => c.visible !== false);
 
@@ -920,7 +975,7 @@ export async function registerRoutes(
 
       for (const page of staticPages) {
         xml += `  <url>\n`;
-        xml += `    <loc>${SITE_URL}${page.url}</loc>\n`;
+        xml += `    <loc>${siteUrl}${page.url}</loc>\n`;
         xml += `    <lastmod>${today}</lastmod>\n`;
         xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
         xml += `    <priority>${page.priority}</priority>\n`;
@@ -929,7 +984,7 @@ export async function registerRoutes(
 
       for (const cat of visibleCategories) {
         xml += `  <url>\n`;
-        xml += `    <loc>${SITE_URL}/categories/${cat.slug}</loc>\n`;
+        xml += `    <loc>${siteUrl}/categories/${cat.slug}</loc>\n`;
         xml += `    <lastmod>${today}</lastmod>\n`;
         xml += `    <changefreq>weekly</changefreq>\n`;
         xml += `    <priority>0.8</priority>\n`;
@@ -945,10 +1000,18 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/robots.txt", (_req: Request, res: Response) => {
-    const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
-    res.set("Content-Type", "text/plain");
-    res.send(robots);
+  app.get("/robots.txt", async (_req: Request, res: Response) => {
+    try {
+      const seo = await getSeoMap();
+      const siteUrl = seo.sitemap_base_url || DEFAULT_SITE_URL;
+      const allowAll = seo.robots_allow_all !== "false";
+      const directive = allowAll ? "Allow: /" : "Disallow: /";
+      const robots = `User-agent: *\n${directive}\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
+      res.set("Content-Type", "text/plain");
+      res.send(robots);
+    } catch (error) {
+      res.status(500).send("Error generating robots.txt");
+    }
   });
 
   return httpServer;

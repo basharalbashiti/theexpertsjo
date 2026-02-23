@@ -1,4 +1,4 @@
-import { users, siteContent, partners, categories, products, productImages, brands, siteImages, clients, leadership, keyContacts, quickLinks, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type ProductImage, type InsertProductImage, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type ContactMessage, type InsertContactMessage } from "@shared/schema";
+import { users, siteContent, partners, categories, products, productImages, brands, siteImages, clients, leadership, keyContacts, quickLinks, seoSettings, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type ProductImage, type InsertProductImage, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type SeoSetting, type InsertSeoSetting, type ContactMessage, type InsertContactMessage } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc, desc, isNull, isNotNull, lt, and } from "drizzle-orm";
 
@@ -76,6 +76,11 @@ export interface IStorage {
   createQuickLink(link: InsertQuickLink): Promise<QuickLink>;
   updateQuickLink(id: number, link: Partial<InsertQuickLink>): Promise<QuickLink | undefined>;
   deleteQuickLink(id: number): Promise<boolean>;
+
+  getAllSeoSettings(): Promise<SeoSetting[]>;
+  getSeoSetting(key: string): Promise<SeoSetting | undefined>;
+  upsertSeoSetting(setting: InsertSeoSetting): Promise<SeoSetting>;
+  bulkUpsertSeoSettings(settings: InsertSeoSetting[]): Promise<void>;
 
   getAllContactMessages(): Promise<ContactMessage[]>;
   getDeletedContactMessages(): Promise<ContactMessage[]>;
@@ -396,6 +401,33 @@ export class DatabaseStorage implements IStorage {
   async deleteQuickLink(id: number): Promise<boolean> {
     const result = await db.delete(quickLinks).where(eq(quickLinks.id, id)).returning();
     return result.length > 0;
+  }
+
+  async getAllSeoSettings(): Promise<SeoSetting[]> {
+    return db.select().from(seoSettings);
+  }
+
+  async getSeoSetting(key: string): Promise<SeoSetting | undefined> {
+    const [setting] = await db.select().from(seoSettings).where(eq(seoSettings.key, key));
+    return setting || undefined;
+  }
+
+  async upsertSeoSetting(setting: InsertSeoSetting): Promise<SeoSetting> {
+    const [result] = await db
+      .insert(seoSettings)
+      .values(setting)
+      .onConflictDoUpdate({
+        target: seoSettings.key,
+        set: { value: setting.value },
+      })
+      .returning();
+    return result;
+  }
+
+  async bulkUpsertSeoSettings(settings: InsertSeoSetting[]): Promise<void> {
+    for (const setting of settings) {
+      await this.upsertSeoSetting(setting);
+    }
   }
 
   async getAllContactMessages(): Promise<ContactMessage[]> {

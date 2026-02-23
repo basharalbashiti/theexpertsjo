@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { db } from "./db";
-import { users, siteContent, partners, brands, siteImages, clients, products, leadership, keyContacts, quickLinks, categories } from "@shared/schema";
+import { users, siteContent, partners, brands, siteImages, clients, products, leadership, keyContacts, quickLinks, categories, seoSettings } from "@shared/schema";
 import { eq } from "drizzle-orm";
 
 const defaultTranslations: Record<string, { en: string; ar: string }> = {
@@ -456,6 +456,30 @@ export async function seedDatabase() {
       console.log(`Seeded ${defaultQuickLinks.length} quick links`);
     }
     await db.insert(siteContent).values({ key: "_seeded_quick_links", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
+  }
+
+  const [seoSeeded] = await db.select().from(siteContent).where(eq(siteContent.key, "_seeded_seo"));
+  if (!seoSeeded) {
+    const existingSeo = await storage.getAllSeoSettings();
+    if (existingSeo.length === 0) {
+      const defaultSeoSettings = [
+        { key: "site_title", value: "The Experts - For Hotel Supplies" },
+        { key: "site_description", value: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience." },
+        { key: "og_title", value: "The Experts - For Hotel Supplies" },
+        { key: "og_description", value: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience." },
+        { key: "twitter_title", value: "The Experts - For Hotel Supplies" },
+        { key: "twitter_description", value: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience." },
+        { key: "org_name", value: "The Experts" },
+        { key: "org_url", value: "https://theexpertsjo.com" },
+        { key: "org_description", value: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience." },
+        { key: "org_phone", value: "+962 79 0484745" },
+        { key: "sitemap_base_url", value: "https://theexpertsjo.com" },
+        { key: "robots_allow_all", value: "true" },
+      ];
+      await storage.bulkUpsertSeoSettings(defaultSeoSettings);
+      console.log(`Seeded ${defaultSeoSettings.length} SEO settings`);
+    }
+    await db.insert(siteContent).values({ key: "_seeded_seo", valueEn: "1", valueAr: "1" }).onConflictDoNothing();
   }
 
 }
