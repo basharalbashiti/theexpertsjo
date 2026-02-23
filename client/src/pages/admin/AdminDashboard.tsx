@@ -199,7 +199,7 @@ export default function AdminDashboard() {
     { id: "key-contacts", label: t("key_contacts"), icon: "phone", description: t("desc_key_contacts") },
     { id: "quick-links", label: t("quick_links"), icon: "link", description: t("desc_quick_links") },
     { id: "messages", label: t("messages"), icon: "mail", description: t("desc_messages") },
-    { id: "seo", label: "SEO", icon: "search", description: "Search engine optimization settings" },
+    { id: "seo", label: t("seo"), icon: "search", description: t("desc_seo") },
     { id: "settings", label: t("settings"), icon: "settings", description: t("desc_settings") },
   ];
 
