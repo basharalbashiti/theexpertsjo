@@ -267,15 +267,15 @@ export default function SeoManager() {
           <p className="text-xs text-neutral-400 mt-1">The base domain used in your sitemap.xml and robots.txt. Must match your live domain.</p>
         </div>
 
-        <div className="flex items-center justify-between py-3 px-4 bg-neutral-50 rounded-lg">
-          <div>
+        <div className="flex items-center justify-between gap-4 py-3 px-4 bg-neutral-50 rounded-lg">
+          <div className="min-w-0">
             <p className="text-sm font-medium text-neutral-700">Allow Search Engines</p>
             <p className="text-xs text-neutral-400">When disabled, robots.txt will block all crawlers from indexing your site.</p>
           </div>
           <button
             data-testid="button-toggle-robots"
             onClick={() => updateField("robots_allow_all", form.robots_allow_all === "true" ? "false" : "true")}
-            className={`relative w-12 h-6 rounded-full transition-colors ${
+            className={`relative flex-shrink-0 w-12 h-6 rounded-full transition-colors ${
               form.robots_allow_all === "true" ? "bg-green-500" : "bg-neutral-300"
             }`}
           >
