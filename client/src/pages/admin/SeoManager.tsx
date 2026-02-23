@@ -267,24 +267,26 @@ export default function SeoManager() {
           <p className="text-xs text-neutral-400 mt-1">The base domain used in your sitemap.xml and robots.txt. Must match your live domain.</p>
         </div>
 
-        <div className="flex items-center justify-between gap-4 py-3 px-4 bg-neutral-50 rounded-lg">
-          <div className="min-w-0">
+        <div className="flex items-center justify-between gap-4 py-3 px-4 bg-neutral-50 rounded-lg overflow-hidden">
+          <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-neutral-700">Allow Search Engines</p>
             <p className="text-xs text-neutral-400">When disabled, robots.txt will block all crawlers from indexing your site.</p>
           </div>
-          <button
-            data-testid="button-toggle-robots"
-            onClick={() => updateField("robots_allow_all", form.robots_allow_all === "true" ? "false" : "true")}
-            className={`relative flex-shrink-0 w-12 h-6 rounded-full transition-colors ${
-              form.robots_allow_all === "true" ? "bg-green-500" : "bg-neutral-300"
-            }`}
-          >
-            <span
-              className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
-                form.robots_allow_all === "true" ? "translate-x-6" : "translate-x-0.5"
+          <div className="flex-shrink-0">
+            <button
+              data-testid="button-toggle-robots"
+              onClick={() => updateField("robots_allow_all", form.robots_allow_all === "true" ? "false" : "true")}
+              className={`relative inline-flex items-center w-12 h-6 rounded-full transition-colors ${
+                form.robots_allow_all === "true" ? "bg-green-500" : "bg-neutral-300"
               }`}
-            />
-          </button>
+            >
+              <span
+                className={`inline-block w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                  form.robots_allow_all === "true" ? "translate-x-6" : "translate-x-0.5"
+                }`}
+              />
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
