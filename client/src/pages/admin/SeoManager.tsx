@@ -4,18 +4,96 @@ import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 
 const SEO_DEFAULTS: Record<string, string> = {
   site_title: "The Experts - For Hotel Supplies",
+  site_title_ar: "الخبراء - لمستلزمات الفنادق",
   site_description: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience.",
+  site_description_ar: "الارتقاء بالضيافة مع مستلزمات متميزة — حيث تلتقي الجودة بالراحة لكل تجربة ضيف.",
   og_title: "The Experts - For Hotel Supplies",
+  og_title_ar: "الخبراء - لمستلزمات الفنادق",
   og_description: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience.",
+  og_description_ar: "الارتقاء بالضيافة مع مستلزمات متميزة — حيث تلتقي الجودة بالراحة لكل تجربة ضيف.",
   twitter_title: "The Experts - For Hotel Supplies",
+  twitter_title_ar: "الخبراء - لمستلزمات الفنادق",
   twitter_description: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience.",
+  twitter_description_ar: "الارتقاء بالضيافة مع مستلزمات متميزة — حيث تلتقي الجودة بالراحة لكل تجربة ضيف.",
   org_name: "The Experts",
+  org_name_ar: "الخبراء",
   org_url: "https://theexpertsjo.com",
   org_description: "Elevating hospitality with premium supplies — where quality meets comfort for every guest experience.",
+  org_description_ar: "الارتقاء بالضيافة مع مستلزمات متميزة — حيث تلتقي الجودة بالراحة لكل تجربة ضيف.",
   org_phone: "+962 79 0484745",
   sitemap_base_url: "https://theexpertsjo.com",
   robots_allow_all: "true",
 };
+
+function BilingualInput({ label, enKey, arKey, form, updateField, type = "input", rows = 2, placeholder }: {
+  label: string;
+  enKey: string;
+  arKey: string;
+  form: Record<string, string>;
+  updateField: (key: string, value: string) => void;
+  type?: "input" | "textarea";
+  rows?: number;
+  placeholder?: string;
+}) {
+  const inputClass = "w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary";
+  return (
+    <div>
+      <label className="block text-sm font-medium text-neutral-700 mb-1">{label}</label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <div className="flex items-center gap-1 mb-1">
+            <span className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider">EN</span>
+          </div>
+          {type === "textarea" ? (
+            <textarea
+              data-testid={`input-${enKey}`}
+              value={form[enKey] || ""}
+              onChange={(e) => updateField(enKey, e.target.value)}
+              rows={rows}
+              className={`${inputClass} resize-none`}
+              placeholder={placeholder}
+            />
+          ) : (
+            <input
+              data-testid={`input-${enKey}`}
+              type="text"
+              value={form[enKey] || ""}
+              onChange={(e) => updateField(enKey, e.target.value)}
+              className={inputClass}
+              placeholder={placeholder}
+            />
+          )}
+        </div>
+        <div>
+          <div className="flex items-center gap-1 mb-1">
+            <span className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider">AR</span>
+          </div>
+          {type === "textarea" ? (
+            <textarea
+              data-testid={`input-${arKey}`}
+              value={form[arKey] || ""}
+              onChange={(e) => updateField(arKey, e.target.value)}
+              rows={rows}
+              dir="rtl"
+              className={`${inputClass} resize-none text-right`}
+              placeholder={placeholder}
+            />
+          ) : (
+            <input
+              data-testid={`input-${arKey}`}
+              type="text"
+              value={form[arKey] || ""}
+              onChange={(e) => updateField(arKey, e.target.value)}
+              dir="rtl"
+              className={`${inputClass} text-right`}
+              placeholder={placeholder}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function SeoManager() {
   const { data: seoData = {}, isLoading } = useQuery<Record<string, string>>({
@@ -30,6 +108,11 @@ export default function SeoManager() {
     const merged: Record<string, string> = {};
     for (const key of Object.keys(SEO_DEFAULTS)) {
       merged[key] = seoData[key] !== undefined ? seoData[key] : SEO_DEFAULTS[key];
+    }
+    for (const key of Object.keys(seoData)) {
+      if (!(key in merged)) {
+        merged[key] = seoData[key];
+      }
     }
     setForm(merged);
   }, [seoData]);
@@ -85,41 +168,31 @@ export default function SeoManager() {
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           <h3 className="text-lg font-bold text-neutral-900">Page Meta Tags</h3>
         </div>
-        <p className="text-sm text-neutral-500">These appear in browser tabs and search engine results.</p>
+        <p className="text-sm text-neutral-500">These appear in browser tabs and search engine results. Provide both English and Arabic versions.</p>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Page Title</label>
-          <input
-            data-testid="input-site-title"
-            type="text"
-            value={form.site_title || ""}
-            onChange={(e) => updateField("site_title", e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-            placeholder="e.g. The Experts - For Hotel Supplies"
-          />
-        </div>
+        <BilingualInput label="Page Title" enKey="site_title" arKey="site_title_ar" form={form} updateField={updateField} placeholder="e.g. The Experts - For Hotel Supplies" />
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Meta Description</label>
-          <textarea
-            data-testid="input-site-description"
-            value={form.site_description || ""}
-            onChange={(e) => updateField("site_description", e.target.value)}
-            rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
-            placeholder="A concise description for search engines (150-160 characters recommended)"
-          />
-          <p className="text-xs text-neutral-400 mt-1">{(form.site_description || "").length} / 160 characters</p>
-        </div>
+        <BilingualInput label="Meta Description" enKey="site_description" arKey="site_description_ar" form={form} updateField={updateField} type="textarea" rows={3} placeholder="A concise description (150-160 characters recommended)" />
 
-        <div className="bg-neutral-50 rounded-lg p-4 border border-dashed border-neutral-300">
-          <p className="text-xs text-neutral-400 mb-2 font-medium">Google Search Preview</p>
-          <div className="space-y-1">
-            <p className="text-[#1a0dab] text-lg leading-snug truncate">{form.site_title || "Page Title"}</p>
-            <p className="text-[#006621] text-sm">{form.org_url || "https://theexpertsjo.com"}</p>
-            <p className="text-sm text-neutral-600 line-clamp-2">{form.site_description || "Meta description will appear here..."}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-neutral-50 rounded-lg p-4 border border-dashed border-neutral-300">
+            <p className="text-xs text-neutral-400 mb-2 font-medium">Google Search Preview (English)</p>
+            <div className="space-y-1">
+              <p className="text-[#1a0dab] text-lg leading-snug truncate">{form.site_title || "Page Title"}</p>
+              <p className="text-[#006621] text-sm">{form.org_url || "https://theexpertsjo.com"}</p>
+              <p className="text-sm text-neutral-600 line-clamp-2">{form.site_description || "Meta description will appear here..."}</p>
+            </div>
+          </div>
+          <div className="bg-neutral-50 rounded-lg p-4 border border-dashed border-neutral-300" dir="rtl">
+            <p className="text-xs text-neutral-400 mb-2 font-medium">معاينة بحث جوجل (عربي)</p>
+            <div className="space-y-1">
+              <p className="text-[#1a0dab] text-lg leading-snug truncate">{form.site_title_ar || "عنوان الصفحة"}</p>
+              <p className="text-[#006621] text-sm">{form.org_url || "https://theexpertsjo.com"}</p>
+              <p className="text-sm text-neutral-600 line-clamp-2">{form.site_description_ar || "وصف الميتا سيظهر هنا..."}</p>
+            </div>
           </div>
         </div>
+        <p className="text-xs text-neutral-400">{(form.site_description || "").length} / 160 characters (EN) · {(form.site_description_ar || "").length} / 160 characters (AR)</p>
       </div>
 
       <div className="bg-white rounded-xl border p-6 space-y-5">
@@ -129,66 +202,40 @@ export default function SeoManager() {
         </div>
         <p className="text-sm text-neutral-500">Controls how your site looks when shared on Facebook, WhatsApp, Twitter/X, and other platforms.</p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Open Graph (Facebook, WhatsApp, LinkedIn)</h4>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">OG Title</label>
-              <input
-                data-testid="input-og-title"
-                type="text"
-                value={form.og_title || ""}
-                onChange={(e) => updateField("og_title", e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">OG Description</label>
-              <textarea
-                data-testid="input-og-description"
-                value={form.og_description || ""}
-                onChange={(e) => updateField("og_description", e.target.value)}
-                rows={2}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
-              />
-            </div>
-          </div>
+        <div className="space-y-5">
+          <h4 className="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Open Graph (Facebook, WhatsApp, LinkedIn)</h4>
+          <BilingualInput label="OG Title" enKey="og_title" arKey="og_title_ar" form={form} updateField={updateField} />
+          <BilingualInput label="OG Description" enKey="og_description" arKey="og_description_ar" form={form} updateField={updateField} type="textarea" rows={2} />
+        </div>
 
-          <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Twitter / X Card</h4>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">Twitter Title</label>
-              <input
-                data-testid="input-twitter-title"
-                type="text"
-                value={form.twitter_title || ""}
-                onChange={(e) => updateField("twitter_title", e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">Twitter Description</label>
-              <textarea
-                data-testid="input-twitter-description"
-                value={form.twitter_description || ""}
-                onChange={(e) => updateField("twitter_description", e.target.value)}
-                rows={2}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
-              />
-            </div>
-          </div>
+        <div className="border-t pt-5 space-y-5">
+          <h4 className="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Twitter / X Card</h4>
+          <BilingualInput label="Twitter Title" enKey="twitter_title" arKey="twitter_title_ar" form={form} updateField={updateField} />
+          <BilingualInput label="Twitter Description" enKey="twitter_description" arKey="twitter_description_ar" form={form} updateField={updateField} type="textarea" rows={2} />
         </div>
 
         <div className="bg-neutral-50 rounded-lg p-4 border border-dashed border-neutral-300">
           <p className="text-xs text-neutral-400 mb-3 font-medium">Social Share Preview</p>
-          <div className="max-w-sm border rounded-lg overflow-hidden bg-white shadow-sm">
-            <div className="h-32 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-              <span className="text-4xl">🔗</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border rounded-lg overflow-hidden bg-white shadow-sm">
+              <div className="h-28 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                <span className="text-3xl">🔗</span>
+              </div>
+              <div className="p-3 space-y-1">
+                <p className="text-xs text-neutral-400 uppercase">{(form.org_url || "theexpertsjo.com").replace(/https?:\/\//, "")}</p>
+                <p className="font-semibold text-sm text-neutral-900 truncate">{form.og_title || "Title"}</p>
+                <p className="text-xs text-neutral-500 line-clamp-2">{form.og_description || "Description"}</p>
+              </div>
             </div>
-            <div className="p-3 space-y-1">
-              <p className="text-xs text-neutral-400 uppercase">{(form.org_url || "theexpertsjo.com").replace(/https?:\/\//, "")}</p>
-              <p className="font-semibold text-sm text-neutral-900 truncate">{form.og_title || "Title"}</p>
-              <p className="text-xs text-neutral-500 line-clamp-2">{form.og_description || "Description"}</p>
+            <div className="border rounded-lg overflow-hidden bg-white shadow-sm" dir="rtl">
+              <div className="h-28 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                <span className="text-3xl">🔗</span>
+              </div>
+              <div className="p-3 space-y-1">
+                <p className="text-xs text-neutral-400 uppercase">{(form.org_url || "theexpertsjo.com").replace(/https?:\/\//, "")}</p>
+                <p className="font-semibold text-sm text-neutral-900 truncate">{form.og_title_ar || "العنوان"}</p>
+                <p className="text-xs text-neutral-500 line-clamp-2">{form.og_description_ar || "الوصف"}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -203,16 +250,6 @@ export default function SeoManager() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Organization Name</label>
-            <input
-              data-testid="input-org-name"
-              type="text"
-              value={form.org_name || ""}
-              onChange={(e) => updateField("org_name", e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-            />
-          </div>
-          <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">Website URL</label>
             <input
               data-testid="input-org-url"
@@ -221,16 +258,6 @@ export default function SeoManager() {
               onChange={(e) => updateField("org_url", e.target.value)}
               className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               placeholder="https://theexpertsjo.com"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Organization Description</label>
-            <textarea
-              data-testid="input-org-description"
-              value={form.org_description || ""}
-              onChange={(e) => updateField("org_description", e.target.value)}
-              rows={2}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
             />
           </div>
           <div>
@@ -245,6 +272,9 @@ export default function SeoManager() {
             />
           </div>
         </div>
+
+        <BilingualInput label="Organization Name" enKey="org_name" arKey="org_name_ar" form={form} updateField={updateField} />
+        <BilingualInput label="Organization Description" enKey="org_description" arKey="org_description_ar" form={form} updateField={updateField} type="textarea" rows={2} />
       </div>
 
       <div className="bg-white rounded-xl border p-6 space-y-5">

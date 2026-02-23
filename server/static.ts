@@ -38,9 +38,28 @@ async function injectSeoTags(html: string): Promise<string> {
       html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/, `<meta name="twitter:description" content="${escapeHtml(seo.twitter_description)}" />`);
     }
 
+    let arTags = "";
+    if (seo.site_title_ar) {
+      arTags += `  <meta name="title:ar" content="${escapeHtml(seo.site_title_ar)}" />\n`;
+    }
+    if (seo.site_description_ar) {
+      arTags += `  <meta name="description:ar" content="${escapeHtml(seo.site_description_ar)}" />\n`;
+    }
+    if (seo.og_title_ar) {
+      arTags += `  <meta property="og:title:ar" content="${escapeHtml(seo.og_title_ar)}" />\n`;
+    }
+    if (seo.og_description_ar) {
+      arTags += `  <meta property="og:description:ar" content="${escapeHtml(seo.og_description_ar)}" />\n`;
+    }
+    if (arTags) {
+      html = html.replace("</head>", `${arTags}  </head>`);
+    }
+
     const orgName = seo.org_name || "The Experts";
+    const orgNameAr = seo.org_name_ar || "الخبراء";
     const orgUrl = seo.org_url || "https://theexpertsjo.com";
     const orgDesc = seo.org_description || "";
+    const orgDescAr = seo.org_description_ar || "";
     const orgPhone = seo.org_phone || "+962 79 0484745";
 
     const jsonLd = `<script type="application/ld+json">
@@ -48,13 +67,15 @@ async function injectSeoTags(html: string): Promise<string> {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "${orgName.replace(/"/g, '\\"')}",
+      "alternateName": "${orgNameAr.replace(/"/g, '\\"')}",
       "url": "${orgUrl.replace(/"/g, '\\"')}",
       "logo": "/opengraph.png",
       "description": "${orgDesc.replace(/"/g, '\\"')}",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "${orgPhone.replace(/"/g, '\\"')}",
-        "contactType": "customer service"
+        "contactType": "customer service",
+        "availableLanguage": ["English", "Arabic"]
       }
     }
     </script>`;
