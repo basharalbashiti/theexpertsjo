@@ -44,6 +44,9 @@ const translations: Record<string, { EN: string; AR: string }> = {
   desc_brands: { EN: "Manage brand logos for homepage slider", AR: "إدارة شعارات العلامات التجارية" },
   desc_partners: { EN: "Manage brand partners (Abdeen, Cashmere)", AR: "إدارة شركاء العلامة التجارية" },
   desc_clients: { EN: "Manage hotel brand clients", AR: "إدارة عملاء الفنادق" },
+  partners_and_clients: { EN: "Partners & Clients", AR: "الشركاء والعملاء" },
+  partners_clients_desc: { EN: "Manage brand partners and hotel brand clients.", AR: "إدارة شركاء العلامات التجارية وعملاء الفنادق." },
+  desc_partners_clients: { EN: "Manage partners & hotel clients", AR: "إدارة الشركاء وعملاء الفنادق" },
   desc_leadership: { EN: "Manage leadership team members", AR: "إدارة أعضاء فريق القيادة" },
   desc_settings: { EN: "Account settings", AR: "إعدادات الحساب" },
 

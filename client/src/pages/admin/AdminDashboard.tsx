@@ -6,9 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAdminLang } from "@/hooks/useAdminLang";
 import { Button } from "@/components/ui/button";
 import ContentEditor from "./ContentEditor";
-import PartnerManager from "./PartnerManager";
+import PartnerClientManager from "./PartnerClientManager";
 import BrandManager from "./BrandManager";
-import ClientManager from "./ClientManager";
 import CategoryManager from "./CategoryManager";
 import ProductManager from "./ProductManager";
 import SiteImageManager from "./SiteImageManager";
@@ -19,7 +18,7 @@ import MessageManager from "./MessageManager";
 import SeoManager from "./SeoManager";
 import type { Category, Product, Partner, Brand, Client, SiteContent, Leadership } from "@shared/schema";
 
-type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners" | "clients" | "leadership" | "key-contacts" | "quick-links" | "messages" | "seo" | "settings";
+type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners-clients" | "leadership" | "key-contacts" | "quick-links" | "messages" | "seo" | "settings";
 
 interface MenuItem {
   id: AdminPage;
@@ -113,8 +112,7 @@ function OverviewPage({ onNavigate, t }: { onNavigate: (page: AdminPage) => void
     { label: t("categories"), count: categories.length, page: "categories" as AdminPage, color: "bg-emerald-50 border-emerald-200 text-emerald-700", icon: "folder" },
     { label: t("products"), count: products.length, page: "products" as AdminPage, color: "bg-purple-50 border-purple-200 text-purple-700", icon: "package" },
     { label: t("our_brands"), count: brandsList.length, page: "brands" as AdminPage, color: "bg-orange-50 border-orange-200 text-orange-700", icon: "award" },
-    { label: t("partners"), count: partners.length, page: "partners" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700", icon: "handshake" },
-    { label: t("clients"), count: clientsList.length, page: "clients" as AdminPage, color: "bg-rose-50 border-rose-200 text-rose-700", icon: "users" },
+    { label: t("partners_and_clients"), count: partners.length + clientsList.length, page: "partners-clients" as AdminPage, color: "bg-amber-50 border-amber-200 text-amber-700", icon: "handshake" },
   ];
 
   const sitemap: SitemapItem[] = [
@@ -193,8 +191,7 @@ export default function AdminDashboard() {
     { id: "categories", label: t("categories"), icon: "folder", description: t("desc_categories") },
     { id: "products", label: t("products"), icon: "package", description: t("desc_products") },
     { id: "brands", label: t("our_brands"), icon: "award", description: t("desc_brands") },
-    { id: "partners", label: t("partners"), icon: "handshake", description: t("desc_partners") },
-    { id: "clients", label: t("clients"), icon: "users", description: t("desc_clients") },
+    { id: "partners-clients", label: t("partners_and_clients"), icon: "handshake", description: t("desc_partners_clients") },
     { id: "leadership", label: t("leadership"), icon: "crown", description: t("desc_leadership") },
     { id: "key-contacts", label: t("key_contacts"), icon: "phone", description: t("desc_key_contacts") },
     { id: "quick-links", label: t("quick_links"), icon: "link", description: t("desc_quick_links") },
@@ -248,10 +245,8 @@ export default function AdminDashboard() {
         return <ProductManager />;
       case "brands":
         return <BrandManager />;
-      case "partners":
-        return <PartnerManager />;
-      case "clients":
-        return <ClientManager />;
+      case "partners-clients":
+        return <PartnerClientManager />;
       case "leadership":
         return <LeadershipManager />;
       case "key-contacts":

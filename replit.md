@@ -61,11 +61,10 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 ### Admin Portal
 - URL: `/admin/login` (login page), `/admin` (dashboard)
 - Default credentials: username `admin`, password `admin123`
-- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners, Clients, Leadership, Key Contacts, Quick Links, Messages, SEO, Settings
+- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners & Clients, Leadership, Key Contacts, Quick Links, Messages, SEO, Settings
 - Brands = logos displayed on homepage slider
-- Partners = brand partners (Abdeen, Cashmere)
-- Clients = hotel brand clients (Four Seasons, Grand Hyatt, Marriott, etc.)
-- Admin pages are English-only, separate from bilingual public site
+- Partners & Clients = combined page with tabs; Partners tab for brand partners (Abdeen, Cashmere), Clients tab for hotel brand clients (Four Seasons, Grand Hyatt, Marriott, etc.)
+- Admin panel supports bilingual Arabic/English via language toggle
 
 ## User Preferences
 - Pure white background (no gray flash on slow connections)
