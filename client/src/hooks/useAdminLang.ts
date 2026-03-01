@@ -221,7 +221,14 @@ const translations: Record<string, { EN: string; AR: string }> = {
   remove: { EN: "Remove", AR: "إزالة" },
 
   account_settings: { EN: "Account Settings", AR: "إعدادات الحساب" },
-  password_change_soon: { EN: "Password change feature coming soon.", AR: "ميزة تغيير كلمة المرور ستتوفر قريباً." },
+  change_password: { EN: "Change Password", AR: "تغيير كلمة المرور" },
+  current_password: { EN: "Current Password", AR: "كلمة المرور الحالية" },
+  new_password: { EN: "New Password", AR: "كلمة المرور الجديدة" },
+  confirm_password: { EN: "Confirm New Password", AR: "تأكيد كلمة المرور الجديدة" },
+  password_updated: { EN: "Password updated successfully!", AR: "تم تحديث كلمة المرور بنجاح!" },
+  password_update_failed: { EN: "Failed to update password.", AR: "فشل تحديث كلمة المرور." },
+  passwords_dont_match: { EN: "New passwords do not match.", AR: "كلمات المرور الجديدة غير متطابقة." },
+  password_min_length: { EN: "Password must be at least 6 characters.", AR: "يجب أن تكون كلمة المرور 6 أحرف على الأقل." },
 
   leadership: { EN: "Leadership", AR: "القيادة" },
   add_leader: { EN: "Add Leader", AR: "إضافة قائد" },

@@ -12,7 +12,6 @@ import defaultHero1 from "@/assets/hero-1.jpg";
 import defaultHero2 from "@/assets/hero-2.jpg";
 import defaultHero3 from "@/assets/hero-3.jpg";
 import defaultLogo from "@/assets/logo.png";
-import defaultFavicon from "/favicon.png";
 import defaultProductsBanner from "@/assets/products-banner-bedroom.png";
 import defaultContactBanner from "@/assets/contact-banner-ultra-clear.png";
 import defaultPartnersBanner from "@/assets/partners-banner-outdoor.png";
@@ -25,7 +24,7 @@ const defaultImages: Record<string, string> = {
   hero2: defaultHero2,
   hero3: defaultHero3,
   logo: defaultLogo,
-  favicon: defaultFavicon,
+  favicon: "/favicon.png",
   og_image: "/opengraph.png",
   products_banner: defaultProductsBanner,
   contact_banner: defaultContactBanner,

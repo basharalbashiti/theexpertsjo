@@ -5,6 +5,8 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 
 ## Recent Changes
 - 2026-02-23: Added email notifications for contact form — when a visitor submits the contact form, an email is sent to alaa@theexpertsjo.com via Resend API with visitor name, email, subject, and message; fire-and-forget (doesn't block form submission); server/email.ts module with HTML template
+- 2026-03-01: Added password change feature to admin Settings — current password verification, min 6 char validation, bilingual form
+- 2026-03-01: Fixed 404 handling — invalid URLs now show proper bilingual "Page Not Found" page instead of broken category page; CategoryDetail checks API response status
 - 2026-03-01: Added favicon and OG image editors to Site Images admin — admin can upload/change browser tab icon and social share image (og:image/twitter:image); both served dynamically in production via server routes
 - 2026-02-23: Added SEO Management admin page — manage page title, meta description, Open Graph/Twitter cards, JSON-LD structured data, sitemap base URL, and robots.txt allow/disallow from admin panel; seo_settings table stores all settings; server-side meta tag injection in production builds; dynamic sitemap.xml and robots.txt use admin-configured base URL
 - 2026-02-21: Added multi-image gallery for products — each product supports up to 4 additional images via product_images table, admin ProductManager shows gallery editor when editing, CategoryDetail page shows image carousel with navigation arrows and dots

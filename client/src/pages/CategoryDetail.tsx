@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
+import NotFound from "@/pages/not-found";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useLanguage } from "@/context/LanguageContext";
@@ -115,7 +116,10 @@ export default function CategoryDetail({ slug }: { slug: string }) {
   useEffect(() => {
     setLoading(true);
     fetch(`/api/categories/slug/${slug}`)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error("Not found");
+        return r.json();
+      })
       .then((cat: Category) => {
         setCategory(cat);
         return fetch(`/api/products?categoryId=${cat.id}`);
@@ -125,7 +129,10 @@ export default function CategoryDetail({ slug }: { slug: string }) {
         setProducts(prods);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        setCategory(null);
+        setLoading(false);
+      });
   }, [slug]);
 
   const title = category
@@ -145,16 +152,7 @@ export default function CategoryDetail({ slug }: { slug: string }) {
   }
 
   if (!category) {
-    return (
-      <Layout>
-        <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-          <p className="text-neutral-500 text-lg">Category not found</p>
-          <Link href="/categories">
-            <a className="text-primary hover:underline">{t("back_to_categories")}</a>
-          </Link>
-        </div>
-      </Layout>
-    );
+    return <NotFound />;
   }
 
   return (

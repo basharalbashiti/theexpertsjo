@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
@@ -17,6 +17,106 @@ import KeyContactManager from "./KeyContactManager";
 import MessageManager from "./MessageManager";
 import SeoManager from "./SeoManager";
 import type { Category, Product, Partner, Brand, Client, SiteContent, Leadership } from "@shared/schema";
+
+function SettingsPanel({ username, t }: { username: string; t: (key: string) => string }) {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  const passwordMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("PATCH", "/api/auth/password", { currentPassword, newPassword });
+      return res.json();
+    },
+    onSuccess: () => {
+      setMessage({ type: "success", text: t("password_updated") });
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    },
+    onError: (err: Error) => {
+      setMessage({ type: "error", text: err.message || t("password_update_failed") });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage(null);
+    if (newPassword !== confirmPassword) {
+      setMessage({ type: "error", text: t("passwords_dont_match") });
+      return;
+    }
+    if (newPassword.length < 6) {
+      setMessage({ type: "error", text: t("password_min_length") });
+      return;
+    }
+    passwordMutation.mutate();
+  };
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-neutral-900">{t("account_settings")}</h2>
+      <div className="bg-white rounded-xl border p-6 space-y-4">
+        <div>
+          <label className="text-sm font-medium text-neutral-500">{t("username")}</label>
+          <p className="text-lg font-semibold text-neutral-900">{username}</p>
+        </div>
+      </div>
+      <div className="bg-white rounded-xl border p-6">
+        <h3 className="text-lg font-semibold text-neutral-900 mb-4">{t("change_password")}</h3>
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t("current_password")}</label>
+            <input
+              type="password"
+              data-testid="input-current-password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t("new_password")}</label>
+            <input
+              type="password"
+              data-testid="input-new-password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t("confirm_password")}</label>
+            <input
+              type="password"
+              data-testid="input-confirm-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              required
+            />
+          </div>
+          {message && (
+            <p data-testid="text-password-message" className={`text-sm ${message.type === "success" ? "text-green-600" : "text-red-600"}`}>
+              {message.text}
+            </p>
+          )}
+          <button
+            type="submit"
+            data-testid="button-change-password"
+            disabled={passwordMutation.isPending}
+            className="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:opacity-50"
+          >
+            {passwordMutation.isPending ? t("saving") : t("change_password")}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners-clients" | "leadership" | "key-contacts" | "quick-links" | "messages" | "seo" | "settings";
 
@@ -258,18 +358,7 @@ export default function AdminDashboard() {
       case "seo":
         return <SeoManager />;
       case "settings":
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-neutral-900">{t("account_settings")}</h2>
-            <div className="bg-white rounded-xl border p-6 space-y-4">
-              <div>
-                <label className="text-sm font-medium text-neutral-500">{t("username")}</label>
-                <p className="text-lg font-semibold text-neutral-900">{user?.username}</p>
-              </div>
-              <p className="text-sm text-neutral-400">{t("password_change_soon")}</p>
-            </div>
-          </div>
-        );
+        return <SettingsPanel username={user?.username || ""} t={t} />;
       default:
         return null;
     }
