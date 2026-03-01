@@ -26,6 +26,7 @@ const defaultImages: Record<string, string> = {
   hero3: defaultHero3,
   logo: defaultLogo,
   favicon: defaultFavicon,
+  og_image: "/opengraph.png",
   products_banner: defaultProductsBanner,
   contact_banner: defaultContactBanner,
   about_banner: defaultHero1,
@@ -44,6 +45,7 @@ const imageSections = [
     slots: [
       { key: "logo", label: "Site Logo", description: "Main logo displayed in the navbar and footer" },
       { key: "favicon", label: "Favicon", description: "Browser tab icon (recommended: 64×64 or 128×128 PNG)" },
+      { key: "og_image", label: "Social Share Image", description: "Image shown when sharing on Facebook, Twitter, WhatsApp, etc. (recommended: 1200×630 PNG)" },
       { key: "hero1", label: "Hero Banner 1", description: "First hero slide on the homepage" },
       { key: "hero2", label: "Hero Banner 2", description: "Second hero slide on the homepage" },
       { key: "hero3", label: "Hero Banner 3", description: "Third hero slide on the homepage" },

@@ -63,6 +63,23 @@ async function injectSeoTags(html: string): Promise<string> {
       );
     }
 
+    const ogImageEntry = await storage.getSiteImage("og_image");
+    if (ogImageEntry && ogImageEntry.imageUrl) {
+      const ogImgUrl = escapeHtml(ogImageEntry.imageUrl);
+      html = html.replace(
+        /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/,
+        `<meta property="og:image" content="${ogImgUrl}" />`
+      );
+      html = html.replace(
+        /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/,
+        `<meta name="twitter:image" content="${ogImgUrl}" />`
+      );
+      html = html.replace(
+        /"logo":\s*"[^"]*"/,
+        `"logo": "${ogImageEntry.imageUrl.replace(/"/g, '\\"')}"`
+      );
+    }
+
     const orgName = seo.org_name || "The Experts";
     const orgNameAr = seo.org_name_ar || "الخبراء";
     const orgUrl = seo.org_url || "https://theexpertsjo.com";

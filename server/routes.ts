@@ -81,6 +81,19 @@ export async function registerRoutes(
     next();
   });
 
+  app.get("/opengraph.png", async (_req, res, next) => {
+    try {
+      const ogEntry = await storage.getSiteImage("og_image");
+      if (ogEntry && ogEntry.imageUrl) {
+        const filePath = path.join(process.cwd(), ogEntry.imageUrl);
+        if (fs.existsSync(filePath)) {
+          return res.sendFile(filePath);
+        }
+      }
+    } catch (e) {}
+    next();
+  });
+
   app.post("/api/auth/login", async (req, res) => {
     try {
       const { username, password } = req.body;
@@ -453,7 +466,7 @@ export async function registerRoutes(
   app.put("/api/site-images/:key", requireAuth, upload.single("image"), async (req, res) => {
     try {
       const allowedKeys = [
-        "hero1", "hero2", "hero3", "hero4", "logo", "favicon",
+        "hero1", "hero2", "hero3", "hero4", "logo", "favicon", "og_image",
         "products_banner", "contact_banner",
         "about_banner", "about_mission", "about_vision", "about_chairman",
         "partners_banner", "partners_cta",
