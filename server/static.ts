@@ -55,6 +55,14 @@ async function injectSeoTags(html: string): Promise<string> {
       html = html.replace("</head>", `${arTags}  </head>`);
     }
 
+    const faviconEntry = await storage.getSiteImage("favicon");
+    if (faviconEntry && faviconEntry.imageUrl) {
+      html = html.replace(
+        /<link\s+rel="icon"[^>]*\/?>/,
+        `<link rel="icon" type="image/png" href="${escapeHtml(faviconEntry.imageUrl)}" />`
+      );
+    }
+
     const orgName = seo.org_name || "The Experts";
     const orgNameAr = seo.org_name_ar || "الخبراء";
     const orgUrl = seo.org_url || "https://theexpertsjo.com";

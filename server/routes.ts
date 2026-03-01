@@ -68,6 +68,19 @@ export async function registerRoutes(
     next();
   });
 
+  app.get("/favicon.png", async (_req, res, next) => {
+    try {
+      const faviconEntry = await storage.getSiteImage("favicon");
+      if (faviconEntry && faviconEntry.imageUrl) {
+        const filePath = path.join(process.cwd(), faviconEntry.imageUrl);
+        if (fs.existsSync(filePath)) {
+          return res.sendFile(filePath);
+        }
+      }
+    } catch (e) {}
+    next();
+  });
+
   app.post("/api/auth/login", async (req, res) => {
     try {
       const { username, password } = req.body;
@@ -440,7 +453,7 @@ export async function registerRoutes(
   app.put("/api/site-images/:key", requireAuth, upload.single("image"), async (req, res) => {
     try {
       const allowedKeys = [
-        "hero1", "hero2", "hero3", "hero4", "logo",
+        "hero1", "hero2", "hero3", "hero4", "logo", "favicon",
         "products_banner", "contact_banner",
         "about_banner", "about_mission", "about_vision", "about_chairman",
         "partners_banner", "partners_cta",

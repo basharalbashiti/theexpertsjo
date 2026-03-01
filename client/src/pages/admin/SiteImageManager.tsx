@@ -12,6 +12,7 @@ import defaultHero1 from "@/assets/hero-1.jpg";
 import defaultHero2 from "@/assets/hero-2.jpg";
 import defaultHero3 from "@/assets/hero-3.jpg";
 import defaultLogo from "@/assets/logo.png";
+import defaultFavicon from "/favicon.png";
 import defaultProductsBanner from "@/assets/products-banner-bedroom.png";
 import defaultContactBanner from "@/assets/contact-banner-ultra-clear.png";
 import defaultPartnersBanner from "@/assets/partners-banner-outdoor.png";
@@ -24,6 +25,7 @@ const defaultImages: Record<string, string> = {
   hero2: defaultHero2,
   hero3: defaultHero3,
   logo: defaultLogo,
+  favicon: defaultFavicon,
   products_banner: defaultProductsBanner,
   contact_banner: defaultContactBanner,
   about_banner: defaultHero1,
@@ -41,6 +43,7 @@ const imageSections = [
     titleKey: "homepage",
     slots: [
       { key: "logo", label: "Site Logo", description: "Main logo displayed in the navbar and footer" },
+      { key: "favicon", label: "Favicon", description: "Browser tab icon (recommended: 64×64 or 128×128 PNG)" },
       { key: "hero1", label: "Hero Banner 1", description: "First hero slide on the homepage" },
       { key: "hero2", label: "Hero Banner 2", description: "Second hero slide on the homepage" },
       { key: "hero3", label: "Hero Banner 3", description: "Third hero slide on the homepage" },
@@ -160,6 +163,7 @@ export default function SiteImageManager() {
               const currentUrl = isRemoved ? "" : (imageMap[slot.key] || defaultImages[slot.key]);
               const hasCustomImage = dbEntry && dbEntry.imageUrl !== "";
               const isLogo = slot.key === "logo";
+              const isFavicon = slot.key === "favicon";
 
               return (
                 <div
@@ -167,7 +171,7 @@ export default function SiteImageManager() {
                   data-testid={`site-image-${slot.key}`}
                   className="bg-white rounded-xl border overflow-hidden"
                 >
-                  <div className={`relative ${isLogo ? "h-40 bg-neutral-800 flex items-center justify-center" : "h-48"}`}>
+                  <div className={`relative ${isFavicon ? "h-32 bg-neutral-100 flex items-center justify-center" : isLogo ? "h-40 bg-neutral-800 flex items-center justify-center" : "h-48"}`}>
                     {isRemoved ? (
                       <div className="w-full h-full bg-neutral-100 flex items-center justify-center">
                         <div className="text-center text-neutral-400">
@@ -175,6 +179,12 @@ export default function SiteImageManager() {
                           <p className="text-xs">{t("no_image") || "No image"}</p>
                         </div>
                       </div>
+                    ) : isFavicon ? (
+                      <img
+                        src={currentUrl}
+                        alt={slot.label}
+                        className="h-16 w-16 object-contain"
+                      />
                     ) : isLogo ? (
                       <img
                         src={currentUrl}
