@@ -174,7 +174,7 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
                     key={cat.id}
                     href={`#category-${cat.slug}`}
                     data-testid={`link-catalog-nav-${cat.slug}`}
-                    className={`whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                    className={`whitespace-nowrap px-5 py-2 text-sm font-medium rounded-full transition-colors ${
                       isActive
                         ? "bg-primary text-white"
                         : "text-neutral-600 hover:text-primary hover:bg-primary/5"
