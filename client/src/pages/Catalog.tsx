@@ -101,6 +101,115 @@ function ProductGallery({ product, name }: { product: Product; name: string }) {
   );
 }
 
+function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
+  logo: string;
+  categories: Category[];
+  activeSlug: string | null;
+  isRtl: boolean;
+  lang: string;
+  toggleLang: () => void;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 2);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (el) el.addEventListener("scroll", checkScroll);
+    window.addEventListener("resize", checkScroll);
+    return () => {
+      if (el) el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, [categories]);
+
+  const scroll = (dir: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = dir === "left" ? -200 : 200;
+    el.scrollBy({ left: amount, behavior: "smooth" });
+  };
+
+  return (
+    <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
+      <div className="container mx-auto px-6 py-4 flex items-center gap-6">
+        {logo && (
+          <Link href="/">
+            <a className="shrink-0">
+              <img src={logo} alt="The Experts" className="h-10 w-auto" data-testid="img-catalog-logo" />
+            </a>
+          </Link>
+        )}
+
+        <div className="flex-1 flex items-center gap-2 min-w-0">
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll("left")}
+              data-testid="button-catalog-scroll-left"
+              className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors"
+            >
+              <ChevronLeft size={16} className="text-neutral-600" />
+            </button>
+          )}
+
+          <div
+            ref={scrollRef}
+            className="flex-1 overflow-x-auto min-w-0"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            <div className={`flex gap-1 ${isRtl ? "flex-row-reverse" : ""}`} style={{ width: "max-content", margin: "0 auto" }}>
+              {categories.map((cat) => {
+                const catName = isRtl && cat.nameAr ? cat.nameAr : cat.nameEn;
+                const isActive = activeSlug === cat.slug;
+                return (
+                  <a
+                    key={cat.id}
+                    href={`#category-${cat.slug}`}
+                    data-testid={`link-catalog-nav-${cat.slug}`}
+                    className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-neutral-600 hover:text-primary hover:bg-primary/5"
+                    }`}
+                  >
+                    {catName}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+
+          {canScrollRight && (
+            <button
+              onClick={() => scroll("right")}
+              data-testid="button-catalog-scroll-right"
+              className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors"
+            >
+              <ChevronRight size={16} className="text-neutral-600" />
+            </button>
+          )}
+        </div>
+
+        <button
+          onClick={toggleLang}
+          data-testid="button-catalog-lang"
+          className="shrink-0 text-xs font-bold px-3 py-1.5 border border-neutral-200 text-neutral-700 hover:bg-primary hover:text-white hover:border-primary transition-all"
+        >
+          {lang === "EN" ? "AR" : "EN"}
+        </button>
+      </div>
+    </nav>
+  );
+}
+
 export default function Catalog() {
   const { t, lang, toggleLang } = useLanguage();
   const isRtl = lang === "AR";
@@ -180,48 +289,14 @@ export default function Catalog() {
 
   return (
     <div className={`min-h-screen bg-white ${isRtl ? "rtl" : "ltr"}`} dir={isRtl ? "rtl" : "ltr"}>
-      <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
-        <div className="container mx-auto px-6 py-3 flex items-center gap-4">
-          {logo && (
-            <Link href="/">
-              <a className="shrink-0">
-                <img src={logo} alt="The Experts" className="h-10 w-auto" data-testid="img-catalog-logo" />
-              </a>
-            </Link>
-          )}
-
-          <div className="flex-1 overflow-x-auto scrollbar-hide">
-            <div className={`flex gap-1 justify-center ${isRtl ? "flex-row-reverse" : ""}`}>
-              {categories.map((cat) => {
-                const catName = isRtl && cat.nameAr ? cat.nameAr : cat.nameEn;
-                const isActive = activeSlug === cat.slug;
-                return (
-                  <a
-                    key={cat.id}
-                    href={`#category-${cat.slug}`}
-                    data-testid={`link-catalog-nav-${cat.slug}`}
-                    className={`whitespace-nowrap px-5 py-2 text-sm font-medium rounded-full transition-colors ${
-                      isActive
-                        ? "bg-primary text-white"
-                        : "text-neutral-600 hover:text-primary hover:bg-primary/5"
-                    }`}
-                  >
-                    {catName}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-
-          <button
-            onClick={toggleLang}
-            data-testid="button-catalog-lang"
-            className="shrink-0 text-xs font-bold px-3 py-1.5 border border-neutral-200 text-neutral-700 hover:bg-primary hover:text-white hover:border-primary transition-all"
-          >
-            {lang === "EN" ? "AR" : "EN"}
-          </button>
-        </div>
-      </nav>
+      <CatalogNav
+        logo={logo}
+        categories={categories}
+        activeSlug={activeSlug}
+        isRtl={isRtl}
+        lang={lang}
+        toggleLang={toggleLang}
+      />
 
       {categories.map((category, catIndex) => {
         const catName = isRtl && category.nameAr ? category.nameAr : category.nameEn;
