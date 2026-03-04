@@ -12,6 +12,7 @@ import Contact from "@/pages/Contact";
 import Partners from "@/pages/Partners";
 import CategoryDetail from "@/pages/CategoryDetail";
 import NotFound from "@/pages/not-found";
+import Catalog from "@/pages/Catalog";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/categories" component={Categories} />
       <Route path="/partners" component={Partners} />
       <Route path="/contact" component={Contact} />
+      <Route path="/catalog" component={Catalog} />
       <Route path="/admin/login">{() => <AdminWrapper component={AdminLogin} />}</Route>
       <Route path="/admin">{() => <AdminWrapper component={AdminDashboard} />}</Route>
       <Route path="/:slug">{(params) => <CategoryDetail slug={params.slug} />}</Route>

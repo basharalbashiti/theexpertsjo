@@ -4,6 +4,7 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-03-04: Added /catalog page — standalone full catalog page (no links from site navigation) showing all categories with their products in a scrollable single-page layout; sticky category navigation bar; bilingual; accessible only via direct link
 - 2026-02-23: Added email notifications for contact form — when a visitor submits the contact form, an email is sent to alaa@theexpertsjo.com via Resend API with visitor name, email, subject, and message; fire-and-forget (doesn't block form submission); server/email.ts module with HTML template
 - 2026-03-01: Added password change feature to admin Settings — current password verification, min 6 char validation, bilingual form
 - 2026-03-01: Fixed 404 handling — invalid URLs now show proper bilingual "Page Not Found" page instead of broken category page; CategoryDetail checks API response status
