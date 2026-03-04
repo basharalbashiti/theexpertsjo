@@ -140,11 +140,11 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
-      <div className="mx-auto px-8 flex items-center gap-8 max-w-[1400px] h-20">
+      <div className="mx-auto px-8 flex items-center gap-8 max-w-[1400px] py-3">
         {logo && (
           <Link href="/">
-            <a className="shrink-0 flex items-center h-full py-2">
-              <img src={logo} alt="The Experts" className="h-full w-auto object-contain" data-testid="img-catalog-logo" />
+            <a className="shrink-0 flex items-center">
+              <img src={logo} alt="The Experts" className="h-14 w-auto object-contain" data-testid="img-catalog-logo" />
             </a>
           </Link>
         )}
