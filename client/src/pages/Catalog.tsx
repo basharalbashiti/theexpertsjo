@@ -386,6 +386,21 @@ export default function Catalog() {
               </div>
             </div>
 
+            <div className={`flex flex-col items-center text-center`}>
+              <ShoppingBag className="mb-4 text-primary" size={36} />
+              <h3 className="text-xl font-serif font-bold mb-3">
+                {isRtl ? "هل تريد معرفة المزيد؟" : "Interested in Our Products?"}
+              </h3>
+              <p className="text-neutral-400 text-sm mb-6">
+                {isRtl
+                  ? "تواصل مع فريقنا للحصول على عروض مخصصة"
+                  : "Get in touch for custom solutions and bulk orders."}
+              </p>
+              <Link href="/contact" data-testid="link-catalog-contact" className="inline-block bg-primary text-white px-8 py-3 uppercase text-xs font-bold tracking-widest hover:bg-white hover:text-black transition-all">
+                {t("contact_sales")}
+              </Link>
+            </div>
+
             <div className={isRtl ? "text-right" : "text-left"}>
               <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-neutral-300 mb-8">
                 {isRtl ? "تواصل معنا" : "CONTACT US"}
@@ -404,21 +419,6 @@ export default function Catalog() {
                   <a href="tel:+962790484745" className="text-neutral-400 hover:text-white transition-colors" dir="ltr">+962 79 0484745</a>
                 </div>
               </div>
-            </div>
-
-            <div className={`flex flex-col items-center text-center ${isRtl ? "md:items-end md:text-right" : "md:items-end md:text-right"}`}>
-              <ShoppingBag className="mb-4 text-primary" size={36} />
-              <h3 className="text-xl font-serif font-bold mb-3">
-                {isRtl ? "هل تريد معرفة المزيد؟" : "Interested in Our Products?"}
-              </h3>
-              <p className="text-neutral-400 text-sm mb-6">
-                {isRtl
-                  ? "تواصل مع فريقنا للحصول على عروض مخصصة"
-                  : "Get in touch for custom solutions and bulk orders."}
-              </p>
-              <Link href="/contact" data-testid="link-catalog-contact" className="inline-block bg-primary text-white px-8 py-3 uppercase text-xs font-bold tracking-widest hover:bg-white hover:text-black transition-all">
-                {t("contact_sales")}
-              </Link>
             </div>
           </div>
         </div>
