@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getQueryFn, apiRequest, queryClient } from "@/lib/queryClient";
 import { Input } from "@/components/ui/input";
@@ -95,6 +95,31 @@ const sectionToTranslationKey: Record<string, string> = {
   leader: "sec_leader",
   general: "sec_general",
 };
+
+function AutoResizeTextarea({ value, onChange, className, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  const resize = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = Math.max(60, el.scrollHeight) + "px";
+  }, []);
+
+  useEffect(() => {
+    resize();
+  }, [value, resize]);
+
+  return (
+    <textarea
+      ref={ref}
+      value={value}
+      onChange={onChange}
+      className={`flex w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden ${className || ""}`}
+      {...props}
+    />
+  );
+}
 
 export default function ContentEditor() {
   const { toast } = useToast();
@@ -293,21 +318,19 @@ export default function ContentEditor() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <Label className="text-xs font-medium text-neutral-500">{t("english")}</Label>
-                    <Textarea
+                    <AutoResizeTextarea
                       data-testid={`textarea-en-${item.id}`}
                       value={edited?.valueEn ?? item.valueEn}
                       onChange={(e) => handleChange(item.id, "valueEn", e.target.value)}
-                      rows={2}
                       className="bg-white"
                     />
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-xs font-medium text-neutral-500">{t("arabic")}</Label>
-                    <Textarea
+                    <AutoResizeTextarea
                       data-testid={`textarea-ar-${item.id}`}
                       value={edited?.valueAr ?? item.valueAr}
                       onChange={(e) => handleChange(item.id, "valueAr", e.target.value)}
-                      rows={2}
                       dir="rtl"
                       className="bg-white"
                     />
