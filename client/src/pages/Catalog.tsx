@@ -3,6 +3,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import { Link } from "wouter";
+import defaultLogo from "@/assets/logo.png";
 
 interface Category {
   id: number;
@@ -101,8 +102,20 @@ function ProductGallery({ product, name }: { product: Product; name: string }) {
 }
 
 export default function Catalog() {
-  const { t, lang } = useLanguage();
+  const { t, lang, toggleLang } = useLanguage();
   const isRtl = lang === "AR";
+  const [logo, setLogo] = useState<string>(defaultLogo);
+
+  useEffect(() => {
+    fetch("/api/site-images")
+      .then(r => r.json())
+      .then((imgs: { key: string; imageUrl: string }[]) => {
+        const logoImg = imgs.find(i => i.key === "logo");
+        if (logoImg && logoImg.imageUrl) setLogo(logoImg.imageUrl);
+        else if (logoImg && logoImg.imageUrl === "") setLogo("");
+      })
+      .catch(() => {});
+  }, []);
   const [categories, setCategories] = useState<Category[]>([]);
   const [productsByCategory, setProductsByCategory] = useState<Record<number, Product[]>>({});
   const [loading, setLoading] = useState(true);
@@ -168,27 +181,45 @@ export default function Catalog() {
   return (
     <div className={`min-h-screen bg-white ${isRtl ? "rtl" : "ltr"}`} dir={isRtl ? "rtl" : "ltr"}>
       <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
-        <div className="container mx-auto px-6 py-3 overflow-x-auto scrollbar-hide">
-          <div className={`flex gap-1 justify-center ${isRtl ? "flex-row-reverse" : ""}`}>
-            {categories.map((cat) => {
-              const catName = isRtl && cat.nameAr ? cat.nameAr : cat.nameEn;
-              const isActive = activeSlug === cat.slug;
-              return (
-                <a
-                  key={cat.id}
-                  href={`#category-${cat.slug}`}
-                  data-testid={`link-catalog-nav-${cat.slug}`}
-                  className={`whitespace-nowrap px-5 py-2 text-sm font-medium rounded-full transition-colors ${
-                    isActive
-                      ? "bg-primary text-white"
-                      : "text-neutral-600 hover:text-primary hover:bg-primary/5"
-                  }`}
-                >
-                  {catName}
-                </a>
-              );
-            })}
+        <div className="container mx-auto px-6 py-3 flex items-center gap-4">
+          {logo && (
+            <Link href="/">
+              <a className="shrink-0">
+                <img src={logo} alt="The Experts" className="h-10 w-auto" data-testid="img-catalog-logo" />
+              </a>
+            </Link>
+          )}
+
+          <div className="flex-1 overflow-x-auto scrollbar-hide">
+            <div className={`flex gap-1 justify-center ${isRtl ? "flex-row-reverse" : ""}`}>
+              {categories.map((cat) => {
+                const catName = isRtl && cat.nameAr ? cat.nameAr : cat.nameEn;
+                const isActive = activeSlug === cat.slug;
+                return (
+                  <a
+                    key={cat.id}
+                    href={`#category-${cat.slug}`}
+                    data-testid={`link-catalog-nav-${cat.slug}`}
+                    className={`whitespace-nowrap px-5 py-2 text-sm font-medium rounded-full transition-colors ${
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-neutral-600 hover:text-primary hover:bg-primary/5"
+                    }`}
+                  >
+                    {catName}
+                  </a>
+                );
+              })}
+            </div>
           </div>
+
+          <button
+            onClick={toggleLang}
+            data-testid="button-catalog-lang"
+            className="shrink-0 text-xs font-bold px-3 py-1.5 border border-neutral-200 text-neutral-700 hover:bg-primary hover:text-white hover:border-primary transition-all"
+          >
+            {lang === "EN" ? "AR" : "EN"}
+          </button>
         </div>
       </nav>
 
