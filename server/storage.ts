@@ -1,6 +1,6 @@
 import { users, siteContent, partners, categories, products, productImages, brands, siteImages, clients, leadership, keyContacts, quickLinks, seoSettings, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type ProductImage, type InsertProductImage, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type SeoSetting, type InsertSeoSetting, type ContactMessage, type InsertContactMessage } from "@shared/schema";
 import { db } from "./db";
-import { eq, asc, desc, isNull, isNotNull, lt, and } from "drizzle-orm";
+import { eq, asc, desc, isNull, isNotNull, lt, and, or, inArray } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -21,6 +21,8 @@ export interface IStorage {
 
   getAllCategories(): Promise<Category[]>;
   getVisibleCategories(): Promise<Category[]>;
+  getCategoriesForProducts(): Promise<Category[]>;
+  getCategoriesForCatalog(): Promise<Category[]>;
   getCategory(id: number): Promise<Category | undefined>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
   createCategory(category: InsertCategory): Promise<Category>;
@@ -29,8 +31,12 @@ export interface IStorage {
 
   getAllProducts(): Promise<Product[]>;
   getVisibleProducts(): Promise<Product[]>;
+  getProductsForProducts(): Promise<Product[]>;
+  getProductsForCatalog(): Promise<Product[]>;
   getProductsByCategory(categoryId: number): Promise<Product[]>;
   getVisibleProductsByCategory(categoryId: number): Promise<Product[]>;
+  getProductsForProductsByCategory(categoryId: number): Promise<Product[]>;
+  getProductsForCatalogByCategory(categoryId: number): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
@@ -171,7 +177,21 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getVisibleCategories(): Promise<Category[]> {
-    return db.select().from(categories).where(eq(categories.visible, true)).orderBy(asc(categories.sortOrder));
+    return db.select().from(categories).where(
+      inArray(categories.visibility, ["both", "products"])
+    ).orderBy(asc(categories.sortOrder));
+  }
+
+  async getCategoriesForProducts(): Promise<Category[]> {
+    return db.select().from(categories).where(
+      inArray(categories.visibility, ["both", "products"])
+    ).orderBy(asc(categories.sortOrder));
+  }
+
+  async getCategoriesForCatalog(): Promise<Category[]> {
+    return db.select().from(categories).where(
+      inArray(categories.visibility, ["both", "catalog"])
+    ).orderBy(asc(categories.sortOrder));
   }
 
   async getCategory(id: number): Promise<Category | undefined> {
@@ -205,7 +225,21 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getVisibleProducts(): Promise<Product[]> {
-    return db.select().from(products).where(eq(products.visible, true)).orderBy(asc(products.sortOrder));
+    return db.select().from(products).where(
+      inArray(products.visibility, ["both", "products"])
+    ).orderBy(asc(products.sortOrder));
+  }
+
+  async getProductsForProducts(): Promise<Product[]> {
+    return db.select().from(products).where(
+      inArray(products.visibility, ["both", "products"])
+    ).orderBy(asc(products.sortOrder));
+  }
+
+  async getProductsForCatalog(): Promise<Product[]> {
+    return db.select().from(products).where(
+      inArray(products.visibility, ["both", "catalog"])
+    ).orderBy(asc(products.sortOrder));
   }
 
   async getProductsByCategory(categoryId: number): Promise<Product[]> {
@@ -213,7 +247,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getVisibleProductsByCategory(categoryId: number): Promise<Product[]> {
-    return db.select().from(products).where(and(eq(products.categoryId, categoryId), eq(products.visible, true))).orderBy(asc(products.sortOrder));
+    return db.select().from(products).where(and(eq(products.categoryId, categoryId), inArray(products.visibility, ["both", "products"]))).orderBy(asc(products.sortOrder));
+  }
+
+  async getProductsForProductsByCategory(categoryId: number): Promise<Product[]> {
+    return db.select().from(products).where(and(eq(products.categoryId, categoryId), inArray(products.visibility, ["both", "products"]))).orderBy(asc(products.sortOrder));
+  }
+
+  async getProductsForCatalogByCategory(categoryId: number): Promise<Product[]> {
+    return db.select().from(products).where(and(eq(products.categoryId, categoryId), inArray(products.visibility, ["both", "catalog"]))).orderBy(asc(products.sortOrder));
   }
 
   async getProduct(id: number): Promise<Product | undefined> {

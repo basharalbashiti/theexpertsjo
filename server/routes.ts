@@ -254,13 +254,13 @@ export async function registerRoutes(
   });
 
   app.get("/api/catalog/categories", async (_req, res) => {
-    const allCategories = await storage.getAllCategories();
-    res.json(allCategories);
+    const cats = await storage.getCategoriesForCatalog();
+    res.json(cats);
   });
 
   app.get("/api/catalog/products", async (_req, res) => {
-    const allProducts = await storage.getAllProducts();
-    res.json(allProducts);
+    const prods = await storage.getProductsForCatalog();
+    res.json(prods);
   });
 
   app.get("/api/categories", async (req, res) => {
@@ -305,6 +305,7 @@ export async function registerRoutes(
       if (req.body.nameAr !== undefined) updates.nameAr = req.body.nameAr;
       if (req.body.slug) updates.slug = req.body.slug;
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
+      if (req.body.visibility !== undefined) updates.visibility = req.body.visibility;
       if (req.body.visible !== undefined) updates.visible = req.body.visible === "true" || req.body.visible === true;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       else if (req.body.removeImage === "true") updates.imageUrl = "";
@@ -315,6 +316,23 @@ export async function registerRoutes(
       res.json(category);
     } catch (error) {
       res.status(500).json({ message: "Failed to update category" });
+    }
+  });
+
+  app.patch("/api/categories/:id/visibility", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { visibility } = req.body;
+      if (!["both", "products", "catalog", "hidden"].includes(visibility)) {
+        return res.status(400).json({ message: "Invalid visibility value" });
+      }
+      const updated = await storage.updateCategory(id, { visibility, visible: visibility !== "hidden" });
+      if (!updated) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update visibility" });
     }
   });
 
@@ -406,6 +424,7 @@ export async function registerRoutes(
       if (req.body.categoryId) updates.categoryId = parseInt(req.body.categoryId);
       if (req.body.sortOrder !== undefined) updates.sortOrder = parseInt(req.body.sortOrder) || 0;
       if (req.body.brand !== undefined) updates.brand = req.body.brand;
+      if (req.body.visibility !== undefined) updates.visibility = req.body.visibility;
       if (req.file) updates.imageUrl = `/uploads/${req.file.filename}`;
       else if (req.body.removeImage === "true") updates.imageUrl = "";
       const product = await storage.updateProduct(id, updates);
@@ -428,6 +447,23 @@ export async function registerRoutes(
       res.json({ message: "Product deleted" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete product" });
+    }
+  });
+
+  app.patch("/api/products/:id/visibility", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { visibility } = req.body;
+      if (!["both", "products", "catalog", "hidden"].includes(visibility)) {
+        return res.status(400).json({ message: "Invalid visibility value" });
+      }
+      const updated = await storage.updateProduct(id, { visibility, visible: visibility !== "hidden" });
+      if (!updated) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update visibility" });
     }
   });
 
@@ -1024,8 +1060,7 @@ export async function registerRoutes(
     try {
       const seo = await getSeoMap();
       const siteUrl = seo.sitemap_base_url || DEFAULT_SITE_URL;
-      const categories = await storage.getAllCategories();
-      const visibleCategories = categories.filter((c: any) => c.visible !== false);
+      const visibleCategories = await storage.getCategoriesForProducts();
 
       const staticPages = [
         { url: "/", priority: "1.0", changefreq: "weekly" },

@@ -288,10 +288,12 @@ export default function ProductManager() {
     },
   });
 
-  const toggleVisibilityMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const res = await fetch(`/api/products/${id}/toggle-visibility`, {
+  const visibilityMutation = useMutation({
+    mutationFn: async ({ id, visibility }: { id: number; visibility: string }) => {
+      const res = await fetch(`/api/products/${id}/visibility`, {
         method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visibility }),
         credentials: "include",
       });
       if (!res.ok) throw new Error(await res.text());
@@ -447,7 +449,7 @@ export default function ProductManager() {
               >
                 {t("category")}<SortIcon field="category" />
               </th>
-              <th className="text-center px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("visible")}</th>
+              <th className="text-center px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("visibility")}</th>
               <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t("actions")}</th>
             </tr>
           </thead>
@@ -484,22 +486,26 @@ export default function ProductManager() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-center">
-                  <button
-                    data-testid={`button-toggle-visibility-product-${product.id}`}
-                    onClick={() => toggleVisibilityMutation.mutate(product.id)}
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-                      product.visible
-                        ? "bg-green-50 text-green-700 hover:bg-green-100"
-                        : "bg-neutral-100 text-neutral-400 hover:bg-neutral-200"
+                  <select
+                    data-testid={`select-visibility-product-${product.id}`}
+                    value={product.visibility || "both"}
+                    onChange={(e) => visibilityMutation.mutate({ id: product.id, visibility: e.target.value })}
+                    disabled={visibilityMutation.isPending}
+                    className={`text-xs font-semibold rounded-full px-2.5 py-1.5 border cursor-pointer transition-colors ${
+                      product.visibility === "hidden"
+                        ? "bg-neutral-100 text-neutral-400 border-neutral-200"
+                        : product.visibility === "both"
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                        : product.visibility === "products"
+                        ? "bg-blue-50 text-blue-700 border-blue-200"
+                        : "bg-amber-50 text-amber-700 border-amber-200"
                     }`}
                   >
-                    {product.visible ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
-                    )}
-                    {product.visible ? t("visible") : t("hidden")}
-                  </button>
+                    <option value="both">{t("visibility_both")}</option>
+                    <option value="products">{t("visibility_products")}</option>
+                    <option value="catalog">{t("visibility_catalog")}</option>
+                    <option value="hidden">{t("visibility_hidden")}</option>
+                  </select>
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">

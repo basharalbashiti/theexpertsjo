@@ -56,6 +56,7 @@ export const categories = pgTable("categories", {
   imageUrl: text("image_url").notNull().default(""),
   sortOrder: integer("sort_order").notNull().default(0),
   visible: boolean("visible").notNull().default(true),
+  visibility: text("visibility").notNull().default("both"),
 });
 
 export const insertCategorySchema = createInsertSchema(categories).pick({
@@ -65,6 +66,7 @@ export const insertCategorySchema = createInsertSchema(categories).pick({
   imageUrl: true,
   sortOrder: true,
   visible: true,
+  visibility: true,
 });
 
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
@@ -81,6 +83,7 @@ export const products = pgTable("products", {
   categoryId: integer("category_id").notNull(),
   sortOrder: integer("sort_order").notNull().default(0),
   visible: boolean("visible").notNull().default(true),
+  visibility: text("visibility").notNull().default("both"),
 });
 
 export const insertProductSchema = createInsertSchema(products).pick({
@@ -93,6 +96,7 @@ export const insertProductSchema = createInsertSchema(products).pick({
   categoryId: true,
   sortOrder: true,
   visible: true,
+  visibility: true,
 });
 
 export type InsertProduct = z.infer<typeof insertProductSchema>;
