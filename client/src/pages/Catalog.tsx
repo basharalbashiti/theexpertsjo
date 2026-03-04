@@ -140,11 +140,11 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
-      <div className="container mx-auto px-6 py-4 flex items-center gap-6">
+      <div className="mx-auto px-8 py-4 flex items-center gap-10 max-w-[1400px]">
         {logo && (
           <Link href="/">
-            <a className="shrink-0">
-              <img src={logo} alt="The Experts" className="h-10 w-auto" data-testid="img-catalog-logo" />
+            <a className="shrink-0 pr-4 border-r border-neutral-200">
+              <img src={logo} alt="The Experts" className="h-12 w-auto" data-testid="img-catalog-logo" />
             </a>
           </Link>
         )}
@@ -201,7 +201,7 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
         <button
           onClick={toggleLang}
           data-testid="button-catalog-lang"
-          className="shrink-0 text-xs font-bold px-3 py-1.5 border border-neutral-200 text-neutral-700 hover:bg-primary hover:text-white hover:border-primary transition-all"
+          className="shrink-0 ml-4 text-xs font-bold px-4 py-2 border border-neutral-200 text-neutral-700 hover:bg-primary hover:text-white hover:border-primary transition-all rounded"
         >
           {lang === "EN" ? "AR" : "EN"}
         </button>
