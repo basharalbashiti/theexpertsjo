@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import { useEffect, useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShoppingBag, MapPin, Mail, Phone } from "lucide-react";
 import { Link } from "wouter";
 import defaultLogo from "@/assets/logo.png";
 
@@ -367,22 +367,47 @@ export default function Catalog() {
         );
       })}
 
-      <section className="py-20 bg-neutral-900 text-white text-center">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <ShoppingBag className="mx-auto mb-6 text-primary" size={44} />
-          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-5">
-            {isRtl ? "هل تريد معرفة المزيد؟" : "Interested in Our Products?"}
-          </h2>
-          <p className="text-neutral-400 mb-8 text-lg">
-            {isRtl
-              ? "تواصل مع فريقنا للحصول على عروض مخصصة وطلبات بالجملة"
-              : "Get in touch with our team for custom solutions and bulk orders."}
-          </p>
-          <Link href="/contact" data-testid="link-catalog-contact" className="inline-block bg-primary text-white px-10 py-4 uppercase text-sm font-bold tracking-widest hover:bg-white hover:text-black transition-all">
-            {t("contact_sales")}
-          </Link>
+      <footer className="bg-neutral-900 text-white">
+        <div className="container mx-auto px-6 max-w-6xl py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className={isRtl ? "text-right" : "text-left"}>
+              {logo && (
+                <img src={logo} alt="The Experts" className="h-16 w-auto mb-6 brightness-0 invert" data-testid="img-catalog-footer-logo" />
+              )}
+              <p className="text-neutral-400 leading-relaxed max-w-sm mb-8">
+                {isRtl
+                  ? "نوفر الراحة والجودة لضيوفكم. منتجات ضيافة فاخرة في جميع أنحاء الشرق الأوسط."
+                  : "Supplying comfort and quality to your guests. Premium hospitality products across the Middle East."}
+              </p>
+              <div className="border-t border-neutral-700 pt-6">
+                <p className="text-neutral-300 text-sm font-medium">
+                  {isRtl ? "شركة الخبراء لمستلزمات الفنادق" : "The Experts For Hotels Supplies Company"}
+                </p>
+              </div>
+            </div>
+
+            <div className={isRtl ? "text-right" : "text-left"}>
+              <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-neutral-300 mb-8">
+                {isRtl ? "تواصل معنا" : "CONTACT US"}
+              </h3>
+              <div className="space-y-5">
+                <div className={`flex items-center gap-4 ${isRtl ? "flex-row-reverse" : ""}`}>
+                  <MapPin size={18} className="text-primary shrink-0" />
+                  <span className="text-neutral-400">{isRtl ? "عمّان - الأردن" : "Amman – Jordan"}</span>
+                </div>
+                <div className={`flex items-center gap-4 ${isRtl ? "flex-row-reverse" : ""}`}>
+                  <Mail size={18} className="text-primary shrink-0" />
+                  <a href="mailto:sales@theexpertsjo.com" className="text-neutral-400 hover:text-white transition-colors">sales@theexpertsjo.com</a>
+                </div>
+                <div className={`flex items-center gap-4 ${isRtl ? "flex-row-reverse" : ""}`}>
+                  <Phone size={18} className="text-primary shrink-0" />
+                  <a href="tel:+962790484745" className="text-neutral-400 hover:text-white transition-colors" dir="ltr">+962 79 0484745</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
