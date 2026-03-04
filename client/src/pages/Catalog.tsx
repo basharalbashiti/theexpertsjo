@@ -140,11 +140,11 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
-      <div className="mx-auto px-8 flex items-center gap-10 max-w-[1400px] h-14">
+      <div className="mx-auto px-8 flex items-center gap-8 max-w-[1400px] h-20">
         {logo && (
           <Link href="/">
-            <a className="shrink-0 flex items-center h-full">
-              <img src={logo} alt="The Experts" className="h-10 max-h-full w-auto object-contain" data-testid="img-catalog-logo" />
+            <a className="shrink-0 flex items-center h-full py-2">
+              <img src={logo} alt="The Experts" className="h-full w-auto object-contain" data-testid="img-catalog-logo" />
             </a>
           </Link>
         )}
@@ -154,9 +154,9 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
             <button
               onClick={() => scroll("left")}
               data-testid="button-catalog-scroll-left"
-              className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors"
+              className="shrink-0 w-6 h-6 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors"
             >
-              <ChevronLeft size={16} className="text-neutral-600" />
+              <ChevronLeft size={14} className="text-neutral-600" />
             </button>
           )}
 
@@ -174,7 +174,7 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
                     key={cat.id}
                     href={`#category-${cat.slug}`}
                     data-testid={`link-catalog-nav-${cat.slug}`}
-                    className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                    className={`whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
                       isActive
                         ? "bg-primary text-white"
                         : "text-neutral-600 hover:text-primary hover:bg-primary/5"
@@ -191,9 +191,9 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
             <button
               onClick={() => scroll("right")}
               data-testid="button-catalog-scroll-right"
-              className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors"
+              className="shrink-0 w-6 h-6 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors"
             >
-              <ChevronRight size={16} className="text-neutral-600" />
+              <ChevronRight size={14} className="text-neutral-600" />
             </button>
           )}
         </div>
@@ -201,7 +201,7 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
         <button
           onClick={toggleLang}
           data-testid="button-catalog-lang"
-          className="shrink-0 ml-4 text-xs font-bold px-4 py-2 border border-neutral-200 text-neutral-700 hover:bg-primary hover:text-white hover:border-primary transition-all rounded"
+          className="shrink-0 text-xs font-bold px-3 py-1.5 border border-neutral-200 text-neutral-700 hover:bg-primary hover:text-white hover:border-primary transition-all rounded"
         >
           {lang === "EN" ? "AR" : "EN"}
         </button>
