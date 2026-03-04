@@ -368,8 +368,23 @@ export default function Catalog() {
       })}
 
       <footer className="bg-neutral-900 text-white">
-        <div className="container mx-auto px-10 max-w-7xl py-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
+        <div className="container mx-auto px-10 max-w-7xl">
+          <div className="flex flex-col items-center text-center py-16 border-b border-neutral-800">
+            <ShoppingBag className="mb-4 text-primary" size={36} />
+            <h3 className="text-xl font-serif font-bold mb-3">
+              {isRtl ? "هل تريد معرفة المزيد؟" : "Interested in Our Products?"}
+            </h3>
+            <p className="text-neutral-400 text-sm mb-6">
+              {isRtl
+                ? "تواصل مع فريقنا للحصول على عروض مخصصة"
+                : "Get in touch for custom solutions and bulk orders."}
+            </p>
+            <Link href="/contact" data-testid="link-catalog-contact" className="inline-block bg-primary text-white px-8 py-3 uppercase text-xs font-bold tracking-widest hover:bg-white hover:text-black transition-all">
+              {t("contact_sales")}
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-20 py-16">
             <div className={isRtl ? "text-right" : "text-left"}>
               {logo && (
                 <img src={logo} alt="The Experts" className="h-16 w-auto mb-6 brightness-0 invert" data-testid="img-catalog-footer-logo" />
@@ -386,22 +401,7 @@ export default function Catalog() {
               </div>
             </div>
 
-            <div className={`flex flex-col items-center text-center`}>
-              <ShoppingBag className="mb-4 text-primary" size={36} />
-              <h3 className="text-xl font-serif font-bold mb-3">
-                {isRtl ? "هل تريد معرفة المزيد؟" : "Interested in Our Products?"}
-              </h3>
-              <p className="text-neutral-400 text-sm mb-6">
-                {isRtl
-                  ? "تواصل مع فريقنا للحصول على عروض مخصصة"
-                  : "Get in touch for custom solutions and bulk orders."}
-              </p>
-              <Link href="/contact" data-testid="link-catalog-contact" className="inline-block bg-primary text-white px-8 py-3 uppercase text-xs font-bold tracking-widest hover:bg-white hover:text-black transition-all">
-                {t("contact_sales")}
-              </Link>
-            </div>
-
-            <div className={`flex flex-col justify-center items-center text-center`}>
+            <div className={`flex flex-col justify-center ${isRtl ? "text-right" : "text-left"}`}>
               <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-neutral-300 mb-8">
                 {isRtl ? "تواصل معنا" : "CONTACT US"}
               </h3>
