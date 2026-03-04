@@ -368,8 +368,8 @@ export default function Catalog() {
       })}
 
       <footer className="bg-neutral-900 text-white">
-        <div className="container mx-auto px-6 max-w-6xl py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="container mx-auto px-10 max-w-7xl py-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
             <div className={isRtl ? "text-right" : "text-left"}>
               {logo && (
                 <img src={logo} alt="The Experts" className="h-16 w-auto mb-6 brightness-0 invert" data-testid="img-catalog-footer-logo" />
@@ -405,18 +405,18 @@ export default function Catalog() {
               <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-neutral-300 mb-8">
                 {isRtl ? "تواصل معنا" : "CONTACT US"}
               </h3>
-              <div className="space-y-5">
+              <div className="space-y-6">
                 <div className={`flex items-center gap-4 ${isRtl ? "flex-row-reverse" : ""}`}>
-                  <MapPin size={18} className="text-primary shrink-0" />
-                  <span className="text-neutral-400">{isRtl ? "عمّان - الأردن" : "Amman – Jordan"}</span>
+                  <MapPin size={20} className="text-primary shrink-0" />
+                  <span className="text-neutral-400 text-sm">{isRtl ? "عمّان - الأردن" : "Amman – Jordan"}</span>
                 </div>
                 <div className={`flex items-center gap-4 ${isRtl ? "flex-row-reverse" : ""}`}>
-                  <Mail size={18} className="text-primary shrink-0" />
-                  <a href="mailto:sales@theexpertsjo.com" className="text-neutral-400 hover:text-white transition-colors">sales@theexpertsjo.com</a>
+                  <Mail size={20} className="text-primary shrink-0" />
+                  <a href="mailto:sales@theexpertsjo.com" className="text-neutral-400 text-sm hover:text-white transition-colors">sales@theexpertsjo.com</a>
                 </div>
                 <div className={`flex items-center gap-4 ${isRtl ? "flex-row-reverse" : ""}`}>
-                  <Phone size={18} className="text-primary shrink-0" />
-                  <a href="tel:+962790484745" className="text-neutral-400 hover:text-white transition-colors" dir="ltr">+962 79 0484745</a>
+                  <Phone size={20} className="text-primary shrink-0" />
+                  <a href="tel:+962790484745" className="text-neutral-400 text-sm hover:text-white transition-colors" dir="ltr">+962 79 0484745</a>
                 </div>
               </div>
             </div>
