@@ -317,7 +317,7 @@ export default function Catalog() {
                 viewport={{ once: true }}
                 className={`mb-16 ${isRtl ? "text-right" : "text-left"}`}
               >
-                <h2 className="text-3xl md:text-5xl font-serif font-bold text-neutral-900 mb-4" data-testid={`text-catalog-category-${category.slug}`}>
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-neutral-900 mb-3" data-testid={`text-catalog-category-${category.slug}`}>
                   {catName}
                 </h2>
                 <div className={`h-1 bg-primary w-24 ${isRtl ? "mr-0 ml-auto" : "ml-0 mr-auto"}`} />
@@ -328,38 +328,34 @@ export default function Catalog() {
                   {isRtl ? "لا توجد منتجات في هذه الفئة بعد" : "No products in this category yet."}
                 </p>
               ) : (
-                <div className="space-y-24">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {products.map((product, index) => {
-                    const shouldReverse = isRtl ? index % 2 === 0 : index % 2 !== 0;
                     const name = isRtl && product.nameAr ? product.nameAr : product.nameEn;
                     const desc = isRtl && product.descriptionAr ? product.descriptionAr : product.descriptionEn;
 
                     return (
                       <motion.div
                         key={product.id}
-                        initial={{ opacity: 0, y: 40 }}
+                        initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className={`flex flex-col ${shouldReverse ? "md:flex-row-reverse" : "md:flex-row"} items-center gap-12 md:gap-20`}
+                        transition={{ delay: index * 0.05 }}
+                        className="group"
                         data-testid={`product-catalog-${product.id}`}
                       >
-                        <div className={`flex-1 space-y-5 ${isRtl ? "text-right" : "text-left"}`}>
+                        <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-md mb-4">
+                          <ProductGallery product={product} name={name} />
+                        </div>
+                        <div className={isRtl ? "text-right" : "text-left"}>
                           {product.brand && (
-                            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-primary">{product.brand}</span>
+                            <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-1">{product.brand}</span>
                           )}
-                          <h3 className="text-2xl md:text-3xl font-serif font-bold text-neutral-900 leading-tight" data-testid={`text-catalog-product-${product.id}`}>
+                          <h3 className="text-lg font-serif font-bold text-neutral-900 leading-snug mb-2" data-testid={`text-catalog-product-${product.id}`}>
                             {name}
                           </h3>
-                          <div className={`h-0.5 bg-primary w-16 ${isRtl ? "mr-0 ml-auto" : "ml-0 mr-auto"}`} />
-                          <p className="text-neutral-600 leading-relaxed max-w-xl">
+                          <p className="text-neutral-500 text-sm leading-relaxed line-clamp-3">
                             {desc}
                           </p>
-                        </div>
-
-                        <div className="flex-1 w-full">
-                          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-xl">
-                            <ProductGallery product={product} name={name} />
-                          </div>
                         </div>
                       </motion.div>
                     );
