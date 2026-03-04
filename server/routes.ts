@@ -336,20 +336,6 @@ export async function registerRoutes(
     }
   });
 
-  app.patch("/api/categories/:id/toggle-visibility", requireAuth, async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const category = await storage.getCategory(id);
-      if (!category) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-      const updated = await storage.updateCategory(id, { visible: !category.visible });
-      res.json(updated);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to toggle visibility" });
-    }
-  });
-
   app.get("/api/categories/slug/:slug", async (req, res) => {
     try {
       const category = await storage.getCategoryBySlug(req.params.slug);
@@ -464,20 +450,6 @@ export async function registerRoutes(
       res.json(updated);
     } catch (error) {
       res.status(500).json({ message: "Failed to update visibility" });
-    }
-  });
-
-  app.patch("/api/products/:id/toggle-visibility", requireAuth, async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const product = await storage.getProduct(id);
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      const updated = await storage.updateProduct(id, { visible: !product.visible });
-      res.json(updated);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to toggle visibility" });
     }
   });
 
