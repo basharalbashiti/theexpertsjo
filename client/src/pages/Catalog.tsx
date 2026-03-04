@@ -109,24 +109,20 @@ export default function Catalog() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then(r => r.json())
-      .then(async (cats: Category[]) => {
-        const visible = cats.sort((a, b) => a.sortOrder - b.sortOrder);
-        setCategories(visible);
+    Promise.all([
+      fetch("/api/catalog/categories").then(r => r.json()),
+      fetch("/api/catalog/products").then(r => r.json()),
+    ])
+      .then(([cats, prods]: [Category[], Product[]]) => {
+        const sorted = cats.sort((a, b) => a.sortOrder - b.sortOrder);
+        setCategories(sorted);
 
         const productsMap: Record<number, Product[]> = {};
-        await Promise.all(
-          visible.map(async (cat) => {
-            try {
-              const r = await fetch(`/api/products?categoryId=${cat.id}`);
-              if (r.ok) {
-                const prods: Product[] = await r.json();
-                productsMap[cat.id] = prods.sort((a, b) => a.sortOrder - b.sortOrder);
-              }
-            } catch {}
-          })
-        );
+        for (const cat of sorted) {
+          productsMap[cat.id] = prods
+            .filter(p => p.categoryId === cat.id)
+            .sort((a, b) => a.sortOrder - b.sortOrder);
+        }
         setProductsByCategory(productsMap);
         setLoading(false);
       })

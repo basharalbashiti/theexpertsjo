@@ -253,6 +253,16 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/catalog/categories", async (_req, res) => {
+    const allCategories = await storage.getAllCategories();
+    res.json(allCategories);
+  });
+
+  app.get("/api/catalog/products", async (_req, res) => {
+    const allProducts = await storage.getAllProducts();
+    res.json(allProducts);
+  });
+
   app.get("/api/categories", async (req, res) => {
     const showAll = req.query.all === "true";
     if (showAll && req.session.userId) {
