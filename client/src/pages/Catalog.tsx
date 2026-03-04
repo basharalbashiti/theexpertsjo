@@ -401,7 +401,7 @@ export default function Catalog() {
               </Link>
             </div>
 
-            <div className={`flex flex-col justify-center ${isRtl ? "text-right" : "text-left"}`}>
+            <div className={`flex flex-col justify-center ${isRtl ? "text-right items-end" : "text-left items-end"}`}>
               <h3 className="text-xs font-bold uppercase tracking-[0.25em] text-neutral-300 mb-8">
                 {isRtl ? "تواصل معنا" : "CONTACT US"}
               </h3>
