@@ -1,7 +1,6 @@
-import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import { Link } from "wouter";
 
@@ -129,52 +128,61 @@ export default function Catalog() {
       .catch(() => setLoading(false));
   }, []);
 
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const slug = entry.target.getAttribute("data-slug");
+            if (slug) setActiveSlug(slug);
+          }
+        }
+      },
+      { rootMargin: "-40% 0px -50% 0px" }
+    );
+    return () => observerRef.current?.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!observerRef.current || categories.length === 0) return;
+    observerRef.current.disconnect();
+    categories.forEach((cat) => {
+      const el = document.getElementById(`category-${cat.slug}`);
+      if (el) observerRef.current!.observe(el);
+    });
+  }, [categories]);
+
   if (loading) {
     return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center pt-24">
+      <div className={`min-h-screen bg-white ${isRtl ? "rtl" : "ltr"}`} dir={isRtl ? "rtl" : "ltr"}>
+        <div className="min-h-screen flex items-center justify-center">
           <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
-      </Layout>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="bg-neutral-900 text-white py-20 pt-36 text-center">
-        <div className="container mx-auto px-6">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-serif font-bold mb-4"
-            data-testid="text-catalog-title"
-          >
-            {isRtl ? "الكتالوج الكامل" : "Full Catalog"}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-neutral-400 text-lg max-w-2xl mx-auto"
-          >
-            {isRtl
-              ? "استعرض مجموعتنا الكاملة من مستلزمات الضيافة الفاخرة"
-              : "Browse our complete collection of premium hospitality supplies"}
-          </motion.p>
-        </div>
-      </div>
-
-      <nav className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-neutral-200 shadow-sm">
-        <div className="container mx-auto px-6 py-3 overflow-x-auto">
-          <div className={`flex gap-2 ${isRtl ? "flex-row-reverse" : ""}`}>
+    <div className={`min-h-screen bg-white ${isRtl ? "rtl" : "ltr"}`} dir={isRtl ? "rtl" : "ltr"}>
+      <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
+        <div className="container mx-auto px-6 py-3 overflow-x-auto scrollbar-hide">
+          <div className={`flex gap-1 justify-center ${isRtl ? "flex-row-reverse" : ""}`}>
             {categories.map((cat) => {
               const catName = isRtl && cat.nameAr ? cat.nameAr : cat.nameEn;
+              const isActive = activeSlug === cat.slug;
               return (
                 <a
                   key={cat.id}
                   href={`#category-${cat.slug}`}
                   data-testid={`link-catalog-nav-${cat.slug}`}
-                  className="whitespace-nowrap px-4 py-2 text-sm font-medium text-neutral-600 hover:text-primary hover:bg-primary/5 rounded-full transition-colors"
+                  className={`whitespace-nowrap px-5 py-2 text-sm font-medium rounded-full transition-colors ${
+                    isActive
+                      ? "bg-primary text-white"
+                      : "text-neutral-600 hover:text-primary hover:bg-primary/5"
+                  }`}
                 >
                   {catName}
                 </a>
@@ -192,6 +200,7 @@ export default function Catalog() {
           <section
             key={category.id}
             id={`category-${category.slug}`}
+            data-slug={category.slug}
             className={catIndex % 2 === 0 ? "bg-white" : "bg-neutral-50"}
             data-testid={`section-catalog-category-${category.slug}`}
           >
@@ -272,6 +281,6 @@ export default function Catalog() {
           </Link>
         </div>
       </section>
-    </Layout>
+    </div>
   );
 }
