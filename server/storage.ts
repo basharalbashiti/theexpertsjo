@@ -106,11 +106,21 @@ export interface IStorage {
     uniqueVisitors: number;
     avgPagesPerSession: number;
     bounceRate: number;
+    avgSessionDuration: number;
     topPages: { path: string; views: number; uniqueVisitors: number }[];
     topReferrers: { referrer: string; visits: number }[];
     deviceBreakdown: { device: string; count: number }[];
     browserBreakdown: { browser: string; count: number }[];
+    osBreakdown: { os: string; count: number }[];
     dailyViews: { date: string; views: number }[];
+    countryBreakdown: { country: string; count: number }[];
+    landingPages: { path: string; count: number }[];
+    exitPages: { path: string; count: number }[];
+    newVsReturning: { new: number; returning: number };
+    peakHours: { hour: number; views: number }[];
+    screenResolutions: { resolution: string; count: number }[];
+    languageBreakdown: { language: string; count: number }[];
+    utmCampaigns: { source: string; medium: string; campaign: string; visits: number }[];
   }>;
   getRealtimeVisitors(minutes: number): Promise<number>;
 }
@@ -545,25 +555,42 @@ export class DatabaseStorage implements IStorage {
 
   async recordPageView(data: InsertPageView): Promise<PageView> {
     const [view] = await db.insert(pageViews).values(data).returning();
-    await db.insert(visitorSessions).values({
-      sessionId: data.sessionId,
-      firstVisit: new Date(),
-      lastVisit: new Date(),
-      pageCount: 1,
-      device: data.device,
-      browser: data.browser,
-      os: data.os,
-      referrer: data.referrer,
-    }).onConflictDoUpdate({
-      target: visitorSessions.sessionId,
-      set: {
+
+    const existingSession = await db.select({ id: visitorSessions.id, pageCount: visitorSessions.pageCount }).from(visitorSessions).where(eq(visitorSessions.sessionId, data.sessionId)).limit(1);
+    const sessionExists = existingSession.length > 0;
+
+    if (sessionExists) {
+      await db.update(visitorSessions).set({
         lastVisit: new Date(),
         pageCount: sql`${visitorSessions.pageCount} + 1`,
         device: data.device,
         browser: data.browser,
         os: data.os,
-      },
-    });
+        country: data.country || "",
+        city: data.city || "",
+        exitPage: data.path,
+        duration: sql`EXTRACT(EPOCH FROM (NOW() - ${visitorSessions.firstVisit}))::integer`,
+        language: data.language || "",
+      }).where(eq(visitorSessions.sessionId, data.sessionId));
+    } else {
+      await db.insert(visitorSessions).values({
+        sessionId: data.sessionId,
+        firstVisit: new Date(),
+        lastVisit: new Date(),
+        pageCount: 1,
+        device: data.device,
+        browser: data.browser,
+        os: data.os,
+        referrer: data.referrer,
+        country: data.country || "",
+        city: data.city || "",
+        isReturning: false,
+        landingPage: data.path,
+        exitPage: data.path,
+        duration: 0,
+        language: data.language || "",
+      });
+    }
     return view;
   }
 
@@ -571,6 +598,11 @@ export class DatabaseStorage implements IStorage {
     const dateFilter = and(
       gte(pageViews.createdAt, startDate),
       lt(pageViews.createdAt, endDate)
+    );
+
+    const sessionFilter = and(
+      gte(visitorSessions.lastVisit, startDate),
+      lt(visitorSessions.lastVisit, endDate)
     );
 
     const [viewsResult] = await db.select({
@@ -592,6 +624,11 @@ export class DatabaseStorage implements IStorage {
     const avgPagesPerSession = totalPagesInPeriod / totalSessions;
     const bounceSessions = sessionPageCounts.filter(s => Number(s.pageCount) === 1).length;
     const bounceRate = sessionPageCounts.length > 0 ? (bounceSessions / sessionPageCounts.length) * 100 : 0;
+
+    const [durationResult] = await db.select({
+      avgDuration: sql<number>`COALESCE(AVG(${visitorSessions.duration}), 0)`,
+    }).from(visitorSessions).where(sessionFilter);
+    const avgSessionDuration = Math.round(Number(durationResult?.avgDuration || 0));
 
     const topPages = await db.select({
       path: pageViews.path,
@@ -625,6 +662,13 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(countDistinct(pageViews.sessionId)))
       .limit(8);
 
+    const osBreakdown = await db.select({
+      os: pageViews.os,
+      count: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(and(dateFilter, sql`${pageViews.os} != ''`))
+      .groupBy(pageViews.os)
+      .orderBy(desc(countDistinct(pageViews.sessionId)));
+
     const dailyViews = await db.select({
       date: sql<string>`DATE(${pageViews.createdAt})::text`,
       views: count(),
@@ -632,16 +676,89 @@ export class DatabaseStorage implements IStorage {
       .groupBy(sql`DATE(${pageViews.createdAt})`)
       .orderBy(sql`DATE(${pageViews.createdAt})`);
 
+    const countryBreakdown = await db.select({
+      country: pageViews.country,
+      count: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(and(dateFilter, sql`${pageViews.country} != ''`))
+      .groupBy(pageViews.country)
+      .orderBy(desc(countDistinct(pageViews.sessionId)))
+      .limit(10);
+
+    const landingPages = await db.select({
+      path: visitorSessions.landingPage,
+      count: count(),
+    }).from(visitorSessions).where(and(sessionFilter, sql`${visitorSessions.landingPage} != ''`))
+      .groupBy(visitorSessions.landingPage)
+      .orderBy(desc(count()))
+      .limit(10);
+
+    const exitPages = await db.select({
+      path: visitorSessions.exitPage,
+      count: count(),
+    }).from(visitorSessions).where(and(sessionFilter, sql`${visitorSessions.exitPage} != ''`))
+      .groupBy(visitorSessions.exitPage)
+      .orderBy(desc(count()))
+      .limit(10);
+
+    const [newCount] = await db.select({
+      count: count(),
+    }).from(visitorSessions).where(and(sessionFilter, eq(visitorSessions.isReturning, false)));
+    const [returningCount] = await db.select({
+      count: count(),
+    }).from(visitorSessions).where(and(sessionFilter, eq(visitorSessions.isReturning, true)));
+
+    const peakHours = await db.select({
+      hour: sql<number>`EXTRACT(HOUR FROM ${pageViews.createdAt})::integer`,
+      views: count(),
+    }).from(pageViews).where(dateFilter)
+      .groupBy(sql`EXTRACT(HOUR FROM ${pageViews.createdAt})`)
+      .orderBy(sql`EXTRACT(HOUR FROM ${pageViews.createdAt})`);
+
+    const screenResolutions = await db.select({
+      resolution: sql<string>`${pageViews.screenWidth} || 'x' || ${pageViews.screenHeight}`,
+      count: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(and(dateFilter, sql`${pageViews.screenWidth} IS NOT NULL AND ${pageViews.screenHeight} IS NOT NULL`))
+      .groupBy(sql`${pageViews.screenWidth} || 'x' || ${pageViews.screenHeight}`)
+      .orderBy(desc(countDistinct(pageViews.sessionId)))
+      .limit(10);
+
+    const languageBreakdown = await db.select({
+      language: pageViews.language,
+      count: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(and(dateFilter, sql`${pageViews.language} != ''`))
+      .groupBy(pageViews.language)
+      .orderBy(desc(countDistinct(pageViews.sessionId)));
+
+    const utmCampaigns = await db.select({
+      source: pageViews.utmSource,
+      medium: pageViews.utmMedium,
+      campaign: pageViews.utmCampaign,
+      visits: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(and(dateFilter, sql`${pageViews.utmSource} != ''`))
+      .groupBy(pageViews.utmSource, pageViews.utmMedium, pageViews.utmCampaign)
+      .orderBy(desc(countDistinct(pageViews.sessionId)))
+      .limit(10);
+
     return {
       totalViews,
       uniqueVisitors,
       avgPagesPerSession: Math.round(avgPagesPerSession * 10) / 10,
       bounceRate: Math.round(bounceRate * 10) / 10,
+      avgSessionDuration,
       topPages: topPages.map(p => ({ path: p.path, views: Number(p.views), uniqueVisitors: Number(p.uniqueVisitors) })),
       topReferrers: topReferrers.map(r => ({ referrer: r.referrer, visits: Number(r.visits) })),
       deviceBreakdown: deviceBreakdown.map(d => ({ device: d.device, count: Number(d.count) })),
       browserBreakdown: browserBreakdown.map(b => ({ browser: b.browser, count: Number(b.count) })),
+      osBreakdown: osBreakdown.map(o => ({ os: o.os, count: Number(o.count) })),
       dailyViews: dailyViews.map(d => ({ date: d.date, views: Number(d.views) })),
+      countryBreakdown: countryBreakdown.map(c => ({ country: c.country, count: Number(c.count) })),
+      landingPages: landingPages.map(l => ({ path: l.path, count: Number(l.count) })),
+      exitPages: exitPages.map(e => ({ path: e.path, count: Number(e.count) })),
+      newVsReturning: { new: Number(newCount?.count || 0), returning: Number(returningCount?.count || 0) },
+      peakHours: peakHours.map(h => ({ hour: Number(h.hour), views: Number(h.views) })),
+      screenResolutions: screenResolutions.map(s => ({ resolution: s.resolution, count: Number(s.count) })),
+      languageBreakdown: languageBreakdown.map(l => ({ language: l.language, count: Number(l.count) })),
+      utmCampaigns: utmCampaigns.map(u => ({ source: u.source, medium: u.medium, campaign: u.campaign, visits: Number(u.visits) })),
     };
   }
 

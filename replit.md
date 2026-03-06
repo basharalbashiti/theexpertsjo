@@ -4,6 +4,7 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-03-06: Enhanced analytics with comprehensive visitor insights — IP geolocation (country/city via ip-api.com with 1hr cache), session duration tracking, landing/exit page tracking, new vs returning visitors, peak hours chart, OS breakdown, screen resolution tracking, language preference tracking (EN/AR), UTM campaign parameter tracking (utm_source/medium/campaign); dashboard now shows 6 summary cards, country breakdown bars, donut chart for new vs returning, landing/exit page tables, 24-hour peak hours bar chart, screen resolutions list, language breakdown, UTM campaigns table (shown only when data exists)
 - 2026-03-06: Added visitor analytics system — page_views and visitor_sessions tables track all public page visits; client-side useAnalytics hook sends page views on navigation (excludes /admin/*); admin Analytics dashboard with period selector (Today/7d/30d/90d), summary cards (views, visitors, avg pages, bounce rate), daily views SVG line chart, top pages, top referrers, device/browser breakdown bars, real-time visitor count; bilingual (EN/AR); rate-limited tracking endpoint
 - 2026-03-04: Improved visibility system — categories and products now have 4 visibility options: "Products & Catalog" (both), "Products Page" only, "Catalog Page" only, or "Hidden"; replaces old boolean toggle; admin dropdown selector with color-coded badges; migration preserves existing visibility states
 - 2026-03-04: Catalog page is fully standalone — no site navbar/footer; only a sticky category-name navigation bar at top with active section highlighting via IntersectionObserver; completely separated from main site layout
@@ -64,8 +65,8 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - `quick_links` - Footer quick links (id, label_en, label_ar, url, sort_order, visible)
 - `seo_settings` - SEO configuration key-value pairs (id, key, value) — keys include site_title, site_description, og_title, og_description, twitter_title, twitter_description, org_name, org_url, org_description, org_phone, sitemap_base_url, robots_allow_all
 - `contact_messages` - Contact form submissions (id, name, email, subject, message, read, created_at)
-- `page_views` - Analytics page view records (id, session_id, path, referrer, user_agent, device, browser, os, created_at)
-- `visitor_sessions` - Analytics visitor sessions (id, session_id, first_visit, last_visit, page_count, device, browser, os, referrer)
+- `page_views` - Analytics page view records (id, session_id, path, referrer, user_agent, device, browser, os, country, city, screen_width, screen_height, language, utm_source, utm_medium, utm_campaign, created_at)
+- `visitor_sessions` - Analytics visitor sessions (id, session_id, first_visit, last_visit, page_count, device, browser, os, referrer, country, city, is_returning, landing_page, exit_page, duration, language)
 
 ### Admin Portal
 - URL: `/admin/login` (login page), `/admin` (dashboard)

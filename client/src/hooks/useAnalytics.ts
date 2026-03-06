@@ -9,6 +9,19 @@ function getSessionId(): string {
   return id;
 }
 
+function getUtmParams(): { utmSource: string; utmMedium: string; utmCampaign: string } {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      utmSource: params.get("utm_source") || "",
+      utmMedium: params.get("utm_medium") || "",
+      utmCampaign: params.get("utm_campaign") || "",
+    };
+  } catch {
+    return { utmSource: "", utmMedium: "", utmCampaign: "" };
+  }
+}
+
 export function useAnalytics(path: string) {
   const lastTracked = useRef<string>("");
 
@@ -18,6 +31,7 @@ export function useAnalytics(path: string) {
     lastTracked.current = path;
 
     const sessionId = getSessionId();
+    const utm = getUtmParams();
     fetch("/api/analytics/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,6 +39,10 @@ export function useAnalytics(path: string) {
         path,
         referrer: document.referrer || "",
         sessionId,
+        screenWidth: window.screen.width,
+        screenHeight: window.screen.height,
+        language: document.documentElement.lang || navigator.language || "",
+        ...utm,
       }),
     }).catch(() => {});
   }, [path]);

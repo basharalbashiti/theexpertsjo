@@ -1116,9 +1116,37 @@ export async function registerRoutes(
     return { device, browser, os };
   }
 
+  const geoCache = new Map<string, { country: string; city: string; ts: number }>();
+
+  async function lookupGeo(ip: string): Promise<{ country: string; city: string }> {
+    const cached = geoCache.get(ip);
+    if (cached && Date.now() - cached.ts < 3600000) {
+      return { country: cached.country, city: cached.city };
+    }
+    try {
+      const cleanIp = ip.replace(/^::ffff:/, "").split(",")[0].trim();
+      if (cleanIp === "127.0.0.1" || cleanIp === "::1" || cleanIp === "unknown" || !cleanIp) {
+        return { country: "", city: "" };
+      }
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+      const resp = await fetch(`http://ip-api.com/json/${cleanIp}?fields=status,country,city`, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (resp.ok) {
+        const data = await resp.json() as { status: string; country?: string; city?: string };
+        if (data.status === "success") {
+          const result = { country: data.country || "", city: data.city || "" };
+          geoCache.set(ip, { ...result, ts: Date.now() });
+          return result;
+        }
+      }
+    } catch {}
+    return { country: "", city: "" };
+  }
+
   app.post("/api/analytics/track", async (req: Request, res: Response) => {
     try {
-      const { path: pagePath, referrer, sessionId } = req.body;
+      const { path: pagePath, referrer, sessionId, screenWidth, screenHeight, language, utmSource, utmMedium, utmCampaign } = req.body;
       if (!pagePath || !sessionId) {
         return res.status(400).json({ message: "Missing path or sessionId" });
       }
@@ -1135,6 +1163,8 @@ export async function registerRoutes(
       const ua = req.headers["user-agent"] || "";
       const { device, browser, os } = parseUserAgent(ua);
 
+      const geo = await lookupGeo(ip);
+
       await storage.recordPageView({
         sessionId,
         path: pagePath,
@@ -1143,6 +1173,14 @@ export async function registerRoutes(
         device,
         browser,
         os,
+        country: geo.country,
+        city: geo.city,
+        screenWidth: screenWidth ? Number(screenWidth) : null,
+        screenHeight: screenHeight ? Number(screenHeight) : null,
+        language: language || "",
+        utmSource: utmSource || "",
+        utmMedium: utmMedium || "",
+        utmCampaign: utmCampaign || "",
       });
 
       res.json({ ok: true });
