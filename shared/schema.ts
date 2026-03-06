@@ -288,6 +288,14 @@ export const pageViews = pgTable("page_views", {
   device: text("device").notNull().default("desktop"),
   browser: text("browser").notNull().default(""),
   os: text("os").notNull().default(""),
+  country: text("country").notNull().default(""),
+  city: text("city").notNull().default(""),
+  screenWidth: integer("screen_width"),
+  screenHeight: integer("screen_height"),
+  language: text("language").notNull().default(""),
+  utmSource: text("utm_source").notNull().default(""),
+  utmMedium: text("utm_medium").notNull().default(""),
+  utmCampaign: text("utm_campaign").notNull().default(""),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -309,6 +317,13 @@ export const visitorSessions = pgTable("visitor_sessions", {
   browser: text("browser").notNull().default(""),
   os: text("os").notNull().default(""),
   referrer: text("referrer").notNull().default(""),
+  country: text("country").notNull().default(""),
+  city: text("city").notNull().default(""),
+  isReturning: boolean("is_returning").notNull().default(false),
+  landingPage: text("landing_page").notNull().default(""),
+  exitPage: text("exit_page").notNull().default(""),
+  duration: integer("duration").notNull().default(0),
+  language: text("language").notNull().default(""),
 });
 
 export const insertVisitorSessionSchema = createInsertSchema(visitorSessions).omit({
