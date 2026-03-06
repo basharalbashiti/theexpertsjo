@@ -77,17 +77,23 @@ function ProductGallery({ product, name }: { product: Product; name: string }) {
       />
       <button
         onClick={() => setActiveIndex((activeIndex - 1 + images.length) % images.length)}
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
+        className="absolute left-0 top-0 w-1/2 h-full cursor-pointer z-10"
+        aria-label="Previous image"
       >
-        <ChevronLeft size={18} />
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+          <ChevronLeft size={18} />
+        </span>
       </button>
       <button
         onClick={() => setActiveIndex((activeIndex + 1) % images.length)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
+        className="absolute right-0 top-0 w-1/2 h-full cursor-pointer z-10"
+        aria-label="Next image"
       >
-        <ChevronRight size={18} />
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+          <ChevronRight size={18} />
+        </span>
       </button>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {images.map((_, i) => (
           <button
             key={i}
