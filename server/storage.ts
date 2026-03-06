@@ -1,6 +1,6 @@
-import { users, siteContent, partners, categories, products, productImages, brands, siteImages, clients, leadership, keyContacts, quickLinks, seoSettings, contactMessages, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type ProductImage, type InsertProductImage, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type SeoSetting, type InsertSeoSetting, type ContactMessage, type InsertContactMessage } from "@shared/schema";
+import { users, siteContent, partners, categories, products, productImages, brands, siteImages, clients, leadership, keyContacts, quickLinks, seoSettings, contactMessages, pageViews, visitorSessions, type User, type InsertUser, type SiteContent, type InsertSiteContent, type Partner, type InsertPartner, type Category, type InsertCategory, type Product, type InsertProduct, type ProductImage, type InsertProductImage, type Brand, type InsertBrand, type SiteImage, type InsertSiteImage, type Client, type InsertClient, type Leadership, type InsertLeadership, type KeyContact, type InsertKeyContact, type QuickLink, type InsertQuickLink, type SeoSetting, type InsertSeoSetting, type ContactMessage, type InsertContactMessage, type PageView, type InsertPageView, type VisitorSession } from "@shared/schema";
 import { db } from "./db";
-import { eq, asc, desc, isNull, isNotNull, lt, and, or, inArray } from "drizzle-orm";
+import { eq, asc, desc, isNull, isNotNull, lt, gte, and, or, inArray, sql, count, countDistinct } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -99,6 +99,20 @@ export interface IStorage {
   permanentDeleteContactMessage(id: number): Promise<boolean>;
   purgeExpiredMessages(daysOld: number): Promise<number>;
   getUnreadMessageCount(): Promise<number>;
+
+  recordPageView(data: InsertPageView): Promise<PageView>;
+  getAnalyticsStats(startDate: Date, endDate: Date): Promise<{
+    totalViews: number;
+    uniqueVisitors: number;
+    avgPagesPerSession: number;
+    bounceRate: number;
+    topPages: { path: string; views: number; uniqueVisitors: number }[];
+    topReferrers: { referrer: string; visits: number }[];
+    deviceBreakdown: { device: string; count: number }[];
+    browserBreakdown: { browser: string; count: number }[];
+    dailyViews: { date: string; views: number }[];
+  }>;
+  getRealtimeVisitors(minutes: number): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -527,6 +541,116 @@ export class DatabaseStorage implements IStorage {
   async getUnreadMessageCount(): Promise<number> {
     const result = await db.select().from(contactMessages).where(and(eq(contactMessages.read, false), isNull(contactMessages.deletedAt)));
     return result.length;
+  }
+
+  async recordPageView(data: InsertPageView): Promise<PageView> {
+    const [view] = await db.insert(pageViews).values(data).returning();
+    await db.insert(visitorSessions).values({
+      sessionId: data.sessionId,
+      firstVisit: new Date(),
+      lastVisit: new Date(),
+      pageCount: 1,
+      device: data.device,
+      browser: data.browser,
+      os: data.os,
+      referrer: data.referrer,
+    }).onConflictDoUpdate({
+      target: visitorSessions.sessionId,
+      set: {
+        lastVisit: new Date(),
+        pageCount: sql`${visitorSessions.pageCount} + 1`,
+        device: data.device,
+        browser: data.browser,
+        os: data.os,
+      },
+    });
+    return view;
+  }
+
+  async getAnalyticsStats(startDate: Date, endDate: Date) {
+    const dateFilter = and(
+      gte(pageViews.createdAt, startDate),
+      lt(pageViews.createdAt, endDate)
+    );
+
+    const [viewsResult] = await db.select({
+      totalViews: count(),
+      uniqueVisitors: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(dateFilter);
+
+    const totalViews = Number(viewsResult?.totalViews || 0);
+    const uniqueVisitors = Number(viewsResult?.uniqueVisitors || 0);
+
+    const sessionPageCounts = await db.select({
+      sessionId: pageViews.sessionId,
+      pageCount: count(),
+    }).from(pageViews).where(dateFilter)
+      .groupBy(pageViews.sessionId);
+
+    const totalSessions = sessionPageCounts.length || 1;
+    const totalPagesInPeriod = sessionPageCounts.reduce((sum, s) => sum + Number(s.pageCount), 0);
+    const avgPagesPerSession = totalPagesInPeriod / totalSessions;
+    const bounceSessions = sessionPageCounts.filter(s => Number(s.pageCount) === 1).length;
+    const bounceRate = sessionPageCounts.length > 0 ? (bounceSessions / sessionPageCounts.length) * 100 : 0;
+
+    const topPages = await db.select({
+      path: pageViews.path,
+      views: count(),
+      uniqueVisitors: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(dateFilter)
+      .groupBy(pageViews.path)
+      .orderBy(desc(count()))
+      .limit(10);
+
+    const topReferrers = await db.select({
+      referrer: pageViews.referrer,
+      visits: count(),
+    }).from(pageViews).where(and(dateFilter, sql`${pageViews.referrer} != ''`))
+      .groupBy(pageViews.referrer)
+      .orderBy(desc(count()))
+      .limit(10);
+
+    const deviceBreakdown = await db.select({
+      device: pageViews.device,
+      count: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(dateFilter)
+      .groupBy(pageViews.device)
+      .orderBy(desc(countDistinct(pageViews.sessionId)));
+
+    const browserBreakdown = await db.select({
+      browser: pageViews.browser,
+      count: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(and(dateFilter, sql`${pageViews.browser} != ''`))
+      .groupBy(pageViews.browser)
+      .orderBy(desc(countDistinct(pageViews.sessionId)))
+      .limit(8);
+
+    const dailyViews = await db.select({
+      date: sql<string>`DATE(${pageViews.createdAt})::text`,
+      views: count(),
+    }).from(pageViews).where(dateFilter)
+      .groupBy(sql`DATE(${pageViews.createdAt})`)
+      .orderBy(sql`DATE(${pageViews.createdAt})`);
+
+    return {
+      totalViews,
+      uniqueVisitors,
+      avgPagesPerSession: Math.round(avgPagesPerSession * 10) / 10,
+      bounceRate: Math.round(bounceRate * 10) / 10,
+      topPages: topPages.map(p => ({ path: p.path, views: Number(p.views), uniqueVisitors: Number(p.uniqueVisitors) })),
+      topReferrers: topReferrers.map(r => ({ referrer: r.referrer, visits: Number(r.visits) })),
+      deviceBreakdown: deviceBreakdown.map(d => ({ device: d.device, count: Number(d.count) })),
+      browserBreakdown: browserBreakdown.map(b => ({ browser: b.browser, count: Number(b.count) })),
+      dailyViews: dailyViews.map(d => ({ date: d.date, views: Number(d.views) })),
+    };
+  }
+
+  async getRealtimeVisitors(minutes: number): Promise<number> {
+    const since = new Date(Date.now() - minutes * 60 * 1000);
+    const [result] = await db.select({
+      count: countDistinct(pageViews.sessionId),
+    }).from(pageViews).where(gte(pageViews.createdAt, since));
+    return Number(result?.count || 0);
   }
 }
 

@@ -2,9 +2,13 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLocation } from "wouter";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang } = useLanguage();
+  const [location] = useLocation();
+  useAnalytics(location);
   
   return (
     <div className={`min-h-screen flex flex-col overflow-x-hidden ${lang === "AR" ? "rtl" : "ltr"}`} dir={lang === "AR" ? "rtl" : "ltr"}>

@@ -16,6 +16,7 @@ import LeadershipManager from "./LeadershipManager";
 import KeyContactManager from "./KeyContactManager";
 import MessageManager from "./MessageManager";
 import SeoManager from "./SeoManager";
+import AnalyticsDashboard from "./AnalyticsDashboard";
 import type { Category, Product, Partner, Brand, Client, SiteContent, Leadership } from "@shared/schema";
 
 function SettingsPanel({ username, t }: { username: string; t: (key: string) => string }) {
@@ -118,7 +119,7 @@ function SettingsPanel({ username, t }: { username: string; t: (key: string) => 
   );
 }
 
-type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners-clients" | "leadership" | "key-contacts" | "quick-links" | "messages" | "seo" | "settings";
+type AdminPage = "overview" | "content" | "site-images" | "categories" | "products" | "brands" | "partners-clients" | "leadership" | "key-contacts" | "quick-links" | "messages" | "analytics" | "seo" | "settings";
 
 interface MenuItem {
   id: AdminPage;
@@ -170,6 +171,9 @@ function MenuIcon({ name }: { name: string }) {
     ),
     search: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    ),
+    "bar-chart-3": (
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
     ),
   };
   return icons[name] || null;
@@ -296,6 +300,7 @@ export default function AdminDashboard() {
     { id: "key-contacts", label: t("key_contacts"), icon: "phone", description: t("desc_key_contacts") },
     { id: "quick-links", label: t("quick_links"), icon: "link", description: t("desc_quick_links") },
     { id: "messages", label: t("messages"), icon: "mail", description: t("desc_messages") },
+    { id: "analytics", label: t("analytics"), icon: "bar-chart-3", description: t("desc_analytics") },
     { id: "seo", label: t("seo"), icon: "search", description: t("desc_seo") },
     { id: "settings", label: t("settings"), icon: "settings", description: t("desc_settings") },
   ];
@@ -355,6 +360,8 @@ export default function AdminDashboard() {
         return <QuickLinksManager />;
       case "messages":
         return <MessageManager />;
+      case "analytics":
+        return <AnalyticsDashboard />;
       case "seo":
         return <SeoManager />;
       case "settings":

@@ -4,6 +4,7 @@
 Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts" with a luxury minimalist design. Features a full admin portal for managing site content, translations, partners, clients, product categories, and products.
 
 ## Recent Changes
+- 2026-03-06: Added visitor analytics system — page_views and visitor_sessions tables track all public page visits; client-side useAnalytics hook sends page views on navigation (excludes /admin/*); admin Analytics dashboard with period selector (Today/7d/30d/90d), summary cards (views, visitors, avg pages, bounce rate), daily views SVG line chart, top pages, top referrers, device/browser breakdown bars, real-time visitor count; bilingual (EN/AR); rate-limited tracking endpoint
 - 2026-03-04: Improved visibility system — categories and products now have 4 visibility options: "Products & Catalog" (both), "Products Page" only, "Catalog Page" only, or "Hidden"; replaces old boolean toggle; admin dropdown selector with color-coded badges; migration preserves existing visibility states
 - 2026-03-04: Catalog page is fully standalone — no site navbar/footer; only a sticky category-name navigation bar at top with active section highlighting via IntersectionObserver; completely separated from main site layout
 - 2026-03-04: Added /catalog page — standalone full catalog page (no links from site navigation) showing all categories with their products in a scrollable single-page layout; sticky category navigation bar; bilingual; accessible only via direct link
@@ -63,11 +64,13 @@ Bilingual (English/Arabic) hospitality supplies catalog website for "The Experts
 - `quick_links` - Footer quick links (id, label_en, label_ar, url, sort_order, visible)
 - `seo_settings` - SEO configuration key-value pairs (id, key, value) — keys include site_title, site_description, og_title, og_description, twitter_title, twitter_description, org_name, org_url, org_description, org_phone, sitemap_base_url, robots_allow_all
 - `contact_messages` - Contact form submissions (id, name, email, subject, message, read, created_at)
+- `page_views` - Analytics page view records (id, session_id, path, referrer, user_agent, device, browser, os, created_at)
+- `visitor_sessions` - Analytics visitor sessions (id, session_id, first_visit, last_visit, page_count, device, browser, os, referrer)
 
 ### Admin Portal
 - URL: `/admin/login` (login page), `/admin` (dashboard)
 - Default credentials: username `admin`, password `admin123`
-- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners & Clients, Leadership, Key Contacts, Quick Links, Messages, SEO, Settings
+- Sidebar sections: Dashboard, Site Content, Site Images, Categories, Products, Our Brands, Partners & Clients, Leadership, Key Contacts, Quick Links, Messages, Analytics, SEO, Settings
 - Brands = logos displayed on homepage slider
 - Partners & Clients = combined page with tabs; Partners tab for brand partners (Abdeen, Cashmere), Clients tab for hotel brand clients (Four Seasons, Grand Hyatt, Marriott, etc.)
 - Admin panel supports bilingual Arabic/English via language toggle

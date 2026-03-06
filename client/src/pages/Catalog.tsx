@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, ShoppingBag, MapPin, Mail, Phone } from "lucide-react";
 import { Link } from "wouter";
 import defaultLogo from "@/assets/logo.png";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 interface Category {
   id: number;
@@ -213,6 +214,7 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
 export default function Catalog() {
   const { t, lang, toggleLang } = useLanguage();
   const isRtl = lang === "AR";
+  useAnalytics("/catalog");
   const [logo, setLogo] = useState<string>(defaultLogo);
 
   useEffect(() => {

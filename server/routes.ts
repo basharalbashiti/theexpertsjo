@@ -1089,5 +1089,106 @@ export async function registerRoutes(
     }
   });
 
+  const trackingRateLimit = new Map<string, number>();
+  setInterval(() => trackingRateLimit.clear(), 60000);
+
+  function parseUserAgent(ua: string) {
+    let device = "desktop";
+    if (/mobile|android|iphone|ipad|ipod/i.test(ua)) {
+      device = /ipad|tablet/i.test(ua) ? "tablet" : "mobile";
+    }
+
+    let browser = "Other";
+    if (/edg\//i.test(ua)) browser = "Edge";
+    else if (/opr\//i.test(ua) || /opera/i.test(ua)) browser = "Opera";
+    else if (/chrome/i.test(ua) && !/edg/i.test(ua)) browser = "Chrome";
+    else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
+    else if (/firefox/i.test(ua)) browser = "Firefox";
+    else if (/msie|trident/i.test(ua)) browser = "IE";
+
+    let os = "Other";
+    if (/windows/i.test(ua)) os = "Windows";
+    else if (/mac os|macintosh/i.test(ua)) os = "macOS";
+    else if (/linux/i.test(ua) && !/android/i.test(ua)) os = "Linux";
+    else if (/android/i.test(ua)) os = "Android";
+    else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
+
+    return { device, browser, os };
+  }
+
+  app.post("/api/analytics/track", async (req: Request, res: Response) => {
+    try {
+      const { path: pagePath, referrer, sessionId } = req.body;
+      if (!pagePath || !sessionId) {
+        return res.status(400).json({ message: "Missing path or sessionId" });
+      }
+
+      const ip = req.ip || req.socket.remoteAddress || "unknown";
+      const key = `${ip}_${sessionId}`;
+      const now = Date.now();
+      const lastTrack = trackingRateLimit.get(key) || 0;
+      if (now - lastTrack < 1000) {
+        return res.status(429).json({ message: "Too many requests" });
+      }
+      trackingRateLimit.set(key, now);
+
+      const ua = req.headers["user-agent"] || "";
+      const { device, browser, os } = parseUserAgent(ua);
+
+      await storage.recordPageView({
+        sessionId,
+        path: pagePath,
+        referrer: referrer || "",
+        userAgent: ua,
+        device,
+        browser,
+        os,
+      });
+
+      res.json({ ok: true });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to track" });
+    }
+  });
+
+  app.get("/api/analytics/stats", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const period = (req.query.period as string) || "7d";
+      const now = new Date();
+      let startDate = new Date();
+
+      switch (period) {
+        case "today":
+          startDate.setHours(0, 0, 0, 0);
+          break;
+        case "7d":
+          startDate.setDate(now.getDate() - 7);
+          break;
+        case "30d":
+          startDate.setDate(now.getDate() - 30);
+          break;
+        case "90d":
+          startDate.setDate(now.getDate() - 90);
+          break;
+        default:
+          startDate.setDate(now.getDate() - 7);
+      }
+
+      const stats = await storage.getAnalyticsStats(startDate, now);
+      res.json(stats);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  app.get("/api/analytics/realtime", requireAuth, async (_req: Request, res: Response) => {
+    try {
+      const count = await storage.getRealtimeVisitors(5);
+      res.json({ visitors: count });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch realtime data" });
+    }
+  });
+
   return httpServer;
 }

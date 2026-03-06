@@ -278,3 +278,42 @@ export const insertContactMessageSchema = createInsertSchema(contactMessages).pi
 
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type ContactMessage = typeof contactMessages.$inferSelect;
+
+export const pageViews = pgTable("page_views", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull(),
+  path: text("path").notNull(),
+  referrer: text("referrer").notNull().default(""),
+  userAgent: text("user_agent").notNull().default(""),
+  device: text("device").notNull().default("desktop"),
+  browser: text("browser").notNull().default(""),
+  os: text("os").notNull().default(""),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertPageViewSchema = createInsertSchema(pageViews).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertPageView = z.infer<typeof insertPageViewSchema>;
+export type PageView = typeof pageViews.$inferSelect;
+
+export const visitorSessions = pgTable("visitor_sessions", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull().unique(),
+  firstVisit: timestamp("first_visit").notNull().defaultNow(),
+  lastVisit: timestamp("last_visit").notNull().defaultNow(),
+  pageCount: integer("page_count").notNull().default(1),
+  device: text("device").notNull().default("desktop"),
+  browser: text("browser").notNull().default(""),
+  os: text("os").notNull().default(""),
+  referrer: text("referrer").notNull().default(""),
+});
+
+export const insertVisitorSessionSchema = createInsertSchema(visitorSessions).omit({
+  id: true,
+});
+
+export type InsertVisitorSession = z.infer<typeof insertVisitorSessionSchema>;
+export type VisitorSession = typeof visitorSessions.$inferSelect;
