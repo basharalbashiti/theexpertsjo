@@ -141,16 +141,16 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
-      <div className="mx-auto px-8 flex items-center gap-8 max-w-[1400px] py-3">
+      <div className="mx-auto px-4 md:px-8 flex items-center gap-3 md:gap-8 max-w-[1400px] py-2 md:py-3">
         {logo && (
           <Link href="/">
             <a className="shrink-0 flex items-center">
-              <img src={logo} alt="The Experts" className="h-14 w-auto object-contain" data-testid="img-catalog-logo" />
+              <img src={logo} alt="The Experts" className="h-10 md:h-14 w-auto object-contain" data-testid="img-catalog-logo" />
             </a>
           </Link>
         )}
 
-        <div className="flex-1 flex items-center gap-2 min-w-0">
+        <div className="flex-1 flex items-center gap-2 min-w-0 hidden md:flex">
           {canScrollLeft && (
             <button
               onClick={() => scroll("left")}
@@ -199,6 +199,8 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
           )}
         </div>
 
+        <div className="flex-1 md:hidden" />
+
         <button
           onClick={toggleLang}
           data-testid="button-catalog-lang"
@@ -206,6 +208,29 @@ function CatalogNav({ logo, categories, activeSlug, isRtl, lang, toggleLang }: {
         >
           {lang === "EN" ? "AR" : "EN"}
         </button>
+      </div>
+
+      <div className="md:hidden overflow-x-auto border-t border-neutral-100" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        <div className={`flex gap-1 px-4 py-2 ${isRtl ? "flex-row-reverse" : ""}`} style={{ width: "max-content" }}>
+          {categories.map((cat) => {
+            const catName = isRtl && cat.nameAr ? cat.nameAr : cat.nameEn;
+            const isActive = activeSlug === cat.slug;
+            return (
+              <a
+                key={cat.id}
+                href={`#category-${cat.slug}`}
+                data-testid={`link-catalog-nav-mobile-${cat.slug}`}
+                className={`whitespace-nowrap px-4 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                  isActive
+                    ? "bg-primary text-white"
+                    : "text-neutral-600 hover:text-primary hover:bg-primary/5"
+                }`}
+              >
+                {catName}
+              </a>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );
