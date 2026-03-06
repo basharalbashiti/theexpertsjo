@@ -286,7 +286,8 @@ export default function AdminDashboard() {
   const { user, isLoading, isAuthenticated } = useAuth();
   const { lang, setLang, t } = useAdminLang();
   const [activePage, setActivePage] = useState<AdminPage>("overview");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const menuItems: MenuItem[] = [
     { id: "overview", label: t("dashboard"), icon: "grid", description: t("desc_overview") },
@@ -373,77 +374,116 @@ export default function AdminDashboard() {
 
   const activeMenuItem = menuItems.find((m) => m.id === activePage);
 
+  const sidebarContent = (
+    <>
+      <div className="p-4 border-b border-neutral-200">
+        <div className="flex items-center gap-3">
+          <button
+            data-testid="button-toggle-sidebar"
+            onClick={() => {
+              if (window.innerWidth < 768) {
+                setMobileSidebarOpen(false);
+              } else {
+                setSidebarOpen(!sidebarOpen);
+              }
+            }}
+            className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors shrink-0"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+          </button>
+          {(sidebarOpen || mobileSidebarOpen) && (
+            <div className="min-w-0">
+              <h1 className="text-sm font-bold text-primary truncate">{t("the_experts")}</h1>
+              <p className="text-xs text-neutral-400 truncate">{t("admin_panel")}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
+        {menuItems.map((item) => (
+          <button
+            key={item.id}
+            data-testid={`nav-${item.id}`}
+            onClick={() => {
+              setActivePage(item.id);
+              if (window.innerWidth < 768) setMobileSidebarOpen(false);
+            }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
+              activePage === item.id
+                ? "bg-primary/10 text-primary font-medium"
+                : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+            }`}
+            title={!sidebarOpen && !mobileSidebarOpen ? item.label : undefined}
+          >
+            <div className="shrink-0">
+              <MenuIcon name={item.icon} />
+            </div>
+            {(sidebarOpen || mobileSidebarOpen) && <span className="text-sm truncate">{item.label}</span>}
+          </button>
+        ))}
+      </nav>
+
+      <div className="p-3 border-t border-neutral-200">
+        <button
+          data-testid="button-logout"
+          onClick={() => logoutMutation.mutate()}
+          disabled={logoutMutation.isPending}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-red-50 hover:text-red-600 transition-colors text-left"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          {(sidebarOpen || mobileSidebarOpen) && <span className="text-sm">{logoutMutation.isPending ? t("logging_out") : t("logout")}</span>}
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-neutral-50 flex" dir={lang === "AR" ? "rtl" : "ltr"}>
+      {mobileSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+
       <aside
-        className={`${sidebarOpen ? "w-64" : "w-16"} bg-white border-r border-neutral-200 flex flex-col transition-all duration-200 shrink-0`}
+        className={`hidden md:flex ${sidebarOpen ? "w-64" : "w-16"} bg-white border-r border-neutral-200 flex-col transition-all duration-200 shrink-0`}
       >
-        <div className="p-4 border-b border-neutral-200">
-          <div className="flex items-center gap-3">
-            <button
-              data-testid="button-toggle-sidebar"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors shrink-0"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
-            </button>
-            {sidebarOpen && (
-              <div className="min-w-0">
-                <h1 className="text-sm font-bold text-primary truncate">{t("the_experts")}</h1>
-                <p className="text-xs text-neutral-400 truncate">{t("admin_panel")}</p>
-              </div>
-            )}
-          </div>
-        </div>
+        {sidebarContent}
+      </aside>
 
-        <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              data-testid={`nav-${item.id}`}
-              onClick={() => setActivePage(item.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
-                activePage === item.id
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
-              }`}
-              title={!sidebarOpen ? item.label : undefined}
-            >
-              <div className="shrink-0">
-                <MenuIcon name={item.icon} />
-              </div>
-              {sidebarOpen && <span className="text-sm truncate">{item.label}</span>}
-            </button>
-          ))}
-        </nav>
-
-        <div className="p-3 border-t border-neutral-200">
-          <button
-            data-testid="button-logout"
-            onClick={() => logoutMutation.mutate()}
-            disabled={logoutMutation.isPending}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-neutral-600 hover:bg-red-50 hover:text-red-600 transition-colors text-left"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-            {sidebarOpen && <span className="text-sm">{logoutMutation.isPending ? t("logging_out") : t("logout")}</span>}
-          </button>
-        </div>
+      <aside
+        className={`fixed inset-y-0 ${lang === "AR" ? "right-0" : "left-0"} z-50 w-64 bg-white border-r border-neutral-200 flex flex-col transition-transform duration-200 md:hidden ${
+          mobileSidebarOpen ? "translate-x-0" : (lang === "AR" ? "translate-x-full pointer-events-none" : "-translate-x-full pointer-events-none")
+        }`}
+      >
+        {sidebarContent}
       </aside>
 
       <main className="flex-1 min-w-0">
-        <header className="bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-bold text-neutral-900">{activeMenuItem?.label || t("dashboard")}</h2>
-            <p className="text-sm text-neutral-500">{activeMenuItem?.description}</p>
+        <header className="bg-white border-b border-neutral-200 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              data-testid="button-mobile-menu"
+              onClick={() => setMobileSidebarOpen(true)}
+              className="md:hidden w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors shrink-0"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+            </button>
+            <div className="min-w-0">
+              <h2 className="text-base md:text-lg font-bold text-neutral-900 truncate">{activeMenuItem?.label || t("dashboard")}</h2>
+              <p className="text-xs md:text-sm text-neutral-500 truncate hidden sm:block">{activeMenuItem?.description}</p>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-neutral-500">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            <span className="text-xs md:text-sm text-neutral-500 hidden sm:inline">
               {t("logged_in_as")} <span className="font-medium text-neutral-700">{user?.username}</span>
             </span>
             <a
               href="/"
               target="_blank"
-              className="text-sm text-primary hover:underline"
+              className="text-xs md:text-sm text-primary hover:underline whitespace-nowrap"
               data-testid="link-view-site"
             >
               {t("view_site")}
@@ -451,14 +491,14 @@ export default function AdminDashboard() {
             <button
               data-testid="button-admin-lang-toggle"
               onClick={() => setLang(lang === "EN" ? "AR" : "EN")}
-              className="text-xs font-semibold px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-50 transition-colors"
+              className="text-xs font-semibold px-2 md:px-3 py-1 md:py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-50 transition-colors whitespace-nowrap"
             >
               {lang === "EN" ? "العربية" : "English"}
             </button>
           </div>
         </header>
 
-        <div className="p-6 max-w-7xl">
+        <div className="p-3 md:p-6 max-w-7xl">
           {renderContent()}
         </div>
       </main>
