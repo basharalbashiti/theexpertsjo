@@ -165,6 +165,7 @@ export default function SiteImageManager() {
               const hasCustomImage = dbEntry && dbEntry.imageUrl !== "";
               const isLogo = slot.key === "logo";
               const isFavicon = slot.key === "favicon";
+              const isOgImage = slot.key === "og_image";
 
               return (
                 <div
@@ -172,7 +173,7 @@ export default function SiteImageManager() {
                   data-testid={`site-image-${slot.key}`}
                   className="bg-white rounded-xl border overflow-hidden"
                 >
-                  <div className={`relative ${isFavicon ? "h-32 bg-neutral-100 flex items-center justify-center" : isLogo ? "h-40 bg-neutral-800 flex items-center justify-center" : "h-48"}`}>
+                  <div className={`relative ${isFavicon ? "h-32 bg-neutral-100 flex items-center justify-center" : isLogo ? "h-40 bg-neutral-800 flex items-center justify-center" : isOgImage ? "h-48 bg-neutral-50 flex items-center justify-center" : "h-48"}`}>
                     {isRemoved ? (
                       <div className="w-full h-full bg-neutral-100 flex items-center justify-center">
                         <div className="text-center text-neutral-400">
@@ -191,6 +192,12 @@ export default function SiteImageManager() {
                         src={currentUrl}
                         alt={slot.label}
                         className="h-20 w-auto object-contain brightness-0 invert"
+                      />
+                    ) : isOgImage ? (
+                      <img
+                        src={currentUrl}
+                        alt={slot.label}
+                        className="w-full h-full object-contain"
                       />
                     ) : (
                       <img
