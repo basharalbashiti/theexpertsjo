@@ -402,12 +402,22 @@ export default function ProductManager() {
                 XLSX.utils.book_append_sheet(wb, ws, "Products");
                 XLSX.writeFile(wb, "products.xlsx");
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1D6F42] hover:bg-[#185C36] text-white text-sm font-medium shadow-sm transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 text-sm font-medium text-neutral-700 shadow-sm transition-colors"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="rgba(255,255,255,0.15)"/>
-                <polyline points="14 2 14 8 20 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <text x="12" y="17" textAnchor="middle" fontSize="7" fontWeight="bold" fill="white" fontFamily="Arial, sans-serif">XLS</text>
+              <svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="2" width="24" height="28" rx="2" fill="#185C37"/>
+                <rect x="14" y="2" width="14" height="28" rx="1" fill="#21A366"/>
+                <rect x="14" y="2" width="14" height="28" rx="1" fill="white"/>
+                <rect x="16" y="7" width="4.5" height="3.5" fill="#21A366"/>
+                <rect x="21.5" y="7" width="4.5" height="3.5" fill="#33C481"/>
+                <rect x="16" y="11.5" width="4.5" height="3.5" fill="#107C41"/>
+                <rect x="21.5" y="11.5" width="4.5" height="3.5" fill="#21A366"/>
+                <rect x="16" y="16" width="4.5" height="3.5" fill="#185C37"/>
+                <rect x="21.5" y="16" width="4.5" height="3.5" fill="#107C41"/>
+                <rect x="16" y="20.5" width="4.5" height="3.5" fill="#107C41"/>
+                <rect x="21.5" y="20.5" width="4.5" height="3.5" fill="#21A366"/>
+                <path d="M4 4C4 2.89543 4.89543 2 6 2H18V30H6C4.89543 30 4 29.1046 4 28V4Z" fill="#185C37"/>
+                <text x="11" y="20" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white" fontFamily="Arial, sans-serif">X</text>
               </svg>
               {t("export_excel")}
             </button>
