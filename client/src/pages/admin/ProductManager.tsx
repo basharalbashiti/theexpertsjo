@@ -472,7 +472,7 @@ export default function ProductManager() {
                     <p className="text-xs text-neutral-400 truncate max-w-[200px]">{product.descriptionEn}</p>
                   )}
                 </td>
-                <td className="px-4 py-3 text-sm text-neutral-600" dir="rtl">{product.nameAr}</td>
+                <td className="px-4 py-3 text-sm text-neutral-600 whitespace-nowrap" dir="rtl">{product.nameAr}</td>
                 <td className="px-4 py-3">
                   {product.brand ? (
                     <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full font-medium">{product.brand}</span>
