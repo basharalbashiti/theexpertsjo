@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAdminLang } from "@/hooks/useAdminLang";
-import { ArrowUp, ArrowDown, ArrowUpDown, ImagePlus, X, Images } from "lucide-react";
+import { ArrowUp, ArrowDown, ArrowUpDown, ImagePlus, X, Images, Download } from "lucide-react";
+import * as XLSX from "xlsx";
 import type { Product, Category, ProductImage } from "@shared/schema";
 
 type SortField = "nameEn" | "brand" | "category" | "sortOrder";
@@ -382,9 +383,34 @@ export default function ProductManager() {
             <h2 className="text-2xl font-bold text-neutral-900">{t("products")}</h2>
             <p className="text-neutral-500 text-sm">{filteredAndSorted.length} {t("n_products")}{filterCategoryId ? ` ${t("in")} ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
           </div>
-          <Button data-testid="button-add-product" onClick={openAdd}>
-            {`+ ${t("add_product")}`}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              data-testid="button-export-products"
+              onClick={() => {
+                const rows = filteredAndSorted.map((p) => ({
+                  [t("order")]: p.sortOrder,
+                  [t("name_en")]: p.nameEn,
+                  [t("name_arabic")]: p.nameAr,
+                  [t("description_en")]: p.descriptionEn || "",
+                  [t("description_ar")]: p.descriptionAr || "",
+                  [t("brand")]: p.brand || "",
+                  [t("category")]: getCategoryName(p.categoryId),
+                  [t("visibility")]: p.visibility || "both",
+                }));
+                const ws = XLSX.utils.json_to_sheet(rows);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Products");
+                XLSX.writeFile(wb, "products.xlsx");
+              }}
+            >
+              <Download size={16} className="mr-1" />
+              {t("export_excel")}
+            </Button>
+            <Button data-testid="button-add-product" onClick={openAdd}>
+              {`+ ${t("add_product")}`}
+            </Button>
+          </div>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <Input

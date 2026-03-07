@@ -172,6 +172,7 @@ const translations: Record<string, { EN: string; AR: string }> = {
   search_name: { EN: "Search by name...", AR: "البحث بالاسم..." },
   all_categories: { EN: "All Categories", AR: "جميع الأقسام" },
   all_brands: { EN: "All Brands", AR: "جميع العلامات" },
+  export_excel: { EN: "Export Excel", AR: "تصدير إكسل" },
   brand: { EN: "Brand", AR: "العلامة التجارية" },
   category: { EN: "Category", AR: "القسم" },
   description_en: { EN: "Description (English)", AR: "الوصف (الإنجليزية)" },
