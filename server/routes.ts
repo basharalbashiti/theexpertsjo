@@ -395,16 +395,23 @@ export async function registerRoutes(
           categoryId = catMap.get(p.category.toLowerCase().trim()) || 0;
         }
         if (!categoryId) { skipped++; continue; }
-        await storage.createProduct({
+        const product = await storage.createProduct({
           nameEn,
           nameAr: (p.nameAr || "").trim(),
           descriptionEn: (p.descriptionEn || "").trim(),
           descriptionAr: (p.descriptionAr || "").trim(),
-          imageUrl: "",
+          imageUrl: (p.image1 || "").trim(),
           brand: (p.brand || "").trim(),
           categoryId,
           sortOrder: parseInt(p.sortOrder) || 0,
         });
+        const galleryImages = [p.image2, p.image3, p.image4, p.image5].filter((url: string) => url && url.trim());
+        for (let i = 0; i < galleryImages.length; i++) {
+          const existing = await storage.getProductImages(product.id);
+          if (existing.length < 4) {
+            await storage.addProductImage({ productId: product.id, imageUrl: galleryImages[i].trim(), sortOrder: existing.length });
+          }
+        }
         imported++;
       }
       res.json({ imported, skipped });
@@ -490,6 +497,20 @@ export async function registerRoutes(
       res.json(updated);
     } catch (error) {
       res.status(500).json({ message: "Failed to update visibility" });
+    }
+  });
+
+  app.get("/api/products/all-images", requireAuth, async (req, res) => {
+    try {
+      const allProducts = await storage.getProducts();
+      const result: Record<number, string[]> = {};
+      for (const p of allProducts) {
+        const imgs = await storage.getProductImages(p.id);
+        result[p.id] = imgs.sort((a, b) => a.sortOrder - b.sortOrder).map(i => i.imageUrl);
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch all product images" });
     }
   });
 

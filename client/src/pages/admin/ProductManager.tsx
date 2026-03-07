@@ -413,7 +413,11 @@ export default function ProductManager() {
                       brand: ["brand", "العلامة التجارية", "العلامة"],
                       category: ["category", "القسم"],
                       sortOrder: ["order", "sort order", "sort_order", "sortorder", "الترتيب"],
-                      visibility: ["visibility", "الظهور"],
+                      image1: ["image 1", "image1", "صورة 1"],
+                      image2: ["image 2", "image2", "صورة 2"],
+                      image3: ["image 3", "image3", "صورة 3"],
+                      image4: ["image 4", "image4", "صورة 4"],
+                      image5: ["image 5", "image5", "صورة 5"],
                     };
                     for (const key of keys) {
                       const lower = key.toLowerCase().trim();
@@ -476,21 +480,34 @@ export default function ProductManager() {
             </button>
             <button
               data-testid="button-export-products"
-              onClick={() => {
-                const rows = filteredAndSorted.map((p) => ({
-                  [t("order")]: p.sortOrder,
-                  [t("name_en")]: p.nameEn,
-                  [t("name_arabic")]: p.nameAr,
-                  [t("description_en")]: p.descriptionEn || "",
-                  [t("description_ar")]: p.descriptionAr || "",
-                  [t("brand")]: p.brand || "",
-                  [t("category")]: getCategoryName(p.categoryId),
-                  [t("visibility")]: p.visibility || "both",
-                }));
-                const ws = XLSX.utils.json_to_sheet(rows);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Products");
-                XLSX.writeFile(wb, "products.xlsx");
+              onClick={async () => {
+                try {
+                  const resp = await fetch("/api/products/all-images", { credentials: "include" });
+                  const allImages: Record<string, string[]> = resp.ok ? await resp.json() : {};
+                  const rows = filteredAndSorted.map((p) => {
+                    const imgs = allImages[p.id] || [];
+                    return {
+                      [t("order")]: p.sortOrder,
+                      [t("name_en")]: p.nameEn,
+                      [t("name_arabic")]: p.nameAr,
+                      [t("description_en")]: p.descriptionEn || "",
+                      [t("description_ar")]: p.descriptionAr || "",
+                      [t("brand")]: p.brand || "",
+                      [t("category")]: getCategoryName(p.categoryId),
+                      ["Image 1"]: p.imageUrl || "",
+                      ["Image 2"]: imgs[0] || "",
+                      ["Image 3"]: imgs[1] || "",
+                      ["Image 4"]: imgs[2] || "",
+                      ["Image 5"]: imgs[3] || "",
+                    };
+                  });
+                  const ws = XLSX.utils.json_to_sheet(rows);
+                  const wb = XLSX.utils.book_new();
+                  XLSX.utils.book_append_sheet(wb, ws, "Products");
+                  XLSX.writeFile(wb, "products.xlsx");
+                } catch {
+                  toast({ title: t("export_excel"), description: "Failed to export", variant: "destructive" });
+                }
               }}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 text-sm font-medium text-neutral-700 shadow-sm transition-colors"
             >
