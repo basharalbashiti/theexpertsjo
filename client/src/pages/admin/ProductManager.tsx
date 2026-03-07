@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAdminLang } from "@/hooks/useAdminLang";
-import { ArrowUp, ArrowDown, ArrowUpDown, ImagePlus, X, Images, Download } from "lucide-react";
+import { ArrowUp, ArrowDown, ArrowUpDown, ImagePlus, X, Images, Download, Upload } from "lucide-react";
 import * as XLSX from "xlsx";
 import type { Product, Category, ProductImage } from "@shared/schema";
 
@@ -384,6 +384,96 @@ export default function ProductManager() {
             <p className="text-neutral-500 text-sm">{filteredAndSorted.length} {t("n_products")}{filterCategoryId ? ` ${t("in")} ${getCategoryName(filterCategoryId)}` : ""}{filterBrand ? ` · ${filterBrand}` : ""}</p>
           </div>
           <div className="flex items-center gap-2">
+            <input
+              id="import-excel-input"
+              type="file"
+              accept=".xlsx,.xls"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async (evt) => {
+                  try {
+                    const data = new Uint8Array(evt.target?.result as ArrayBuffer);
+                    const wb = XLSX.read(data, { type: "array" });
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    const rows: any[] = XLSX.utils.sheet_to_json(ws);
+                    if (rows.length === 0) {
+                      toast({ title: t("import_error"), description: t("import_empty"), variant: "destructive" });
+                      return;
+                    }
+                    const headerMap: Record<string, string> = {};
+                    const keys = Object.keys(rows[0]);
+                    const fieldAliases: Record<string, string[]> = {
+                      nameEn: ["name (english)", "name_en", "name en", "name english", "nameen", "english name"],
+                      nameAr: ["name (arabic)", "name_ar", "name ar", "name arabic", "namear", "arabic name", "الاسم"],
+                      descriptionEn: ["description (english)", "description_en", "description en", "descriptionen"],
+                      descriptionAr: ["description (arabic)", "description_ar", "description ar", "descriptionar", "الوصف"],
+                      brand: ["brand", "العلامة التجارية", "العلامة"],
+                      category: ["category", "القسم"],
+                      sortOrder: ["order", "sort order", "sort_order", "sortorder", "الترتيب"],
+                      visibility: ["visibility", "الظهور"],
+                    };
+                    for (const key of keys) {
+                      const lower = key.toLowerCase().trim();
+                      for (const [field, aliases] of Object.entries(fieldAliases)) {
+                        if (aliases.includes(lower) || lower === field.toLowerCase()) {
+                          headerMap[key] = field;
+                          break;
+                        }
+                      }
+                    }
+                    const products = rows.map((row) => {
+                      const mapped: any = {};
+                      for (const [excelCol, field] of Object.entries(headerMap)) {
+                        mapped[field] = row[excelCol] ?? "";
+                      }
+                      return mapped;
+                    });
+                    const resp = await fetch("/api/products/import", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      credentials: "include",
+                      body: JSON.stringify({ products }),
+                    });
+                    const result = await resp.json();
+                    if (resp.ok) {
+                      toast({ title: t("import_success"), description: `${result.imported} ${t("imported")}${result.skipped ? `, ${result.skipped} ${t("skipped")}` : ""}` });
+                      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+                    } else {
+                      toast({ title: t("import_error"), description: result.message, variant: "destructive" });
+                    }
+                  } catch {
+                    toast({ title: t("import_error"), description: t("import_failed"), variant: "destructive" });
+                  }
+                };
+                reader.readAsArrayBuffer(file);
+                e.target.value = "";
+              }}
+            />
+            <button
+              data-testid="button-import-products"
+              onClick={() => document.getElementById("import-excel-input")?.click()}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 text-sm font-medium text-neutral-700 shadow-sm transition-colors"
+            >
+              <svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="2" width="24" height="28" rx="2" fill="#185C37"/>
+                <rect x="14" y="2" width="14" height="28" rx="1" fill="white"/>
+                <rect x="16" y="7" width="4.5" height="3.5" fill="#21A366"/>
+                <rect x="21.5" y="7" width="4.5" height="3.5" fill="#33C481"/>
+                <rect x="16" y="11.5" width="4.5" height="3.5" fill="#107C41"/>
+                <rect x="21.5" y="11.5" width="4.5" height="3.5" fill="#21A366"/>
+                <rect x="16" y="16" width="4.5" height="3.5" fill="#185C37"/>
+                <rect x="21.5" y="16" width="4.5" height="3.5" fill="#107C41"/>
+                <rect x="16" y="20.5" width="4.5" height="3.5" fill="#107C41"/>
+                <rect x="21.5" y="20.5" width="4.5" height="3.5" fill="#21A366"/>
+                <path d="M4 4C4 2.89543 4.89543 2 6 2H18V30H6C4.89543 30 4 29.1046 4 28V4Z" fill="#185C37"/>
+                <text x="11" y="20" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white" fontFamily="Arial, sans-serif">X</text>
+              </svg>
+              {t("import_excel")}
+              <Upload size={15} className="text-neutral-400" />
+            </button>
             <button
               data-testid="button-export-products"
               onClick={() => {

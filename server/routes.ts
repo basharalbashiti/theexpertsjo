@@ -373,6 +373,46 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/products/import", requireAuth, async (req, res) => {
+    try {
+      const { products } = req.body;
+      if (!Array.isArray(products) || products.length === 0) {
+        return res.status(400).json({ message: "No products to import" });
+      }
+      const allCategories = await storage.getCategories();
+      const catMap = new Map<string, number>();
+      for (const c of allCategories) {
+        catMap.set(c.nameEn.toLowerCase(), c.id);
+        if (c.nameAr) catMap.set(c.nameAr.toLowerCase(), c.id);
+      }
+      let imported = 0;
+      let skipped = 0;
+      for (const p of products) {
+        const nameEn = (p.nameEn || "").trim();
+        if (!nameEn) { skipped++; continue; }
+        let categoryId = p.categoryId ? parseInt(p.categoryId) : 0;
+        if (!categoryId && p.category) {
+          categoryId = catMap.get(p.category.toLowerCase().trim()) || 0;
+        }
+        if (!categoryId) { skipped++; continue; }
+        await storage.createProduct({
+          nameEn,
+          nameAr: (p.nameAr || "").trim(),
+          descriptionEn: (p.descriptionEn || "").trim(),
+          descriptionAr: (p.descriptionAr || "").trim(),
+          imageUrl: "",
+          brand: (p.brand || "").trim(),
+          categoryId,
+          sortOrder: parseInt(p.sortOrder) || 0,
+        });
+        imported++;
+      }
+      res.json({ imported, skipped });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to import products" });
+    }
+  });
+
   app.post("/api/products", requireAuth, upload.single("image"), async (req, res) => {
     try {
       const { nameEn, nameAr, descriptionEn, descriptionAr, categoryId, sortOrder, brand } = req.body;
