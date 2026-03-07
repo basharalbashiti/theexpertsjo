@@ -419,8 +419,8 @@ export default function ProductManager() {
                 <path d="M4 4C4 2.89543 4.89543 2 6 2H18V30H6C4.89543 30 4 29.1046 4 28V4Z" fill="#185C37"/>
                 <text x="11" y="20" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white" fontFamily="Arial, sans-serif">X</text>
               </svg>
-              <Download size={15} className="text-neutral-400" />
               {t("export_excel")}
+              <Download size={15} className="text-neutral-400" />
             </button>
             <Button data-testid="button-add-product" onClick={openAdd}>
               {`+ ${t("add_product")}`}
