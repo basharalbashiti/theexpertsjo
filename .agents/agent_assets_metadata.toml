@@ -56,3 +56,45 @@ mtime_ms = 1791794746184
 storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/cd2fb4e7-7314-4212-88f8-64367d4edba3/1cf05233-6228-4c86-86ac-3c835553758c"
 storage_version_token = "1791794783225492"
 content_type = "application/octet-stream"
+
+[[outputs]]
+id = "vBRu8GUQ7kuWjvq_WhUqs"
+uri = "file://dist/download-parts/theexpertsjo-backup.zip.part-00"
+type = "unspecified"
+title = "Backup ZIP — part 1 of 3"
+description = "First part of the ZIP. Download all three parts, then concatenate them in order to restore the ZIP file."
+logical_id = "80037bc1-bb2a-4954-abef-9349f85e4ef8"
+content_hash = "sha256:54c38c7fe794ca7cb05954b55a72e3f9b7234bc2d86663d5653fd9a8fe12d058"
+size = 99614720
+mtime_ms = 1791795071171
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/80037bc1-bb2a-4954-abef-9349f85e4ef8/71683020-3d73-46b5-9f5f-9e3444045bfb"
+storage_version_token = "1791795088920141"
+content_type = "application/octet-stream"
+
+[[outputs]]
+id = "mN2d-3wr-JBzBr3Uoc6wP"
+uri = "file://dist/download-parts/theexpertsjo-backup.zip.part-01"
+type = "unspecified"
+title = "Backup ZIP — part 2 of 3"
+description = "Second part of the ZIP. Download all three parts, then concatenate them in order to restore the ZIP file."
+logical_id = "920308e2-302a-4616-85f2-775fb1f852af"
+content_hash = "sha256:0bc7c195790a836247a3c97abec33a7a007b0bc6f27f837058d7bb3a0d8b84b1"
+size = 99614720
+mtime_ms = 1791795071339
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/920308e2-302a-4616-85f2-775fb1f852af/856b6d32-3b32-4be8-9189-4930457e7f82"
+storage_version_token = "1791795099182913"
+content_type = "application/octet-stream"
+
+[[outputs]]
+id = "y3clQ7dQ0a_IdS8FyLnGb"
+uri = "file://dist/download-parts/theexpertsjo-backup.zip.part-02"
+type = "unspecified"
+title = "Backup ZIP — part 3 of 3"
+description = "Final part of the ZIP. Download all three parts, then concatenate them in order to restore the ZIP file."
+logical_id = "90ccf09e-eb54-474a-9c3d-505e5d8cc434"
+content_hash = "sha256:e0aaa0bd28a63562ecb6476176546b95634fffe9e149c3ac6129de6e89c702f4"
+size = 73551221
+mtime_ms = 1791795071447
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/90ccf09e-eb54-474a-9c3d-505e5d8cc434/58b85d65-3c77-4b1b-928b-300cc2932013"
+storage_version_token = "1791795108126107"
+content_type = "application/octet-stream"
