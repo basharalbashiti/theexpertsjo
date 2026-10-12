@@ -1,0 +1,58 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "lLr5vJ1FohhAZ0CvDVrB5"
+uri = "file://theexpertsjo-db.sql"
+type = "unspecified"
+title = "Database dump"
+description = "PostgreSQL database dump (89 KB)."
+logical_id = "c0c1628c-ff7a-4cc8-b53e-718686167536"
+content_hash = "sha256:ec9439336c377968719178fdf60cd572014940574d2ffeec2e9248a65f64589d"
+size = 90459
+mtime_ms = 1791794358153
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/c0c1628c-ff7a-4cc8-b53e-718686167536/f7394c72-a67b-4677-99bd-e0156b28a8c9"
+storage_version_token = "1791794754242162"
+content_type = "application/octet-stream"
+
+[[outputs]]
+id = "vJCEKs_frR3vKkz5GV5Bi"
+uri = "file://dist/download-parts/theexpertsjo-app.tar.gz.part-00"
+type = "unspecified"
+title = "App archive — part 1 of 3"
+description = "First 95 MiB part of the app archive. Download all three parts and concatenate in order to restore the .tar.gz file."
+logical_id = "0789fca1-5673-4ebe-8994-ffc317488ab4"
+content_hash = "sha256:8d320f55e22eeee13ea658e8ce2319afaef037573bf230f3d13749e36c047d47"
+size = 99614720
+mtime_ms = 1791794745904
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/0789fca1-5673-4ebe-8994-ffc317488ab4/3d0a6f78-74e0-43e2-97a1-163fb45901f8"
+storage_version_token = "1791794764549751"
+content_type = "application/octet-stream"
+
+[[outputs]]
+id = "boqiSxBXkaUJc6vCD_1rj"
+uri = "file://dist/download-parts/theexpertsjo-app.tar.gz.part-01"
+type = "unspecified"
+title = "App archive — part 2 of 3"
+description = "Second 95 MiB part of the app archive. Download all three parts and concatenate in order to restore the .tar.gz file."
+logical_id = "c7f4a76a-fbb5-4f98-ad25-810aa2b11822"
+content_hash = "sha256:006c4a33b16d0cbe198e28236a4715b25fb0ba4583be33c1553dfd334c7f075d"
+size = 99614720
+mtime_ms = 1791794746084
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/c7f4a76a-fbb5-4f98-ad25-810aa2b11822/25c364d8-c524-4e66-8ae1-38398730c6e0"
+storage_version_token = "1791794774659225"
+content_type = "application/octet-stream"
+
+[[outputs]]
+id = "7RSAxSnEG81w6G0O7us6W"
+uri = "file://dist/download-parts/theexpertsjo-app.tar.gz.part-02"
+type = "unspecified"
+title = "App archive — part 3 of 3"
+description = "Final part of the app archive. Download all three parts and concatenate in order to restore the .tar.gz file."
+logical_id = "cd2fb4e7-7314-4212-88f8-64367d4edba3"
+content_hash = "sha256:da93e750375e3708b1f3cd205e1155dfb23ddbb735afb977afe09ec83cd8d97b"
+size = 73460400
+mtime_ms = 1791794746184
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:e24cf016-21c9-4399-a654-3af271d57383/cd2fb4e7-7314-4212-88f8-64367d4edba3/1cf05233-6228-4c86-86ac-3c835553758c"
+storage_version_token = "1791794783225492"
+content_type = "application/octet-stream"
